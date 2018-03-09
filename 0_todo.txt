@@ -10,3 +10,14 @@ Major tasks that would need to be performed:
 
 Research Questions:
 - What is the real difference between coalitions and teams regarding partial knowledge sharing?
+
+To do to make the model pluggable:
+-!!! Purge the entire forest fire model (note, all functions below should be written in such a way that they can be easily rewritten for other models later on)
+	- Remove elements of the forest fire model
+	- Create a function that reads the outputs from the model
+	- Create a new function for the calculation of the states
+	- Create a new function where the policy instruments are defined
+	- Create a function that will send the inputs
+-! Differentiate how the inputs are set
+-! Differentiate how the outputs are outputted
+-! Differentiate how the experiments (batches) are run

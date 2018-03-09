@@ -1,16 +1,2 @@
-16 May:
-
-- Simplify resources notification for the external parties.
-- Add a function for the grading and the implementing of actions
-- Remove all parts of the code related to grading and implementing of actions
-
-17 May:
-- Continuation on the cleaning and condensing of the code. Now related to the three streams actions and the external parties.
-
-18 May:
-- Addition of the function file.
-- Adaptation of the grade calculation for the intra-team actions.
-- Completion of the changes to all function grading and implementation of actions (missing inter-team and inter-coalitions still)
-
-16 June:
-- Addition of the initialisation of the partial knowledge for the belief tree policy and instrument for all agents.
+09 May 2018
+The changes that are now being made are done to transform the model into a pluggable model.
