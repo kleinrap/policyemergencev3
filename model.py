@@ -15,8 +15,6 @@ from mesa.space import MultiGrid
 
 # Importing functions from other PMT files
 from datacollection import DataCollector
-from technical_model import Technical_Model
-from tree_cell import TreeCell
 from agent import Policymakers, Electorate, Externalparties, Truth, Policyentres
 from network_creation import PolicyNetworkLinks
 from team_creation import Team
@@ -44,16 +42,6 @@ class PolicyEmergence(Model):
 		# From inputs:
 		self.height = inputs_dict["height"]
 		self.width = inputs_dict["width"]
-
-		### TO BE REMOVED
-		# Forest fire model related inputs
-		self.instrument_campSites = inputs_dict["technical_input"][0]
-		self.instrument_planting = inputs_dict["technical_input"][1]
-		self.thin_burning_probability = inputs_dict["technical_input"][2]
-		self.firefighter_force = inputs_dict["technical_input"][3]
-		self.instrument_prevention = inputs_dict["technical_input"][4]
-		### TO BE REMOVED
-
 		# Agent numbers related inputs
 		self.externalparties_number = inputs_dict["total_agent_number"][0]
 		self.policymaker_number = inputs_dict["total_agent_number"][1]
@@ -67,8 +55,8 @@ class PolicyEmergence(Model):
 		self.agenda_prob_3S_as = inputs_dict["Agenda_inputs"][2]
 		self.agenda_poli_3S_as = inputs_dict["Agenda_inputs"][3]
 		# Belief structure related inputs
-		self.deep_core = inputs_dict["deep_core"]
-		self.len_PC = len(self.deep_core)
+		self.policy_core = inputs_dict["policy_core"]
+		self.len_PC = len(self.policy_core)
 		self.mid_level = inputs_dict["mid_level"]
 		self.len_ML = len(self.mid_level)
 		self.secondary = inputs_dict["secondary"]
@@ -93,12 +81,6 @@ class PolicyEmergence(Model):
 		self.resources_potency = inputs_dict["resources_potency"]
 		self.events = events
 
-		# 1.1.2 Technical model parameter inputs
-		### TO BE REMOVED
-		self.grid = MultiGrid(self.height, self.width, torus=True)
-		self.technical_model = Technical_Model(self.len_PC, self.len_ML, self.len_S)
-		### TO BE REMOVED
-
 		# 1.1.3 Derived inputs:
 		self.total_agent_number = self.externalparties_number + self.policymaker_number + self.policyentre_number
 		self.issues_number = self.len_PC + self.len_ML + self.len_S
@@ -119,28 +101,6 @@ class PolicyEmergence(Model):
 		self.action_agent_number = len(self.agent_action_list)
 		print("This is the list of active agents: " + str(self.agent_action_list))
 		print(' ')
-
-		# 1.1.5 Creation of the tree cells for the technical forest fire model
-		### TO BE REMOVED
-		k= 0
-		for (contents, x, y) in self.grid.coord_iter():
-			p = random.random()
-			k = k+1
-			# Create a tree
-			new_tree = TreeCell((x, y), self)
-			# 30% is for thin forest, 30% is for thick forest,
-			# 10% is for camp sites and the rest is empty
-			if p <= 0.3:
-				new_tree.condition = "Thin forest"
-			elif p <= 0.6 and p > 0.3:
-				new_tree.condition = "Thick forest"
-			elif p <= 0.62 and p > 0.6:
-				new_tree.condition = "Camp site"
-			else:
-				new_tree.condition = "Empty"
-			self.grid._place_agent((x, y), new_tree)
-			self.technical_model.add(new_tree)
-		### TO BE REMOVED
 
 		# 1.1.6 None interests and partial knowledge initialisation
 		# Creation of the truth belieftree (containing the real states of the world)
@@ -167,7 +127,7 @@ class PolicyEmergence(Model):
 		self.link_list = inputs_dict["Link_list"]
 
 		# 1.1.8 Initial update of the conflict levels
-		self.conflict_level_update(self.link_list, self.deep_core, self.mid_level, self.secondary, self.conflict_level_coef)
+		self.conflict_level_update(self.link_list, self.policy_core, self.mid_level, self.secondary, self.conflict_level_coef)
 		
 		# 1.1 9 Initialisation of 3S-related parameters
 		# For the three streams theory, creation of the team lists:
@@ -283,38 +243,6 @@ class PolicyEmergence(Model):
 						agents.belieftree[0][self.len_PC + self.len_ML + self.len_S + cw][0] = \
 							- agents.belieftree[0][self.len_PC + self.len_ML + self.len_S + cw][0]
 
-		# 1.2.4 Technical model simulation (technical_model.py)
-		### TO BE REMOVED
-		# [Backbone/Backbone+/3S/ACF]
-		print('Running the technical model ...')
-
-		# 1.2.4.1 Technical model simulation - calculate the states 
-		master_cell = self.technical_model.cells_repository
-		self.total_cells = self.height * self.width
-		# Perform the step for each tree cell
-		for agents in master_cell:
-			agents.step(self.thin_burning_probability, self.firefighter_force)
-
-		# 1.2.4.2 Update of the truth belieftree
-		self.technical_model.states_update(self.height, self.width, self.belieftree_truth, \
-		 self.thin_burning_probability, self.firefighter_force)
-		print('... cleared.')
-		print('   ')
-
-		# 1.2.4.3 Implementing the policy instruments on the technical model
-		prob_update = self.technical_model.measures_implementation(self.agenda_instrument, self.instruments, \
-			self.instrument_campSites, self.instrument_planting, self.thin_burning_probability, \
-			self.firefighter_force, self.instrument_prevention)
-		self.thin_burning_probability = prob_update[0]
-		self.firefighter_force = prob_update[1]
-
-		# 1.2.4.4 Update the truth belieftree
-		self.technical_model.states_update(self.height, self.width, self.belieftree_truth, \
-		 self.thin_burning_probability, self.firefighter_force)
-		print('... cleared.')
-		print('   ')
-		### TO BE REMOVED
-
 		# TO BE ADDED
 		# This should be replaced by:
 		# 1. Something to read the output file of the technical model
@@ -324,7 +252,6 @@ class PolicyEmergence(Model):
 		# 1.2.X Reading of the states from an output file
 		technical_model_outputs = pd.read_csv("TechnicalModelOutputs.data",header=None)
 
-		print(len(self.belieftree_truth))
 		for i in range(len(self.belieftree_truth)):
 			self.belieftree_truth[i] = technical_model_outputs[i][0]
 		print(self.belieftree_truth)
@@ -468,7 +395,7 @@ class PolicyEmergence(Model):
 
 		# 1.2.10.2. Conflict level update for all links
 		# [Backbone/Backbone+/3S/ACF]
-		self.conflict_level_update(self.link_list, self.deep_core, self.mid_level, self.secondary, self.conflict_level_coef)
+		self.conflict_level_update(self.link_list, self.policy_core, self.mid_level, self.secondary, self.conflict_level_coef)
 
 		# 1.2.10.3. Issue selection
 		if AS_theory != 2:
@@ -507,14 +434,14 @@ class PolicyEmergence(Model):
 			random.shuffle(shuffled_list_agent)
 			for agents in shuffled_list_agent:
 				agents.agent_team_threeS_as(agents, self.agent_action_list, self.team_list_as, self.team_list_as_total, self.link_list, self.team_number_as, \
-					self.tick_number, self.threeS_link_list_as, self.deep_core, self.mid_level, self.secondary, self.team_gap_threshold, self.team_belief_problem_threshold, self.team_belief_policy_threshold)
+					self.tick_number, self.threeS_link_list_as, self.policy_core, self.mid_level, self.secondary, self.team_gap_threshold, self.team_belief_problem_threshold, self.team_belief_policy_threshold)
 
 			# 1.2.11.1.1.3. Belief actions in a team
 			conflict_level_option = 1
 			shuffled_team_list_as = self.team_list_as
 			random.shuffle(shuffled_team_list_as)
 			for teams in shuffled_team_list_as:
-				teams.team_belief_actions_threeS_as(teams, self.causalrelation_number, self.deep_core, self.mid_level, self.secondary, self.agent_action_list, self.threeS_link_list_as, self.threeS_link_list_as_total, \
+				teams.team_belief_actions_threeS_as(teams, self.causalrelation_number, self.policy_core, self.mid_level, self.secondary, self.agent_action_list, self.threeS_link_list_as, self.threeS_link_list_as_total, \
 					self.threeS_link_id_as, self.link_list, self.affiliation_weights, self.conflict_level_coef, self.resources_weight_action, self.resources_potency, conflict_level_option)
 		
 			print('... cleared.')
@@ -548,7 +475,7 @@ class PolicyEmergence(Model):
 			shuffled_coalition_list_as = self.coalitions_list_as
 			random.shuffle(shuffled_coalition_list_as)
 			for coalitions in shuffled_coalition_list_as:
-				coalitions.coalition_belief_actions_ACF_as(coalitions, self.causalrelation_number, self.deep_core, self.mid_level, self.secondary, self.agent_action_list, self.ACF_link_list_as, self.ACF_link_list_as_total, \
+				coalitions.coalition_belief_actions_ACF_as(coalitions, self.causalrelation_number, self.policy_core, self.mid_level, self.secondary, self.agent_action_list, self.ACF_link_list_as, self.ACF_link_list_as_total, \
 					self.ACF_link_id_as, self.link_list, self.affiliation_weights, self.conflict_level_coef, self.resources_weight_action, self.resources_potency)
 		
 			print('... cleared.')
@@ -610,14 +537,14 @@ class PolicyEmergence(Model):
 					# The external parties
 					if type(agents) == Externalparties:
 						agents.external_parties_actions_as(agents, self.agent_action_list, self.causalrelation_number, self.affiliation_weights, \
-							self.deep_core, self.mid_level, self.secondary, self.electorate_number, self.action_agent_number, self.master_list, self.link_list, self.resources_weight_action, self.resources_potency)
+							self.policy_core, self.mid_level, self.secondary, self.electorate_number, self.action_agent_number, self.master_list, self.link_list, self.resources_weight_action, self.resources_potency)
 
 					# The policy makers and policy entrepreneurs
 					# Shuffle of the list of links for the actions
 					link_list_shuffle = self.link_list
 					random.shuffle(link_list_shuffle)
 					if type(agents) != Externalparties:
-						agents.pm_pe_actions_as(agents, link_list_shuffle, self.deep_core, self.mid_level, self.secondary, \
+						agents.pm_pe_actions_as(agents, link_list_shuffle, self.policy_core, self.mid_level, self.secondary, \
 							self.resources_weight_action, self.resources_potency, self.affiliation_weights)
 
 			# [3S]
@@ -626,7 +553,7 @@ class PolicyEmergence(Model):
 				for agents in shuffled_list_agent:
 					# 1 - Looking at the external parties
 					if type(agents) == Externalparties:
-						agents.external_parties_actions_as_3S(agents, self.agent_action_list, self.causalrelation_number, self.affiliation_weights, self.deep_core, self.mid_level, self.secondary, \
+						agents.external_parties_actions_as_3S(agents, self.agent_action_list, self.causalrelation_number, self.affiliation_weights, self.policy_core, self.mid_level, self.secondary, \
 							self.electorate_number, self.action_agent_number, self.master_list, self.link_list, self.conflict_level_coef, self.resources_weight_action, self.resources_potency)
 
 					# 2 - Looking at the policy makers and policy entrepreneurs
@@ -634,7 +561,7 @@ class PolicyEmergence(Model):
 					link_list_shuffle = self.link_list
 					random.shuffle(link_list_shuffle)
 					if type(agents) != Externalparties :
-						agents.pm_pe_actions_as_3S(agents, link_list_shuffle, self.deep_core, self.mid_level, self.secondary, \
+						agents.pm_pe_actions_as_3S(agents, link_list_shuffle, self.policy_core, self.mid_level, self.secondary, \
 							self.resources_weight_action, self.resources_potency, self.affiliation_weights, self.conflict_level_coef)
 
 			print('... cleared.')
@@ -702,7 +629,7 @@ class PolicyEmergence(Model):
 		print('Instrument selection ...')
 
 		# 1.2.14.1 Conflict level update
-		self.conflict_level_update(self.link_list, self.deep_core, self.mid_level, self.secondary, self.conflict_level_coef)
+		self.conflict_level_update(self.link_list, self.policy_core, self.mid_level, self.secondary, self.conflict_level_coef)
 		
 		# 1.2.14.2 Policy instrument selection
 		# [Backbone/Backbone+/ACF]
@@ -749,7 +676,7 @@ class PolicyEmergence(Model):
 			random.shuffle(shuffled_list_agent)
 			for agents in shuffled_list_agent:
 				agents.agent_team_threeS_pf(agents, self.agent_action_list, self.team_list_pf, self.team_list_pf_total, self.link_list, self.team_number_pf, \
-					self.tick_number, self.threeS_link_list_pf, self.deep_core, self.mid_level, self.secondary, self.agenda_prob_3S_as, self.team_gap_threshold, \
+					self.tick_number, self.threeS_link_list_pf, self.policy_core, self.mid_level, self.secondary, self.agenda_prob_3S_as, self.team_gap_threshold, \
 					self.team_belief_problem_threshold, self.team_belief_policy_threshold)
 
 			# 1.2.15.1.1.3. Belief actions in a team
@@ -757,7 +684,7 @@ class PolicyEmergence(Model):
 			shuffled_team_list_as = self.team_list_as
 			random.shuffle(shuffled_team_list_as)
 			for teams in shuffled_team_list_as:
-				teams.team_belief_actions_threeS_pf(teams, self.causalrelation_number, self.deep_core, self.mid_level, self.secondary, self.agent_action_list, self.threeS_link_list_pf, self.threeS_link_list_pf_total, \
+				teams.team_belief_actions_threeS_pf(teams, self.causalrelation_number, self.policy_core, self.mid_level, self.secondary, self.agent_action_list, self.threeS_link_list_pf, self.threeS_link_list_pf_total, \
 					self.threeS_link_id_pf, self.link_list, self.affiliation_weights, self.agenda_prob_3S_as, self.conflict_level_coef, self.resources_weight_action, self.resources_potency, conflict_level_option)
 
 			print('... cleared.')
@@ -789,7 +716,7 @@ class PolicyEmergence(Model):
 			shuffled_coalition_list_pf = self.coalitions_list_pf
 			random.shuffle(shuffled_coalition_list_pf)
 			for coalitions in shuffled_coalition_list_pf:
-				coalitions.coalition_belief_actions_ACF_pf(coalitions, self.causalrelation_number, self.deep_core, self.mid_level, self.secondary, self.agent_action_list, self.ACF_link_list_pf, self.ACF_link_list_pf_total, \
+				coalitions.coalition_belief_actions_ACF_pf(coalitions, self.causalrelation_number, self.policy_core, self.mid_level, self.secondary, self.agent_action_list, self.ACF_link_list_pf, self.ACF_link_list_pf_total, \
 					self.ACF_link_id_pf, self.link_list, self.affiliation_weights, self.agenda_as_issue, self.instruments, self.conflict_level_coef, self.resources_weight_action, self.resources_potency)
 		
 			print('... cleared.')
@@ -849,7 +776,7 @@ class PolicyEmergence(Model):
 					# The external parties
 					if type(agents) == Externalparties:
 						agents.external_parties_actions_pf(agents, self.agent_action_list, self.causalrelation_number, \
-							self.affiliation_weights, self.deep_core, self.mid_level, self.secondary, self.electorate_number, \
+							self.affiliation_weights, self.policy_core, self.mid_level, self.secondary, self.electorate_number, \
 							self.action_agent_number, self.agenda_as_issue, self.instruments, self.master_list, self.link_list, self.resources_weight_action, self.resources_potency)
 
 					# The policy makers and policy entrepreneurs
@@ -857,7 +784,7 @@ class PolicyEmergence(Model):
 					link_list_shuffle = self.link_list
 					random.shuffle(link_list_shuffle)
 					if type(agents) == Policymakers or type(agents) == Policyentres:
-						agents.pm_pe_actions_pf(agents, self.link_list, self.deep_core, self.mid_level, self.secondary, self.causalrelation_number, \
+						agents.pm_pe_actions_pf(agents, self.link_list, self.policy_core, self.mid_level, self.secondary, self.causalrelation_number, \
 							self.agenda_as_issue, self.instruments, self.resources_weight_action, self.resources_potency, AS_theory, self.affiliation_weights)
 			
 			# [3S]
@@ -866,7 +793,7 @@ class PolicyEmergence(Model):
 				for agents in shuffled_list_agent:
 					# 1 - Looking at the external parties
 					if type(agents) == Externalparties:
-						agents.external_parties_actions_pf_3S(agents, self.agent_action_list, self.causalrelation_number, self.affiliation_weights, self.deep_core, self.mid_level, self.secondary, \
+						agents.external_parties_actions_pf_3S(agents, self.agent_action_list, self.causalrelation_number, self.affiliation_weights, self.policy_core, self.mid_level, self.secondary, \
 							self.electorate_number, self.action_agent_number, self.master_list, self.agenda_prob_3S_as, self.link_list, self.conflict_level_coef, self.resources_weight_action, self.resources_potency)
 
 					# 2 - Looking at the policy makers and policy entrepreneurs
@@ -874,7 +801,7 @@ class PolicyEmergence(Model):
 					link_list_shuffle = self.link_list
 					random.shuffle(link_list_shuffle)
 					if type(agents) == Policymakers or type(agents) == Policyentres:
-						agents.pm_pe_actions_pf_3S(agents, link_list_shuffle, self.deep_core, self.mid_level, self.secondary, \
+						agents.pm_pe_actions_pf_3S(agents, link_list_shuffle, self.policy_core, self.mid_level, self.secondary, \
 							self.resources_weight_action, self.resources_potency, self.agenda_prob_3S_as, self.affiliation_weights, self.conflict_level_coef)
 
 			print('... cleared.')
@@ -919,7 +846,7 @@ class PolicyEmergence(Model):
 		####################################################################################################
 
 		# 1.2.19 Conflict level update
-		self.conflict_level_update(self.link_list, self.deep_core, self.mid_level, self.secondary, self.conflict_level_coef)
+		self.conflict_level_update(self.link_list, self.policy_core, self.mid_level, self.secondary, self.conflict_level_coef)
 
 		# 1.2.20 Data collection
 		print('Data collection process ...')
@@ -1054,17 +981,17 @@ class PolicyEmergence(Model):
 
 		#####	
 		# 1.5.2 Preference calculation for the mid-level issues
-		PC_denominator = 0
+		ML_denominator = 0
 		# 1.5.2.1. Calculation of the denominator
 		for j in range(len_ML):
-			PC_denominator = 0
+			ML_denominator = 0
 			# print('Selection PC' + str(j+1))
 			# print('State of the PC' + str(j+1) + ': ' + str(agent.belieftree[0][len_PC + j][0])) # the state printed
 			# Selecting the causal relations starting from PC
 			for k in range(len_PC):
 				# Contingency for partial knowledge issues
 				if agent.belieftree[who][k][1] == None or agent.belieftree[who][k][0] == None or agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0] == None:
-					PC_denominator = 0
+					ML_denominator = 0
 				else:
 					# print('Causal Relation PC' + str(j+1) + ' - PC' + str(k+1) + ': ' + str(agent.belieftree[0][len_PC+len_ML+len_S+j+(k*len_ML)][1]))
 					# print('Gap of PC' + str(k+1) + ': ' + str((agent.belieftree[0][k][1] - agent.belieftree[0][k][0])))
@@ -1072,11 +999,11 @@ class PolicyEmergence(Model):
 					# print('agent.belieftree[' + str(who) + '][' + str(len_PC+len_ML+len_S+j+(k*len_ML)) + '][0]: ' + str(agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0]))
 					if (agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0] < 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) < 0) \
 					  or (agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0] > 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) > 0):
-						PC_denominator = PC_denominator + abs(agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0]*\
+						ML_denominator = ML_denominator + abs(agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0]*\
 						  (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]))
-						# print('This is the PC numerator: ' + str(PC_denominator))
+						# print('This is the PC numerator: ' + str(ML_denominator))
 					else:
-						PC_denominator = PC_denominator	
+						ML_denominator = ML_denominator	
 
 		# 1.5.2.2. Addition of the gaps of the associated mid-level issues
 		for i in range(len_ML):
@@ -1731,7 +1658,7 @@ class PolicyEmergence(Model):
 
 	link_list = defaultdict(list)
 
-	def conflict_level_update(self, link_list, deep_core, mid_level, secondary, conflict_level_coef):
+	def conflict_level_update(self, link_list, policy_core, mid_level, secondary, conflict_level_coef):
 
 		"""
 		The conflict level update function

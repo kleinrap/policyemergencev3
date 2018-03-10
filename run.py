@@ -112,13 +112,6 @@ for run_number in range(run_number_total):
 			datacollector = DataCollector(
 				# Model
 				{"Run_number": lambda m: m.run_number,
-				"Empty": lambda m: m.technical_model.cell_count("Empty"),
-				"Burnt": lambda m: m.technical_model.cell_count("Burnt"),
-				"Camp_site": lambda m: m.technical_model.cell_count("Camp site"),
-				"Thin_forest": lambda m: m.technical_model.cell_count("Thin forest"),
-				"Thick_forest": lambda m: m.technical_model.cell_count("Thick forest"),
-				"Firefighters": lambda m: m.firefighter_force,
-				"Prevention": lambda m: m.thin_burning_probability,
 				"Agenda_issue": lambda m: m.agenda_as_issue,
 				"Chosen_instrument": lambda m: m.agenda_instrument,
 				"Belieftruth_tree": lambda m: m.belieftree_truth
@@ -139,13 +132,6 @@ for run_number in range(run_number_total):
 			datacollector = DataCollector(
 				# Model
 				{"Run_number": lambda m: m.run_number,
-				"Empty": lambda m: m.technical_model.cell_count("Empty"),
-				"Burnt": lambda m: m.technical_model.cell_count("Burnt"),
-				"Camp_site": lambda m: m.technical_model.cell_count("Camp site"),
-				"Thin_forest": lambda m: m.technical_model.cell_count("Thin forest"),
-				"Thick_forest": lambda m: m.technical_model.cell_count("Thick forest"),
-				"Firefighters": lambda m: m.firefighter_force,
-				"Prevention": lambda m: m.thin_burning_probability,
 				"Agenda_issue": lambda m: m.agenda_as_issue,
 				"Chosen_instrument": lambda m: m.agenda_instrument,
 				"Belieftruth_tree": lambda m: m.belieftree_truth
@@ -171,14 +157,6 @@ for run_number in range(run_number_total):
 			datacollector = DataCollector(
 				# Model
 				{"Run_number": lambda m: m.run_number,
-				"Empty": lambda m: m.technical_model.cell_count("Empty"),
-				"Burnt": lambda m: m.technical_model.cell_count("Burnt"),
-				"Camp_site": lambda m: m.technical_model.cell_count("Camp site"),
-				"Thin_forest": lambda m: m.technical_model.cell_count("Thin forest"),
-				"Thick_forest": lambda m: m.technical_model.cell_count("Thick forest"),
-				# "Instruments": lambda m: m.agenda_instrument,
-				"Firefighters": lambda m: m.firefighter_force,
-				"Prevention": lambda m: m.thin_burning_probability,
 				"Agenda_issue": lambda m: m.agenda_as_issue,
 				"Chosen_instrument": lambda m: m.agenda_instrument,
 				"Belieftruth_tree": lambda m: m.truthagent.belieftree_truth,
@@ -224,14 +202,6 @@ for run_number in range(run_number_total):
 			datacollector = DataCollector(
 				# Model
 				{"Run_number": lambda m: m.run_number,
-				"Empty": lambda m: m.technical_model.cell_count("Empty"),
-				"Burnt": lambda m: m.technical_model.cell_count("Burnt"),
-				"Camp_site": lambda m: m.technical_model.cell_count("Camp site"),
-				"Thin_forest": lambda m: m.technical_model.cell_count("Thin forest"),
-				"Thick_forest": lambda m: m.technical_model.cell_count("Thick forest"),
-				# "Instruments": lambda m: m.agenda_instrument,
-				"Firefighters": lambda m: m.firefighter_force,
-				"Prevention": lambda m: m.thin_burning_probability,
 				"Agenda_issue": lambda m: m.agenda_as_issue,
 				"Chosen_instrument": lambda m: m.agenda_instrument,
 				"Belieftruth_tree": lambda m: m.truthagent.belieftree_truth

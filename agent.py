@@ -684,7 +684,7 @@ class Agent:
 					# print('Loop stops now because there is no more low aware.')
 					new2_link = False
 
-	def agent_team_threeS_as(self, agents, agent_action_list, team_list_as, team_list_as_total, link_list, team_number_as, tick_number, threeS_link_list_as, deep_core, \
+	def agent_team_threeS_as(self, agents, agent_action_list, team_list_as, team_list_as_total, link_list, team_number_as, tick_number, threeS_link_list_as, policy_core, \
 		mid_level, secondary, team_gap_threshold, team_belief_problem_threshold, team_belief_policy_threshold):
 
 		"""
@@ -705,7 +705,7 @@ class Agent:
 
 		"""
 
-		len_PC = len(deep_core)
+		len_PC = len(policy_core)
 		len_ML = len(mid_level)
 		len_S = len(secondary)
 
@@ -716,8 +716,8 @@ class Agent:
 
 		# Calculation needed for the choice of the causal relation
 		prefered_Pr = []
-		for deep_core_issues in range(len_PC):
-			prefered_Pr.append(agents.belieftree[0][deep_core_issues][2])
+		for policy_core_issues in range(len_PC):
+			prefered_Pr.append(agents.belieftree[0][policy_core_issues][2])
 		prefered_Pr = prefered_Pr.index(max(prefered_Pr))
 
 		# a. Belonging level update (completed)
@@ -1621,7 +1621,7 @@ class Agent:
 									team.resources[0] += agent_members.team_as[1]
 									team.resources[1] = team.resources[0]
 
-	def agent_team_threeS_pf(self, agents, agent_action_list, team_list_pf, team_list_pf_total, link_list, team_number_pf, tick_number, threeS_link_list_pf, deep_core, \
+	def agent_team_threeS_pf(self, agents, agent_action_list, team_list_pf, team_list_pf_total, link_list, team_number_pf, tick_number, threeS_link_list_pf, policy_core, \
 		mid_level, secondary, agenda_prob_3S_as, team_gap_threshold, team_belief_problem_threshold, team_belief_policy_threshold):
 
 		"""
@@ -1646,7 +1646,7 @@ class Agent:
 		
 		"""
 
-		len_PC = len(deep_core)
+		len_PC = len(policy_core)
 		len_ML = len(mid_level)
 		len_S = len(secondary)
 
@@ -2750,7 +2750,7 @@ class Agent:
 					agent_exchange1.belieftree[1 + agent_exchange2.unique_id][issue][parameter] = \
 						ActionFunctions.one_minus_one_check(agent_exchange1.belieftree[1 + agent_exchange2.unique_id][issue][parameter])
 
-	def pm_pe_actions_as(self, agents, link_list, deep_core, mid_level, secondary, resources_weight_action, resources_potency, affiliation_weights):
+	def pm_pe_actions_as(self, agents, link_list, policy_core, mid_level, secondary, resources_weight_action, resources_potency, affiliation_weights):
 
 		"""
 		The PEs and PMs actions function (agenda setting)
@@ -2766,7 +2766,7 @@ class Agent:
 
 		"""
 
-		len_PC = len(deep_core)
+		len_PC = len(policy_core)
 		len_ML = len(mid_level)
 		len_S = len(secondary)
 		total_issue_number = len_PC + len_ML + len_S
@@ -2774,7 +2774,7 @@ class Agent:
 		# Selection of the cw of interest
 		cw_of_interest = []
 		# We only consider the causal relations related to the problem on the agenda
-		for cw_choice in range(len(deep_core)):
+		for cw_choice in range(len(policy_core)):
 				cw_of_interest.append(len_PC + len_ML + len_S + (agents.select_as_issue - len_PC) + cw_choice * len(mid_level))
 
 		# print(' ')
@@ -2882,7 +2882,7 @@ class Agent:
 			# agents.resources_actions -= agents.resources
 			agents.resources_actions -= agents.resources[0] * resources_weight_action
 
-	def pm_pe_actions_pf(self, agents, link_list, deep_core, mid_level, secondary, causalrelation_number, agenda_as_issue, instruments, resources_weight_action, resources_potency, AS_theory, affiliation_weights):
+	def pm_pe_actions_pf(self, agents, link_list, policy_core, mid_level, secondary, causalrelation_number, agenda_as_issue, instruments, resources_weight_action, resources_potency, AS_theory, affiliation_weights):
 
 		"""
 		The PEs and PMs actions function (policy formulation)
@@ -2898,7 +2898,7 @@ class Agent:
 
 		"""
 
-		len_PC = len(deep_core)
+		len_PC = len(policy_core)
 		len_ML = len(mid_level)
 		len_S = len(secondary)
 		total_issue_number = len_PC + len_ML + len_S
@@ -3024,7 +3024,7 @@ class Agent:
 			# print('Resources left: ' + str(agents.resources_actions))
 			agents.resources_actions -= agents.resources[0] * resources_weight_action
 
-	def pm_pe_actions_as_3S(self, agents, link_list, deep_core, mid_level, secondary, resources_weight_action, resources_potency, affiliation_weights, conflict_level_coef):
+	def pm_pe_actions_as_3S(self, agents, link_list, policy_core, mid_level, secondary, resources_weight_action, resources_potency, affiliation_weights, conflict_level_coef):
 
 		"""
 		The PEs and PMs actions function - three streams (agenda setting)
@@ -3044,7 +3044,7 @@ class Agent:
 
 		"""
 
-		len_PC = len(deep_core)
+		len_PC = len(policy_core)
 		len_ML = len(mid_level)
 		len_S = len(secondary)
 		total_issue_number = len_PC + len_ML + len_S
@@ -3052,7 +3052,7 @@ class Agent:
 		# Selection of the cw of interest
 		cw_of_interest = []
 		# We only consider the causal relations related to the problem selected by the agent
-		for cw_choice in range(len(deep_core)):
+		for cw_choice in range(len(policy_core)):
 				cw_of_interest.append(len_PC + len_ML + len_S + (agents.select_problem_3S_as - len_PC) + cw_choice * len(mid_level))
 
 		# Selection of the impact of interest
@@ -3216,7 +3216,7 @@ class Agent:
 
 			agents.resources_actions -= agents.resources[0] * resources_weight_action
 
-	def pm_pe_actions_pf_3S(self, agents, link_list, deep_core, mid_level, secondary, resources_weight_action, resources_potency, agenda_prob_3S_as, affiliation_weights, conflict_level_coef):
+	def pm_pe_actions_pf_3S(self, agents, link_list, policy_core, mid_level, secondary, resources_weight_action, resources_potency, agenda_prob_3S_as, affiliation_weights, conflict_level_coef):
 
 		"""
 		The PEs and PMs actions function - three streams (policy formulation)
@@ -3236,7 +3236,7 @@ class Agent:
 
 		"""
 
-		len_PC = len(deep_core)
+		len_PC = len(policy_core)
 		len_ML = len(mid_level)
 		len_S = len(secondary)
 		total_issue_number = len_PC + len_ML + len_S
@@ -3863,7 +3863,7 @@ class Externalparties(Agent):
 		return 'External party: ' + str(self.unique_id)
 
 	def external_parties_actions_as(self, agents, agent_action_list, causalrelation_number, \
-		affiliation_weights, deep_core, mid_level, secondary, electorate_number, action_agent_number, master_list, link_list, resources_weight_action, resources_potency):
+		affiliation_weights, policy_core, mid_level, secondary, electorate_number, action_agent_number, master_list, link_list, resources_weight_action, resources_potency):
 
 		"""
 		The external parties actions function (agenda setting)
@@ -3879,7 +3879,7 @@ class Externalparties(Agent):
 
 		"""
 
-		len_PC = len(deep_core)
+		len_PC = len(policy_core)
 		len_ML = len(mid_level)
 		len_S = len(secondary)
 
@@ -3892,7 +3892,7 @@ class Externalparties(Agent):
 
 		# Selecting the relevant causal relations
 		cw_of_interest = []
-		for cw_choice in range(len(deep_core)):
+		for cw_choice in range(len(policy_core)):
 				cw_of_interest.append(len_PC + len_ML + len_S + (agents.select_as_issue - len_PC) + cw_choice * len(mid_level))
 
 		# Making sure that there are enough resources
@@ -4102,7 +4102,7 @@ class Externalparties(Agent):
 			# agents.resources_actions -= agents.resources[0] * 0.1
 
 	def external_parties_actions_pf(self, agents, agent_action_list, causalrelation_number, \
-		affiliation_weights, deep_core, mid_level, secondary, electorate_number, action_agent_number, agenda_as_issue, instruments, master_list, link_list, resources_weight_action, resources_potency):
+		affiliation_weights, policy_core, mid_level, secondary, electorate_number, action_agent_number, agenda_as_issue, instruments, master_list, link_list, resources_weight_action, resources_potency):
 
 		"""
 		The external parties actions function (policy formulation)
@@ -4121,7 +4121,7 @@ class Externalparties(Agent):
 
 		"""
 
-		len_PC = len(deep_core)
+		len_PC = len(policy_core)
 		len_ML = len(mid_level)
 		len_S = len(secondary)
 
@@ -4335,7 +4335,7 @@ class Externalparties(Agent):
 			agents.resources_actions_EInfluence -= agents.resources[0] * 0.1
 
 	def external_parties_actions_as_3S(self, agents, agent_action_list, causalrelation_number, \
-		affiliation_weights, deep_core, mid_level, secondary, electorate_number, action_agent_number, master_list, link_list, conflict_level_coef, resources_weight_action, resources_potency):
+		affiliation_weights, policy_core, mid_level, secondary, electorate_number, action_agent_number, master_list, link_list, conflict_level_coef, resources_weight_action, resources_potency):
 
 		"""
 		The external parties actions function - three streams (agenda setting)
@@ -4355,7 +4355,7 @@ class Externalparties(Agent):
 
 		"""
 
-		len_PC = len(deep_core)
+		len_PC = len(policy_core)
 		len_ML = len(mid_level)
 		len_S = len(secondary)
 
@@ -4368,7 +4368,7 @@ class Externalparties(Agent):
 
 		cw_of_interest = []
 		# We only consider the causal relations related to the problem on the agenda
-		for cw_choice in range(len(deep_core)):
+		for cw_choice in range(len(policy_core)):
 				cw_of_interest.append(len_PC + len_ML + len_S + (agents.select_problem_3S_as - len_PC) + cw_choice * len(mid_level))
 
 		# If the team is advocating for a problem, the following tasks are completed
@@ -4667,7 +4667,7 @@ class Externalparties(Agent):
 			agents.resources_actions_EInfluence -= agents.resources[0] * 0.1
 
 	def external_parties_actions_pf_3S(self, agents, agent_action_list, causalrelation_number, \
-		affiliation_weights, deep_core, mid_level, secondary, electorate_number, action_agent_number, master_list, agenda_prob_3S_as, link_list, conflict_level_coef, resources_weight_action, resources_potency):
+		affiliation_weights, policy_core, mid_level, secondary, electorate_number, action_agent_number, master_list, agenda_prob_3S_as, link_list, conflict_level_coef, resources_weight_action, resources_potency):
 
 		"""
 		The external parties actions function - three streams (policy formulation)
@@ -4690,7 +4690,7 @@ class Externalparties(Agent):
 
 		"""
 
-		len_PC = len(deep_core)
+		len_PC = len(policy_core)
 		len_ML = len(mid_level)
 		len_S = len(secondary)
 

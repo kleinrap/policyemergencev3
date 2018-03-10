@@ -1,7 +1,6 @@
 import random
 
 class Technical_Model():
-
 	
 	def __init__(self, len_PC, len_ML, len_S):
 		self.len_PC = len_PC
@@ -53,7 +52,7 @@ class Technical_Model():
 
 		# Current modek has 2 Pr, 3 PC and 5 S
 		# Pr1 - Economy -- Pr2 - Environment
-		# PC1 - Forest size -- PC2 - Tourism -- PC3 - Safety
+		# PC1 - Forest size -- PC2 - Tourism -- ML3 - Safety
 		# S1 - Camp sites -- S2 - Planting -- S3 - Monitoring -- S4 - Firefighters -- S5 - Prevention
 
 		
@@ -119,31 +118,31 @@ class Technical_Model():
 		# PC2 - Tourism
 		self.belieftree_truth[3] = round(((0.75 * self.campSite_percentage + 0.25 * self.thickForest_percentage)* 2 ) - 1 , 5)
 
-		# PC3 - Safety - 
+		# ML3 - Safety - 
 		# All of the numbers in this sum are counted on the interval [0,1] depending on their respective maximum. Negative aspects go
 		# down from 1 towards 0 while poisitve aspects go up from 0 to 1.
 		maxThickForest = 1.0
 		if self.thin_burning_probability > maxThin_burning_probability:
-			PC3_P1 = 0
+			ML3_P1 = 0
 		else: # this is negative towards the safety grade
-			PC3_P1 =  1 - self.thin_burning_probability/maxThin_burning_probability
+			ML3_P1 =  1 - self.thin_burning_probability/maxThin_burning_probability
 		if self.firefighter_force > maxFirefighter_force:
-			PC3_P2 = 1
+			ML3_P2 = 1
 		else: # this is positive towards the safety grade
-			PC3_P2 = self.firefighter_force/maxFirefighter_force
+			ML3_P2 = self.firefighter_force/maxFirefighter_force
 		if self.empty_percentage > maxEmpty:
-			PC3_P3 = 1
+			ML3_P3 = 1
 		else: # this is positive towards the safety grade
-			PC3_P3 = self.empty_percentage/maxEmpty
+			ML3_P3 = self.empty_percentage/maxEmpty
 		if self.campSite_percentage > maxCampSites:
-			PC3_P4 = 0
+			ML3_P4 = 0
 		else: # this is negative towards the safety grade
-			PC3_P4 = 1 - self.campSite_percentage/maxCampSites
+			ML3_P4 = 1 - self.campSite_percentage/maxCampSites
 		if self.thickForest_percentage > maxThickForest:
-			PC3_P5 = 0
+			ML3_P5 = 0
 		else: # this is negative towards the safety grade
-			PC3_P5 = 1 - self.thickForest_percentage/maxThickForest
-		self.belieftree_truth[4] = round((( (PC3_P1 + PC3_P2 + PC3_P3 + PC3_P4 + PC3_P5) / 5) * 2) - 1, 5)
+			ML3_P5 = 1 - self.thickForest_percentage/maxThickForest
+		self.belieftree_truth[4] = round((( (ML3_P1 + ML3_P2 + ML3_P3 + ML3_P4 + ML3_P5) / 5) * 2) - 1, 5)
 
 		# Pr1 - Economy
 		self.belieftree_truth[0] = round((((self.belieftree_truth[3] + 1) / 2 + (self.belieftree_truth[4] + 1) / 2) * 2/2) - 1 , 5)
