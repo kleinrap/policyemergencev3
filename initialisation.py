@@ -4959,9 +4959,6 @@ def initial_values(inputs_dict, experiment_input, run_number, agent_inputs, AS_t
 		# agent_action_list.append(policyentre)
 		inputs_dict["Agents"].append(policyentre)
 
-
-
-
 	####################################################################################################
 	# INITIALISATION of the backbone parameters
 	####################################################################################################
@@ -5001,15 +4998,12 @@ def initial_values(inputs_dict, experiment_input, run_number, agent_inputs, AS_t
 	random.seed(1)
 	inputs_dict["Link_list"] = []
 	agent_action_list = []
-	print(inputs_dict["Agents"])
 	for agents in inputs_dict["Agents"]:
-		print(type(agents))
 		if type(agents) == Policymakers or type(agents) == Policyentres or type(agents) == Externalparties:
 			# print(agents)
-			print(agents)
 			agent_action_list.append(agents)
 
-	print('')
+	# print('')
 
 	if experiment_input[9][run_number] != False:
 		inputs_dict["Trust_decay_coefficient"] = experiment_input[9][run_number]

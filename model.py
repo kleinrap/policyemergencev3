@@ -7,6 +7,7 @@ import math
 import copy
 import os
 from collections import defaultdict, Counter
+import pandas as pd
 
 # Importing functions from mesa
 from mesa import Model
@@ -323,8 +324,10 @@ class PolicyEmergence(Model):
 		# 1.2.X Reading of the states from an output file
 		technical_model_outputs = pd.read_csv("TechnicalModelOutputs.data",header=None)
 
-		for i in len(self.belieftree_truth):
+		print(len(self.belieftree_truth))
+		for i in range(len(self.belieftree_truth)):
 			self.belieftree_truth[i] = technical_model_outputs[i][0]
+		print(self.belieftree_truth)
 
 		# technical_model_outputs = pd.read_csv("TechnicalModelOutputs.data",header=None)
 		# print(technical_model_outputs)
