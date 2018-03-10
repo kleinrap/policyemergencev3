@@ -234,7 +234,7 @@ from agent import Policymakers, Policyentres
 # 		return 'External party: ' + str(self.unique_id)
 
 # 	def external_parties_actions_as(self, agents, agent_action_list, causalrelation_number, \
-# 		affiliation_weights, deep_core, policy_core, secondary, electorate_number, action_agent_number, master_list, link_list):
+# 		affiliation_weights, deep_core, mid_level, secondary, electorate_number, action_agent_number, master_list, link_list):
 
 		
 
@@ -252,8 +252,8 @@ from agent import Policymakers, Policyentres
 
 # 		"""
 
-# 		len_Pr = len(deep_core)
-# 		len_PC = len(policy_core)
+# 		len_PC = len(deep_core)
+# 		len_ML = len(mid_level)
 # 		len_S = len(secondary)
 
 # 		############################################################################################################
@@ -267,9 +267,9 @@ from agent import Policymakers, Policyentres
 # 		# # Selecting the relevant causal relations
 # 		# cw_of_interest = []
 # 		# for cw_choice in range(len(deep_core)):
-# 		# 		cw_of_interest.append(len_Pr + len_PC + len_S + (agents.select_as_issue - len_Pr) + cw_choice * len(policy_core))
+# 		# 		cw_of_interest.append(len_PC + len_ML + len_S + (agents.select_as_issue - len_PC) + cw_choice * len(mid_level))
 
-# 		# self.influence_actions_AS(agents, agent_action_list, link_list, cw_of_interest, affiliation_weights, action_agent_number, len_Pr, len_PC, len_S)
+# 		# self.influence_actions_AS(agents, agent_action_list, link_list, cw_of_interest, affiliation_weights, action_agent_number, len_PC, len_ML, len_S)
 
 # 		############################################################################################################
 # 		############################################################################################################
@@ -289,7 +289,7 @@ from agent import Policymakers, Policyentres
 # 		# Selecting the relevant causal relations
 # 		cw_of_interest = []
 # 		for cw_choice in range(len(deep_core)):
-# 				cw_of_interest.append(len_Pr + len_PC + len_S + (agents.select_as_issue - len_Pr) + cw_choice * len(policy_core))
+# 				cw_of_interest.append(len_PC + len_ML + len_S + (agents.select_as_issue - len_PC) + cw_choice * len(mid_level))
 
 # 		# Making sure that there are enough resources
 # 		while agents.resources_actions > 0.001:
@@ -635,7 +635,7 @@ from agent import Policymakers, Policyentres
 
 # 			actions_EP_grades_EInfluence = []
 # 			# FIRST - Calculation of the best option
-# 			for issue_num in range(len_Pr + len_PC):
+# 			for issue_num in range(len_PC + len_ML):
 # 				actions_EP_grades_EInfluence_ind = []
 # 				# Going through all agents that are electorate from the master_list
 # 				agents_electorate = []
@@ -662,7 +662,7 @@ from agent import Policymakers, Policyentres
 # 							agents_el.belieftree_electorate[issue_num][1] += (agents.belieftree[0][issue_num][1] - agents_el.belieftree_electorate[issue_num][1]) \
 # 								* agents.resources[0] * 0.1 / electorate_number
 # 							# Update of the preference
-# 							self.preference_udapte_electorate(agents_el, len_Pr, len_PC, len_S)
+# 							self.preference_udapte_electorate(agents_el, len_PC, len_ML, len_S)
 # 							# Calculation of the new gradec
 # 							issue_num_grade = abs(agents.belieftree[0][issue_num][2] - agents_el.belieftree_electorate[issue_num][2])
 
@@ -672,7 +672,7 @@ from agent import Policymakers, Policyentres
 # 							agents_el.belieftree_electorate[issue_num][1] += (agents.belieftree[0][issue_num][1] - agents_el.belieftree_electorate[issue_num][1]) \
 # 								* agents.resources[0] * 0.1 * affiliation_weights[0] / electorate_number
 # 							# Update of the preference
-# 							self.preference_udapte_electorate(agents_el, len_Pr, len_PC, len_S)
+# 							self.preference_udapte_electorate(agents_el, len_PC, len_ML, len_S)
 # 							# Calculation of the new gradec
 # 							issue_num_grade = abs(agents.belieftree[0][issue_num][2] - agents_el.belieftree_electorate[issue_num][2])
 
@@ -682,7 +682,7 @@ from agent import Policymakers, Policyentres
 # 							agents_el.belieftree_electorate[issue_num][1] += (agents.belieftree[0][issue_num][1] - agents_el.belieftree_electorate[issue_num][1]) \
 # 								* agents.resources[0] * 0.1 * affiliation_weights[1] / electorate_number
 # 							# Update of the preference
-# 							self.preference_udapte_electorate(agents_el, len_Pr, len_PC, len_S)
+# 							self.preference_udapte_electorate(agents_el, len_PC, len_ML, len_S)
 # 							# Calculation of the new gradec
 # 							issue_num_grade = abs(agents.belieftree[0][issue_num][2] - agents_el.belieftree_electorate[issue_num][2])
 
@@ -692,7 +692,7 @@ from agent import Policymakers, Policyentres
 # 							agents_el.belieftree_electorate[issue_num][1] += (agents.belieftree[0][issue_num][1] - agents_el.belieftree_electorate[issue_num][1]) \
 # 								* agents.resources[0] * 0.1 * affiliation_weights[2] / electorate_number
 # 							# Update of the preference
-# 							self.preference_udapte_electorate(agents_el, len_Pr, len_PC, len_S)
+# 							self.preference_udapte_electorate(agents_el, len_PC, len_ML, len_S)
 # 							# Calculation of the new grade
 # 							issue_num_grade = abs(agents.belieftree[0][issue_num][2] - agents_el.belieftree_electorate[issue_num][2])
 
@@ -703,7 +703,7 @@ from agent import Policymakers, Policyentres
 
 
 # 						# Re-updating the preference levels
-# 						self.preference_udapte_electorate(agents_el, len_Pr, len_PC, len_S)
+# 						self.preference_udapte_electorate(agents_el, len_PC, len_ML, len_S)
 
 # 					actions_EP_grades_EInfluence_ind.append(issue_num_grade)
 
@@ -739,13 +739,13 @@ from agent import Policymakers, Policyentres
 # 				agents_el.belieftree_electorate[best_EInfluence][1] = self.one_minus_one_check(agents_el.belieftree_electorate[best_EInfluence][1])
 
 # 				# Re-updating the preference levels
-# 				self.preference_udapte_electorate(agents_el, len_Pr, len_PC, len_S)
+# 				self.preference_udapte_electorate(agents_el, len_PC, len_ML, len_S)
 
 # 			agents.resources_actions_EInfluence -= agents.resources[0] * 0.1
 # 			# agents.resources_actions -= agents.resources[0] * 0.1
 
 # 	def external_parties_actions_pf(self, agents, agent_action_list, causalrelation_number, \
-# 		affiliation_weights, deep_core, policy_core, secondary, electorate_number, action_agent_number, agenda_as_issue, instruments, master_list, link_list):
+# 		affiliation_weights, deep_core, mid_level, secondary, electorate_number, action_agent_number, agenda_as_issue, instruments, master_list, link_list):
 
 # 		"""
 # 		The external parties actions function (policy formulation)
@@ -764,8 +764,8 @@ from agent import Policymakers, Policyentres
 
 # 		"""
 
-# 		len_Pr = len(deep_core)
-# 		len_PC = len(policy_core)
+# 		len_PC = len(deep_core)
+# 		len_ML = len(mid_level)
 # 		len_S = len(secondary)
 
 # 		# Here are the modifications related to the policy formulation
@@ -775,9 +775,9 @@ from agent import Policymakers, Policyentres
 # 		print(agents.select_pinstrument)
 # 		for cw_choice in range(len(secondary)):
 # 			# Index explanation - pass all issues, then all causal relations related to the PC-Pr links, then reach the links related to the issue on the agenda
-# 			if agents.belieftree[0][len_Pr + len_PC + len_S + (len_Pr * len_PC) + (agenda_as_issue - len_Pr)*len_S + cw_choice][0] \
+# 			if agents.belieftree[0][len_PC + len_ML + len_S + (len_PC * len_ML) + (agenda_as_issue - len_PC)*len_S + cw_choice][0] \
 # 				* instruments[agents.select_pinstrument][cw_choice] != 0:
-# 				cw_of_interest.append(len_Pr + len_PC + len_S + (len_Pr * len_PC) + (agenda_as_issue - len_Pr)*len_S + cw_choice)
+# 				cw_of_interest.append(len_PC + len_ML + len_S + (len_PC * len_ML) + (agenda_as_issue - len_PC)*len_S + cw_choice)
 
 		
 # 		# Looking for the relevant issues for the policy formulation
@@ -786,7 +786,7 @@ from agent import Policymakers, Policyentres
 # 		issue_of_interest = []
 # 		for issue_choice in range(len(secondary)):
 # 			if instruments[agents.select_pinstrument][issue_choice] != 0:
-# 				issue_of_interest.append(len_Pr + len_PC + issue_choice)
+# 				issue_of_interest.append(len_PC + len_ML + issue_choice)
 
 # 		# Assignment of the resources for the two main types of actions:
 # 		agents.resources_actions_EInfluence = agents.resources_actions * 0.2
@@ -1250,7 +1250,7 @@ from agent import Policymakers, Policyentres
 # 			agents.resources_actions_EInfluence -= agents.resources[0] * 0.1
 
 # 	def external_parties_actions_as_3S(self, agents, agent_action_list, causalrelation_number, \
-# 		affiliation_weights, deep_core, policy_core, secondary, electorate_number, action_agent_number, master_list, link_list, conflict_level_coef):
+# 		affiliation_weights, deep_core, mid_level, secondary, electorate_number, action_agent_number, master_list, link_list, conflict_level_coef):
 
 # 		"""
 # 		The external parties actions function - three streams (agenda setting)
@@ -1270,8 +1270,8 @@ from agent import Policymakers, Policyentres
 
 # 		"""
 
-# 		len_Pr = len(deep_core)
-# 		len_PC = len(policy_core)
+# 		len_PC = len(deep_core)
+# 		len_ML = len(mid_level)
 # 		len_S = len(secondary)
 
 # 		# Assignment of the resources for the two main types of actions:
@@ -1287,7 +1287,7 @@ from agent import Policymakers, Policyentres
 # 		cw_of_interest = []
 # 		# We only consider the causal relations related to the problem on the agenda
 # 		for cw_choice in range(len(deep_core)):
-# 				cw_of_interest.append(len_Pr + len_PC + len_S + (agents.select_problem_3S_as - len_Pr) + cw_choice * len(policy_core))
+# 				cw_of_interest.append(len_PC + len_ML + len_S + (agents.select_problem_3S_as - len_PC) + cw_choice * len(mid_level))
 
 # 		# If the team is advocating for a problem, the following tasks are completed
 # 		if agents.select_issue_3S_as == 'problem':
@@ -1976,7 +1976,7 @@ from agent import Policymakers, Policyentres
 # 		while agents.resources_actions_EInfluence > 0.001:
 # 			actions_EP_grades_EInfluence = []
 # 			# FIRST - Calculation of the best option
-# 			for issue_num in range(len_Pr + len_PC):
+# 			for issue_num in range(len_PC + len_ML):
 # 				actions_EP_grades_EInfluence_ind = []
 # 				# Going through all agents that are electorate from the master_list
 # 				agents_electorate = []
@@ -2004,7 +2004,7 @@ from agent import Policymakers, Policyentres
 # 							agents_el.belieftree_electorate[issue_num][1] += (agents.belieftree[0][issue_num][1] - agents_el.belieftree_electorate[issue_num][1]) \
 # 								* agents.resources[0] * 0.1 / electorate_number
 # 							# Update of the preference
-# 							self.preference_udapte_electorate(agents_el, len_Pr, len_PC, len_S)
+# 							self.preference_udapte_electorate(agents_el, len_PC, len_ML, len_S)
 # 							# Calculation of the new gradec
 # 							issue_num_grade = abs(agents.belieftree[0][issue_num][2] - agents_el.belieftree_electorate[issue_num][2])
 
@@ -2014,7 +2014,7 @@ from agent import Policymakers, Policyentres
 # 							agents_el.belieftree_electorate[issue_num][1] += (agents.belieftree[0][issue_num][1] - agents_el.belieftree_electorate[issue_num][1]) \
 # 								* agents.resources[0] * 0.1 * affiliation_weights[0] / electorate_number
 # 							# Update of the preference
-# 							self.preference_udapte_electorate(agents_el, len_Pr, len_PC, len_S)
+# 							self.preference_udapte_electorate(agents_el, len_PC, len_ML, len_S)
 # 							# Calculation of the new gradec
 # 							issue_num_grade = abs(agents.belieftree[0][issue_num][2] - agents_el.belieftree_electorate[issue_num][2])
 
@@ -2024,7 +2024,7 @@ from agent import Policymakers, Policyentres
 # 							agents_el.belieftree_electorate[issue_num][1] += (agents.belieftree[0][issue_num][1] - agents_el.belieftree_electorate[issue_num][1]) \
 # 								* agents.resources[0] * 0.1 * affiliation_weights[1] / electorate_number
 # 							# Update of the preference
-# 							self.preference_udapte_electorate(agents_el, len_Pr, len_PC, len_S)
+# 							self.preference_udapte_electorate(agents_el, len_PC, len_ML, len_S)
 # 							# Calculation of the new gradec
 # 							issue_num_grade = abs(agents.belieftree[0][issue_num][2] - agents_el.belieftree_electorate[issue_num][2])
 
@@ -2034,7 +2034,7 @@ from agent import Policymakers, Policyentres
 # 							agents_el.belieftree_electorate[issue_num][1] += (agents.belieftree[0][issue_num][1] - agents_el.belieftree_electorate[issue_num][1]) \
 # 								* agents.resources[0] * 0.1 * affiliation_weights[2] / electorate_number
 # 							# Update of the preference
-# 							self.preference_udapte_electorate(agents_el, len_Pr, len_PC, len_S)
+# 							self.preference_udapte_electorate(agents_el, len_PC, len_ML, len_S)
 # 							# Calculation of the new grade
 # 							issue_num_grade = abs(agents.belieftree[0][issue_num][2] - agents_el.belieftree_electorate[issue_num][2])
 
@@ -2045,7 +2045,7 @@ from agent import Policymakers, Policyentres
 
 
 # 						# Re-updating the preference levels
-# 						self.preference_udapte_electorate(agents_el, len_Pr, len_PC, len_S)
+# 						self.preference_udapte_electorate(agents_el, len_PC, len_ML, len_S)
 
 # 					actions_EP_grades_EInfluence_ind.append(issue_num_grade)
 
@@ -2081,12 +2081,12 @@ from agent import Policymakers, Policyentres
 # 					self.one_minus_one_check(agents_el.belieftree_electorate[best_EInfluence][1])
 
 # 				# Re-updating the preference levels
-# 				self.preference_udapte_electorate(agents_el, len_Pr, len_PC, len_S)
+# 				self.preference_udapte_electorate(agents_el, len_PC, len_ML, len_S)
 
 # 			agents.resources_actions_EInfluence -= agents.resources[0] * 0.1
 
 # 	def external_parties_actions_pf_3S(self, agents, agent_action_list, causalrelation_number, \
-# 		affiliation_weights, deep_core, policy_core, secondary, electorate_number, action_agent_number, master_list, agenda_prob_3S_as, link_list, conflict_level_coef):
+# 		affiliation_weights, deep_core, mid_level, secondary, electorate_number, action_agent_number, master_list, agenda_prob_3S_as, link_list, conflict_level_coef):
 
 # 		"""
 # 		The external parties actions function - three streams (policy formulation)
@@ -2109,8 +2109,8 @@ from agent import Policymakers, Policyentres
 
 # 		"""
 
-# 		len_Pr = len(deep_core)
-# 		len_PC = len(policy_core)
+# 		len_PC = len(deep_core)
+# 		len_ML = len(mid_level)
 # 		len_S = len(secondary)
 
 # 		# Assignment of the resources for the two main types of actions:
@@ -2127,14 +2127,14 @@ from agent import Policymakers, Policyentres
 # 		cw_of_interest = []
 # 		# Select one by one the Pr
 # 		j = agenda_prob_3S_as
-# 		# for j in range(len_PC):
+# 		# for j in range(len_ML):
 # 		# Selecting the causal relations starting from Pr
 # 		for k in range(len_S):
 # 			# Contingency for partial knowledge issues
-# 			# print(len_Pr + len_PC + len_S + len_PC*len_Pr + (j-len_Pr) + k*len_PC)
-# 			if (agents.belieftree[0][len_Pr + len_PC + len_S + len_PC*len_Pr + (j-len_Pr) + k*len_PC][0] < 0 and (agents.belieftree[0][j][1] - agents.belieftree[0][j][0]) < 0) \
-# 			  or (agents.belieftree[0][len_Pr + len_PC + len_S + len_PC*len_Pr + (j-len_Pr) + k*len_PC][0] > 0 and (agents.belieftree[0][j][1] - agents.belieftree[0][j][0]) > 0):
-# 				cw_of_interest.append(len_Pr + len_PC + len_S + len_PC*len_Pr + (j-len_Pr) + k*len_PC)
+# 			# print(len_PC + len_ML + len_S + len_ML*len_PC + (j-len_PC) + k*len_ML)
+# 			if (agents.belieftree[0][len_PC + len_ML + len_S + len_ML*len_PC + (j-len_PC) + k*len_ML][0] < 0 and (agents.belieftree[0][j][1] - agents.belieftree[0][j][0]) < 0) \
+# 			  or (agents.belieftree[0][len_PC + len_ML + len_S + len_ML*len_PC + (j-len_PC) + k*len_ML][0] > 0 and (agents.belieftree[0][j][1] - agents.belieftree[0][j][0]) > 0):
+# 				cw_of_interest.append(len_PC + len_ML + len_S + len_ML*len_PC + (j-len_PC) + k*len_ML)
 		
 
 # 		# If the team is advocating for a problem, the following tasks are completed
@@ -2824,7 +2824,7 @@ from agent import Policymakers, Policyentres
 # 		while agents.resources_actions_EInfluence > 0.001:
 # 				actions_EP_grades_EInfluence = []
 # 				# FIRST - Calculation of the best option
-# 				for issue_num in range(len_Pr + len_PC):
+# 				for issue_num in range(len_PC + len_ML):
 # 					actions_EP_grades_EInfluence_ind = []
 # 					# Going through all agents that are electorate from the master_list
 # 					agents_electorate = []
@@ -2852,7 +2852,7 @@ from agent import Policymakers, Policyentres
 # 								agents_el.belieftree_electorate[issue_num][1] += (agents.belieftree[0][issue_num][1] - agents_el.belieftree_electorate[issue_num][1]) \
 # 									* agents.resources[0] * 0.1 / electorate_number
 # 								# Update of the preference
-# 								self.preference_udapte_electorate(agents_el, len_Pr, len_PC, len_S)
+# 								self.preference_udapte_electorate(agents_el, len_PC, len_ML, len_S)
 # 								# Calculation of the new gradec
 # 								issue_num_grade = abs(agents.belieftree[0][issue_num][2] - agents_el.belieftree_electorate[issue_num][2])
 
@@ -2862,7 +2862,7 @@ from agent import Policymakers, Policyentres
 # 								agents_el.belieftree_electorate[issue_num][1] += (agents.belieftree[0][issue_num][1] - agents_el.belieftree_electorate[issue_num][1]) \
 # 									* agents.resources[0] * 0.1 * affiliation_weights[0] / electorate_number
 # 								# Update of the preference
-# 								self.preference_udapte_electorate(agents_el, len_Pr, len_PC, len_S)
+# 								self.preference_udapte_electorate(agents_el, len_PC, len_ML, len_S)
 # 								# Calculation of the new gradec
 # 								issue_num_grade = abs(agents.belieftree[0][issue_num][2] - agents_el.belieftree_electorate[issue_num][2])
 
@@ -2872,7 +2872,7 @@ from agent import Policymakers, Policyentres
 # 								agents_el.belieftree_electorate[issue_num][1] += (agents.belieftree[0][issue_num][1] - agents_el.belieftree_electorate[issue_num][1]) \
 # 									* agents.resources[0] * 0.1 * affiliation_weights[1] / electorate_number
 # 								# Update of the preference
-# 								self.preference_udapte_electorate(agents_el, len_Pr, len_PC, len_S)
+# 								self.preference_udapte_electorate(agents_el, len_PC, len_ML, len_S)
 # 								# Calculation of the new gradec
 # 								issue_num_grade = abs(agents.belieftree[0][issue_num][2] - agents_el.belieftree_electorate[issue_num][2])
 
@@ -2882,7 +2882,7 @@ from agent import Policymakers, Policyentres
 # 								agents_el.belieftree_electorate[issue_num][1] += (agents.belieftree[0][issue_num][1] - agents_el.belieftree_electorate[issue_num][1]) \
 # 									* agents.resources[0] * 0.1 * affiliation_weights[2] / electorate_number
 # 								# Update of the preference
-# 								self.preference_udapte_electorate(agents_el, len_Pr, len_PC, len_S)
+# 								self.preference_udapte_electorate(agents_el, len_PC, len_ML, len_S)
 # 								# Calculation of the new grade
 # 								issue_num_grade = abs(agents.belieftree[0][issue_num][2] - agents_el.belieftree_electorate[issue_num][2])
 
@@ -2893,7 +2893,7 @@ from agent import Policymakers, Policyentres
 
 
 # 							# Re-updating the preference levels
-# 							self.preference_udapte_electorate(agents_el, len_Pr, len_PC, len_S)
+# 							self.preference_udapte_electorate(agents_el, len_PC, len_ML, len_S)
 
 # 						actions_EP_grades_EInfluence_ind.append(issue_num_grade)
 
@@ -2929,11 +2929,11 @@ from agent import Policymakers, Policyentres
 # 						self.one_minus_one_check(agents_el.belieftree_electorate[best_EInfluence][1])
 
 # 					# Re-updating the preference levels
-# 					self.preference_udapte_electorate(agents_el, len_Pr, len_PC, len_S)
+# 					self.preference_udapte_electorate(agents_el, len_PC, len_ML, len_S)
 
 # 				agents.resources_actions_EInfluence -= agents.resources[0] * 0.1
 
-# 	def preference_udapte_electorate(self, agent, len_Pr, len_PC, len_S):
+# 	def preference_udapte_electorate(self, agent, len_PC, len_ML, len_S):
 
 # 		"""
 # 		Electorate preference update function
@@ -2954,9 +2954,9 @@ from agent import Policymakers, Policyentres
 # 		#####
 # 		# Preference calculation for the deep core issues
 # 		Pr_denominator = 0
-# 		for h in range(len_Pr):
+# 		for h in range(len_PC):
 # 			Pr_denominator = Pr_denominator + abs(agent.belieftree_electorate[h][1] - agent.belieftree_electorate[h][0])
-# 		for i in range(len_Pr):
+# 		for i in range(len_PC):
 # 			# There are rare occasions where the denominator could be 0
 # 			if Pr_denominator != 0:
 # 				agent.belieftree_electorate[i][2] = abs(agent.belieftree_electorate[i][1] - agent.belieftree_electorate[i][0]) / Pr_denominator
@@ -2966,26 +2966,26 @@ from agent import Policymakers, Policyentres
 # 		#####
 # 		# Preference calculation for the policy core issues
 # 		PC_denominator = 0
-# 		for h in range(len_PC):
-# 			PC_denominator = PC_denominator + abs(agent.belieftree_electorate[len_Pr + h][1] - agent.belieftree_electorate[len_Pr + h][0])
-# 		for i in range(len_PC):
+# 		for h in range(len_ML):
+# 			PC_denominator = PC_denominator + abs(agent.belieftree_electorate[len_PC + h][1] - agent.belieftree_electorate[len_PC + h][0])
+# 		for i in range(len_ML):
 # 			# There are rare occasions where the denominator could be 0
 # 			if PC_denominator != 0:
-# 				agent.belieftree_electorate[len_Pr + i][2] = abs(agent.belieftree_electorate[len_Pr + i][1] - agent.belieftree_electorate[len_Pr + i][0]) / PC_denominator
+# 				agent.belieftree_electorate[len_PC + i][2] = abs(agent.belieftree_electorate[len_PC + i][1] - agent.belieftree_electorate[len_PC + i][0]) / PC_denominator
 # 			else:
-# 				agent.belieftree_electorate[len_Pr + i][2] = 0
+# 				agent.belieftree_electorate[len_PC + i][2] = 0
 
 # 		#####
 # 		# Preference calculation for the secondary issues
 # 		S_denominator = 0
 # 		for h in range(len_S):
-# 			S_denominator = S_denominator + abs(agent.belieftree_electorate[len_Pr + len_PC + h][1] - agent.belieftree_electorate[len_Pr + len_PC + h][0])
+# 			S_denominator = S_denominator + abs(agent.belieftree_electorate[len_PC + len_ML + h][1] - agent.belieftree_electorate[len_PC + len_ML + h][0])
 # 		for i in range(len_S):
 # 			# There are rare occasions where the denominator could be 0
 # 			if S_denominator != 0:
-# 				agent.belieftree_electorate[len_Pr + len_PC + i][2] = abs(agent.belieftree_electorate[len_Pr + len_PC + i][1] - agent.belieftree_electorate[len_Pr + len_PC + i][0]) / S_denominator
+# 				agent.belieftree_electorate[len_PC + len_ML + i][2] = abs(agent.belieftree_electorate[len_PC + len_ML + i][1] - agent.belieftree_electorate[len_PC + len_ML + i][0]) / S_denominator
 # 			else:
-# 				agent.belieftree_electorate[len_Pr + len_PC + i][2] = 0
+# 				agent.belieftree_electorate[len_PC + len_ML + i][2] = 0
 
 # 	def one_minus_one_check(self, to_be_checked_parameter):
 
@@ -3241,7 +3241,7 @@ from agent import Policymakers, Policyentres
 		
 # 		return results
 
-# 	def pm_pe_actions_as(self, agents, link_list, deep_core, policy_core, secondary, resources_weight_action, resources_potency, affiliation_weights):
+# 	def pm_pe_actions_as(self, agents, link_list, deep_core, mid_level, secondary, resources_weight_action, resources_potency, affiliation_weights):
 
 # 		"""
 # 		The PEs and PMs actions function (agenda setting)
@@ -3257,16 +3257,16 @@ from agent import Policymakers, Policyentres
 
 # 		"""
 
-# 		len_Pr = len(deep_core)
-# 		len_PC = len(policy_core)
+# 		len_PC = len(deep_core)
+# 		len_ML = len(mid_level)
 # 		len_S = len(secondary)
-# 		total_issue_number = len_Pr + len_PC + len_S
+# 		total_issue_number = len_PC + len_ML + len_S
 
 # 		# Selection of the cw of interest
 # 		cw_of_interest = []
 # 		# We only consider the causal relations related to the problem on the agenda
 # 		for cw_choice in range(len(deep_core)):
-# 				cw_of_interest.append(len_Pr + len_PC + len_S + (agents.select_as_issue - len_Pr) + cw_choice * len(policy_core))
+# 				cw_of_interest.append(len_PC + len_ML + len_S + (agents.select_as_issue - len_PC) + cw_choice * len(mid_level))
 
 # 		# print(' ')
 # 		# print('Causal relations of interest: ' + str(cw_of_interest))
@@ -3384,7 +3384,7 @@ from agent import Policymakers, Policyentres
 # 			# agents.resources_actions -= agents.resources
 # 			agents.resources_actions -= agents.resources[0] * resources_weight_action
 
-# 	def pm_pe_actions_pf(self, agents, link_list, deep_core, policy_core, secondary, causalrelation_number, agenda_as_issue, instruments, resources_weight_action, resources_potency, AS_theory, affiliation_weights):
+# 	def pm_pe_actions_pf(self, agents, link_list, deep_core, mid_level, secondary, causalrelation_number, agenda_as_issue, instruments, resources_weight_action, resources_potency, AS_theory, affiliation_weights):
 
 # 		"""
 # 		The PEs and PMs actions function (policy formulation)
@@ -3400,10 +3400,10 @@ from agent import Policymakers, Policyentres
 
 # 		"""
 
-# 		len_Pr = len(deep_core)
-# 		len_PC = len(policy_core)
+# 		len_PC = len(deep_core)
+# 		len_ML = len(mid_level)
 # 		len_S = len(secondary)
-# 		total_issue_number = len_Pr + len_PC + len_S
+# 		total_issue_number = len_PC + len_ML + len_S
 
 # 		# Here are the modifications related to the policy formulation
 # 		# Looking for the relevant causal relations for the policy formulation
@@ -3411,16 +3411,16 @@ from agent import Policymakers, Policyentres
 # 		cw_of_interest = []
 # 		# We only consider the causal relations related to the problem on the agenda
 # 		for cw_choice in range(len(secondary)):
-# 			if agents.belieftree[0][len_Pr + len_PC + len_S + (len_Pr * len_PC) + (agenda_as_issue - len_Pr)*len_S + cw_choice][0] \
+# 			if agents.belieftree[0][len_PC + len_ML + len_S + (len_PC * len_ML) + (agenda_as_issue - len_PC)*len_S + cw_choice][0] \
 # 				* instruments[agents.select_pinstrument][cw_choice] != 0:
-# 				cw_of_interest.append(len_Pr + len_PC + len_S + (len_Pr * len_PC) + (agenda_as_issue - len_Pr)*len_S + cw_choice)
+# 				cw_of_interest.append(len_PC + len_ML + len_S + (len_PC * len_ML) + (agenda_as_issue - len_PC)*len_S + cw_choice)
 # 		of_interest.append(cw_of_interest)
 
 # 		# Looking for the relevant issues for the policy formulation
 # 		issue_of_interest = []
 # 		for issue_choice in range(len(secondary)):
 # 			if instruments[agents.select_pinstrument][issue_choice] != 0:
-# 				issue_of_interest.append(len_Pr + len_PC + issue_choice)
+# 				issue_of_interest.append(len_PC + len_ML + issue_choice)
 # 		of_interest.append(issue_of_interest)
 
 # 		# Making sure there are enough resources
@@ -3533,7 +3533,7 @@ from agent import Policymakers, Policyentres
 # 			# print('Resources left: ' + str(agents.resources_actions))
 # 			agents.resources_actions -= agents.resources[0] * resources_weight_action
 
-# 	def pm_pe_actions_as_3S(self, agents, link_list, deep_core, policy_core, secondary, resources_weight_action, resources_potency, affiliation_weights, conflict_level_coef):
+# 	def pm_pe_actions_as_3S(self, agents, link_list, deep_core, mid_level, secondary, resources_weight_action, resources_potency, affiliation_weights, conflict_level_coef):
 
 # 		"""
 # 		The PEs and PMs actions function - three streams (agenda setting)
@@ -3553,16 +3553,16 @@ from agent import Policymakers, Policyentres
 
 # 		"""
 
-# 		len_Pr = len(deep_core)
-# 		len_PC = len(policy_core)
+# 		len_PC = len(deep_core)
+# 		len_ML = len(mid_level)
 # 		len_S = len(secondary)
-# 		total_issue_number = len_Pr + len_PC + len_S
+# 		total_issue_number = len_PC + len_ML + len_S
 
 # 		# Selection of the cw of interest
 # 		cw_of_interest = []
 # 		# We only consider the causal relations related to the problem selected by the agent
 # 		for cw_choice in range(len(deep_core)):
-# 				cw_of_interest.append(len_Pr + len_PC + len_S + (agents.select_problem_3S_as - len_Pr) + cw_choice * len(policy_core))
+# 				cw_of_interest.append(len_PC + len_ML + len_S + (agents.select_problem_3S_as - len_PC) + cw_choice * len(mid_level))
 
 # 		# Selection of the impact of interest
 # 		impact_number = len(agents.belieftree_policy[0][agents.select_policy_3S_as])
@@ -4598,7 +4598,7 @@ from agent import Policymakers, Policyentres
 # 			# agents.resources_actions -= agents.resources
 # 			agents.resources_actions -= agents.resources[0] * resources_weight_action
 
-# 	def pm_pe_actions_pf_3S(self, agents, link_list, deep_core, policy_core, secondary, resources_weight_action, resources_potency, agenda_prob_3S_as, affiliation_weights, conflict_level_coef):
+# 	def pm_pe_actions_pf_3S(self, agents, link_list, deep_core, mid_level, secondary, resources_weight_action, resources_potency, agenda_prob_3S_as, affiliation_weights, conflict_level_coef):
 
 # 		"""
 # 		The PEs and PMs actions function - three streams (policy formulation)
@@ -4618,23 +4618,23 @@ from agent import Policymakers, Policyentres
 
 # 		"""
 
-# 		len_Pr = len(deep_core)
-# 		len_PC = len(policy_core)
+# 		len_PC = len(deep_core)
+# 		len_ML = len(mid_level)
 # 		len_S = len(secondary)
-# 		total_issue_number = len_Pr + len_PC + len_S
+# 		total_issue_number = len_PC + len_ML + len_S
 
 # 		# Selection of the cw of interest
 # 		cw_of_interest = []
 # 		# Select one by one the Pr
 # 		j = agenda_prob_3S_as
-# 		# for j in range(len_PC):
+# 		# for j in range(len_ML):
 # 		# Selecting the causal relations starting from Pr
 # 		for k in range(len_S):
 # 			# Contingency for partial knowledge issues
-# 			# print(len_Pr + len_PC + len_S + len_PC*len_Pr + (j-len_Pr) + k*len_PC)
-# 			if (agents.belieftree[0][len_Pr + len_PC + len_S + len_PC*len_Pr + (j-len_Pr) + k*len_PC][0] < 0 and (agents.belieftree[0][j][1] - agents.belieftree[0][j][0]) < 0) \
-# 			  or (agents.belieftree[0][len_Pr + len_PC + len_S + len_PC*len_Pr + (j-len_Pr) + k*len_PC][0] > 0 and (agents.belieftree[0][j][1] - agents.belieftree[0][j][0]) > 0):
-# 				cw_of_interest.append(len_Pr + len_PC + len_S + len_PC*len_Pr + (j-len_Pr) + k*len_PC)
+# 			# print(len_PC + len_ML + len_S + len_ML*len_PC + (j-len_PC) + k*len_ML)
+# 			if (agents.belieftree[0][len_PC + len_ML + len_S + len_ML*len_PC + (j-len_PC) + k*len_ML][0] < 0 and (agents.belieftree[0][j][1] - agents.belieftree[0][j][0]) < 0) \
+# 			  or (agents.belieftree[0][len_PC + len_ML + len_S + len_ML*len_PC + (j-len_PC) + k*len_ML][0] > 0 and (agents.belieftree[0][j][1] - agents.belieftree[0][j][0]) > 0):
+# 				cw_of_interest.append(len_PC + len_ML + len_S + len_ML*len_PC + (j-len_PC) + k*len_ML)
 
 # 		# Selection of the impact of interest
 # 		impact_number = len(agents.belieftree_instrument[0][agents.select_policy_3S_pf])
@@ -5703,7 +5703,7 @@ from agent import Policymakers, Policyentres
 # 			# agents.resources_actions -= agents.resources
 # 			agents.resources_actions -= agents.resources[0] * resources_weight_action
 
-# 	def preference_udapte_as_PC(self, agent, who, len_Pr, len_PC, len_S):
+# 	def preference_udapte_as_PC(self, agent, who, len_PC, len_ML, len_S):
 
 # 		"""
 # 		The preference update for policy cores function (agenda setting)
@@ -5720,58 +5720,58 @@ from agent import Policymakers, Policyentres
 # 		# Preference calculation for the policy core issues
 # 		PC_denominator = 0
 # 		# Select one by one the Pr
-# 		for j in range(len_PC):
+# 		for j in range(len_ML):
 # 			PC_denominator = 0
 # 			# Selecting the causal relations starting from Pr
-# 			for k in range(len_Pr):
+# 			for k in range(len_PC):
 # 				# Contingency for partial knowledge issues
-# 				if agent.belieftree[who][k][1] == None or agent.belieftree[who][k][0] == None or agent.belieftree[who][len_Pr+len_PC+len_S+j+(k*len_PC)][0] == None:
+# 				if agent.belieftree[who][k][1] == None or agent.belieftree[who][k][0] == None or agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0] == None:
 # 					PC_denominator = 0
 # 				else:
 # 					# Check if causal relation and gap are both positive of both negative
-# 					if (agent.belieftree[who][len_Pr+len_PC+len_S+j+(k*len_PC)][0] < 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) < 0) \
-# 					  or (agent.belieftree[who][len_Pr+len_PC+len_S+j+(k*len_PC)][0] > 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) > 0):
-# 						PC_denominator = PC_denominator + abs(agent.belieftree[who][len_Pr+len_PC+len_S+j+(k*len_PC)][0]*\
+# 					if (agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0] < 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) < 0) \
+# 					  or (agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0] > 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) > 0):
+# 						PC_denominator = PC_denominator + abs(agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0]*\
 # 						  (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]))
 # 					else:
 # 						PC_denominator = PC_denominator	
 # 		# Then adding the gap of the policy core:
-# 		for i in range(len_PC):
+# 		for i in range(len_ML):
 # 			# Contingency for partial knowledge issues
-# 			if agent.belieftree[who][len_Pr + i][1] == None or agent.belieftree[who][len_Pr + i][0] == None:
+# 			if agent.belieftree[who][len_PC + i][1] == None or agent.belieftree[who][len_PC + i][0] == None:
 # 				PC_denominator = PC_denominator
 # 			else:
-# 				PC_denominator = PC_denominator + abs(agent.belieftree[who][len_Pr + i][1] - agent.belieftree[who][len_Pr + i][0])
+# 				PC_denominator = PC_denominator + abs(agent.belieftree[who][len_PC + i][1] - agent.belieftree[who][len_PC + i][0])
 		
 # 		# Calculating the numerator and the preference of all policy core issues:
 # 		# Select one by one the Pr
-# 		for j in range(len_PC):
+# 		for j in range(len_ML):
 # 			PC_numerator = 0
 # 			# Selecting the causal relations starting from Pr
-# 			for k in range(len_Pr):
+# 			for k in range(len_PC):
 # 				# Contingency for partial knowledge issues
-# 				if agent.belieftree[who][k][1] == None or agent.belieftree[who][k][0] == None or agent.belieftree[who][len_Pr+len_PC+len_S+j+(k*len_PC)][0] == None: 
+# 				if agent.belieftree[who][k][1] == None or agent.belieftree[who][k][0] == None or agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0] == None: 
 # 					PC_numerator = 0
 # 				else:
 # 					# Check if causal relation and gap are both positive of both negative
-# 					if (agent.belieftree[who][len_Pr+len_PC+len_S+j+(k*len_PC)][0] < 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) < 0) \
-# 					  or (agent.belieftree[who][len_Pr+len_PC+len_S+j+(k*len_PC)][0] > 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) > 0):
-# 						PC_numerator = PC_numerator + abs(agent.belieftree[who][len_Pr+len_PC+len_S+j+(k*len_PC)][0]*\
+# 					if (agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0] < 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) < 0) \
+# 					  or (agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0] > 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) > 0):
+# 						PC_numerator = PC_numerator + abs(agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0]*\
 # 						  (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]))
 # 					else:
 # 						PC_numerator = PC_numerator	
 # 			# Contingency for partial knowledge issues
-# 			if agent.belieftree[who][len_Pr + j][1] == None or agent.belieftree[who][len_Pr + j][0] == None:
+# 			if agent.belieftree[who][len_PC + j][1] == None or agent.belieftree[who][len_PC + j][0] == None:
 # 				PC_numerator = 0
 # 			else:
 # 				# Then adding the gap of the policy core:
-# 				PC_numerator = PC_numerator + abs(agent.belieftree[who][len_Pr + j][1] - agent.belieftree[who][len_Pr + j][0])
+# 				PC_numerator = PC_numerator + abs(agent.belieftree[who][len_PC + j][1] - agent.belieftree[who][len_PC + j][0])
 # 			if PC_denominator != 0:
-# 				agent.belieftree[who][len_Pr+j][2] = PC_numerator/PC_denominator 
+# 				agent.belieftree[who][len_PC+j][2] = PC_numerator/PC_denominator 
 # 			else:
-# 				agent.belieftree[who][len_Pr+j][2] = 0
+# 				agent.belieftree[who][len_PC+j][2] = 0
 
-# 	def preference_udapte_pf_PC(self, agent, who, len_Pr, len_PC, len_S, agenda_prob_3S_as):
+# 	def preference_udapte_pf_PC(self, agent, who, len_PC, len_ML, len_S, agenda_prob_3S_as):
 
 # 		"""
 # 		The preference update for policy cores function (policy formulation)
@@ -5792,19 +5792,19 @@ from agent import Policymakers, Policyentres
 # 		S_denominator = 0
 # 		for j in range(len_S):
 # 			# print('Selection S' + str(j+1))
-# 			# print('State of the S' + str(j+1) + ': ' + str(agent.belieftree[0][len_Pr + j][0])) # the state printed
+# 			# print('State of the S' + str(j+1) + ': ' + str(agent.belieftree[0][len_PC + j][0])) # the state printed
 # 			# Selecting the causal relations starting from PC
 # 			# print(' ')
-# 			# print(len_Pr + len_PC + len_S + len_Pr*len_PC + j*len_PC + (k-len_Pr))
+# 			# print(len_PC + len_ML + len_S + len_PC*len_ML + j*len_ML + (k-len_PC))
 # 			# Contingency for partial knowledge issues
-# 			if agent.belieftree[0][k][1] != None and agent.belieftree[0][k][0] != None and agent.belieftree[0][len_Pr + len_PC + len_S + len_Pr*len_PC + j*len_PC + (k-len_Pr)][0] != None:
-# 				# print('Causal Relation S' + str(j+1) + ' - PC' + str(k+1) + ': ' + str(agent.belieftree[0][len_Pr+len_PC+len_S+(j+(k*len_PC))][0]))
+# 			if agent.belieftree[0][k][1] != None and agent.belieftree[0][k][0] != None and agent.belieftree[0][len_PC + len_ML + len_S + len_PC*len_ML + j*len_ML + (k-len_PC)][0] != None:
+# 				# print('Causal Relation S' + str(j+1) + ' - PC' + str(k+1) + ': ' + str(agent.belieftree[0][len_PC+len_ML+len_S+(j+(k*len_ML))][0]))
 # 				# print('Gap of PC' + str(k+1) + ': ' + str(agent.belieftree[0][k][1] - agent.belieftree[0][k][0]))
 # 				# Check if causal relation and gap are both positive of both negative
-# 				if (agent.belieftree[0][len_Pr + len_PC + len_S + len_Pr*len_PC + j*len_PC + (k-len_Pr)][0] < 0 and (agent.belieftree[0][k][1] - agent.belieftree[0][k][0]) < 0) \
-# 					or (agent.belieftree[0][len_Pr + len_PC + len_S + len_Pr*len_PC + j*len_PC + (k-len_Pr)][0] > 0 and (agent.belieftree[0][k][1] - agent.belieftree[0][k][0]) > 0):
+# 				if (agent.belieftree[0][len_PC + len_ML + len_S + len_PC*len_ML + j*len_ML + (k-len_PC)][0] < 0 and (agent.belieftree[0][k][1] - agent.belieftree[0][k][0]) < 0) \
+# 					or (agent.belieftree[0][len_PC + len_ML + len_S + len_PC*len_ML + j*len_ML + (k-len_PC)][0] > 0 and (agent.belieftree[0][k][1] - agent.belieftree[0][k][0]) > 0):
 # 					# print('Calculating')
-# 					S_denominator = S_denominator + abs(agent.belieftree[0][len_Pr + len_PC + len_S + len_Pr*len_PC + j*len_PC + (k-len_Pr)][0] * \
+# 					S_denominator = S_denominator + abs(agent.belieftree[0][len_PC + len_ML + len_S + len_PC*len_ML + j*len_ML + (k-len_PC)][0] * \
 # 						(agent.belieftree[0][k][1] - agent.belieftree[0][k][0]))
 # 					# print('This is the PC numerator: ' + str(S_denominator))
 # 				else:
@@ -5812,12 +5812,12 @@ from agent import Policymakers, Policyentres
 # 			else:
 # 				S_denominator = 0
 # 			# Contingency for partial knowledge issues
-# 			if agent.belieftree[0][len_Pr + len_PC + j][1] == None or agent.belieftree[0][len_Pr + len_PC + j][0] == None:
+# 			if agent.belieftree[0][len_PC + len_ML + j][1] == None or agent.belieftree[0][len_PC + len_ML + j][0] == None:
 # 				S_denominator = S_denominator
 # 			else:
 # 				# Then adding the gap of the policy core:
-# 				# print('This is the gap for the S' + str(j+1) + ': ' + str(agent.belieftree[0][len_Pr + len_PC + j][1] - agent.belieftree[0][len_Pr + len_PC + j][0]))
-# 				S_denominator = S_denominator + abs(agent.belieftree[0][len_Pr + len_PC + j][1] - agent.belieftree[0][len_Pr + len_PC + j][0])
+# 				# print('This is the gap for the S' + str(j+1) + ': ' + str(agent.belieftree[0][len_PC + len_ML + j][1] - agent.belieftree[0][len_PC + len_ML + j][0]))
+# 				S_denominator = S_denominator + abs(agent.belieftree[0][len_PC + len_ML + j][1] - agent.belieftree[0][len_PC + len_ML + j][0])
 
 
 # 		# Calculating the numerator and the preference of all policy core issues:
@@ -5825,12 +5825,12 @@ from agent import Policymakers, Policyentres
 # 		for j in range(len_S):
 # 			S_numerator = 0
 # 			# Contingency for partial knowledge issues
-# 			if agent.belieftree[0][k][1] != None and agent.belieftree[0][k][0] != None and agent.belieftree[0][len_Pr + len_PC + len_S + len_Pr*len_PC + j*len_PC + (k-len_Pr)][0] != None:
+# 			if agent.belieftree[0][k][1] != None and agent.belieftree[0][k][0] != None and agent.belieftree[0][len_PC + len_ML + len_S + len_PC*len_ML + j*len_ML + (k-len_PC)][0] != None:
 # 				# Check if causal relation and gap are both positive of both negative
-# 				if (agent.belieftree[0][len_Pr + len_PC + len_S + len_Pr*len_PC + j*len_PC + (k-len_Pr)][0] < 0 and (agent.belieftree[0][k][1] - agent.belieftree[0][k][0]) < 0) \
-# 					or (agent.belieftree[0][len_Pr + len_PC + len_S + len_Pr*len_PC + j*len_PC + (k-len_Pr)][0] > 0 and (agent.belieftree[0][k][1] - agent.belieftree[0][k][0]) > 0):
+# 				if (agent.belieftree[0][len_PC + len_ML + len_S + len_PC*len_ML + j*len_ML + (k-len_PC)][0] < 0 and (agent.belieftree[0][k][1] - agent.belieftree[0][k][0]) < 0) \
+# 					or (agent.belieftree[0][len_PC + len_ML + len_S + len_PC*len_ML + j*len_ML + (k-len_PC)][0] > 0 and (agent.belieftree[0][k][1] - agent.belieftree[0][k][0]) > 0):
 # 					# print('Calculating')
-# 					S_numerator = S_numerator + abs(agent.belieftree[0][len_Pr + len_PC + len_S + len_Pr*len_PC + j*len_PC + (k-len_Pr)][0] * \
+# 					S_numerator = S_numerator + abs(agent.belieftree[0][len_PC + len_ML + len_S + len_PC*len_ML + j*len_ML + (k-len_PC)][0] * \
 # 						(agent.belieftree[0][k][1] - agent.belieftree[0][k][0]))
 # 					# print('This is the PC numerator: ' + str(S_numerator))
 # 				else:
@@ -5838,17 +5838,17 @@ from agent import Policymakers, Policyentres
 # 			else:
 # 				S_numerator = 0
 # 			# Contingency for partial knowledge issues
-# 			if agent.belieftree[0][len_Pr + len_PC + j][1] == None or agent.belieftree[0][len_Pr + len_PC + j][0] == None:
+# 			if agent.belieftree[0][len_PC + len_ML + j][1] == None or agent.belieftree[0][len_PC + len_ML + j][0] == None:
 # 				S_numerator = 0
 # 			else:
 # 				# Then adding the gap of the policy core:
-# 				S_numerator = S_numerator + abs(agent.belieftree[0][len_Pr + len_PC + j][1] - agent.belieftree[0][len_Pr + len_PC + j][0])
+# 				S_numerator = S_numerator + abs(agent.belieftree[0][len_PC + len_ML + j][1] - agent.belieftree[0][len_PC + len_ML + j][0])
 # 			if S_denominator != 0:
-# 				agent.belieftree[who][len_Pr + len_PC + j][2] = S_numerator/S_denominator 
+# 				agent.belieftree[who][len_PC + len_ML + j][2] = S_numerator/S_denominator 
 # 			else:
-# 				agent.belieftree[who][len_Pr + len_PC + j][2] = 0
+# 				agent.belieftree[who][len_PC + len_ML + j][2] = 0
 
-# 	def instrument_preference_update(self, agent, who, AS_theory, len_Pr, len_PC, len_S, instruments):
+# 	def instrument_preference_update(self, agent, who, AS_theory, len_PC, len_ML, len_S, instruments):
 
 # 		"""
 # 		Instrument preference update function
@@ -5891,10 +5891,10 @@ from agent import Policymakers, Policyentres
 # 		if AS_theory == 2:
 # 			j = agent.select_problem_3S_as
 # 		for k in range(len_S):
-# 			if agent.belieftree[who][j][1] != None and agent.belieftree[who][j][0] != None and agent.belieftree[who][len_Pr + len_PC + len_S + (len_Pr*len_PC) + (j - len_Pr)*len_S + k][0] != None:
-# 				if (agent.belieftree[who][len_Pr + len_PC + len_S + (len_Pr*len_PC) + (j - len_Pr)*len_S + k][0] < 0 and (agent.belieftree[who][j][1] - agent.belieftree[who][j][0]) < 0) \
-# 					or (agent.belieftree[who][len_Pr + len_PC + len_S + (len_Pr*len_PC) + (j - len_Pr)*len_S + k][0] > 0 and (agent.belieftree[who][j][1] - agent.belieftree[who][j][0]) > 0):
-# 					S_denominator = S_denominator + abs(agent.belieftree[who][len_Pr + len_PC + len_S + (len_Pr*len_PC) + (j - len_Pr)*len_S + k][0]*\
+# 			if agent.belieftree[who][j][1] != None and agent.belieftree[who][j][0] != None and agent.belieftree[who][len_PC + len_ML + len_S + (len_PC*len_ML) + (j - len_PC)*len_S + k][0] != None:
+# 				if (agent.belieftree[who][len_PC + len_ML + len_S + (len_PC*len_ML) + (j - len_PC)*len_S + k][0] < 0 and (agent.belieftree[who][j][1] - agent.belieftree[who][j][0]) < 0) \
+# 					or (agent.belieftree[who][len_PC + len_ML + len_S + (len_PC*len_ML) + (j - len_PC)*len_S + k][0] > 0 and (agent.belieftree[who][j][1] - agent.belieftree[who][j][0]) > 0):
+# 					S_denominator = S_denominator + abs(agent.belieftree[who][len_PC + len_ML + len_S + (len_PC*len_ML) + (j - len_PC)*len_S + k][0]*\
 # 					  (agent.belieftree[who][j][1] - agent.belieftree[who][j][0]))
 # 				else:
 # 					S_denominator = S_denominator
@@ -5902,9 +5902,9 @@ from agent import Policymakers, Policyentres
 # 				S_denominator = S_denominator
 
 # 		for i in range(len_S):
-# 			if agent.belieftree[who][len_Pr + len_PC + i][0] != 'No':
-# 				if agent.belieftree[who][len_Pr + len_PC + i][1] != None and agent.belieftree[who][len_Pr + len_PC + i][0] != None:
-# 					S_denominator = S_denominator + abs(agent.belieftree[who][len_Pr + len_PC + i][1] - agent.belieftree[who][len_Pr + len_PC + i][0])
+# 			if agent.belieftree[who][len_PC + len_ML + i][0] != 'No':
+# 				if agent.belieftree[who][len_PC + len_ML + i][1] != None and agent.belieftree[who][len_PC + len_ML + i][0] != None:
+# 					S_denominator = S_denominator + abs(agent.belieftree[who][len_PC + len_ML + i][1] - agent.belieftree[who][len_PC + len_ML + i][0])
 # 				else:
 # 					S_denominator = 0
 
@@ -5916,24 +5916,24 @@ from agent import Policymakers, Policyentres
 # 				k = agent.select_as_issue
 # 			if AS_theory == 2:
 # 				k = agent.select_problem_3S_as
-# 			if agent.belieftree[who][k][1] != None and agent.belieftree[who][k][0] != None and agent.belieftree[who][len_Pr + len_PC + len_S + (len_Pr*len_PC) + (k - len_Pr)*len_S + j][0] != None:
-# 				if (agent.belieftree[who][len_Pr + len_PC + len_S + (len_Pr*len_PC) + (k - len_Pr)*len_S + j][0] < 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) < 0) \
-# 					or (agent.belieftree[who][len_Pr + len_PC + len_S + (len_Pr*len_PC) + (k - len_Pr)*len_S + j][0] > 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) > 0):
-# 					S_numerator = S_numerator + abs(agent.belieftree[who][len_Pr + len_PC + len_S + (len_Pr*len_PC) + (k - len_Pr)*len_S + j][0]*\
+# 			if agent.belieftree[who][k][1] != None and agent.belieftree[who][k][0] != None and agent.belieftree[who][len_PC + len_ML + len_S + (len_PC*len_ML) + (k - len_PC)*len_S + j][0] != None:
+# 				if (agent.belieftree[who][len_PC + len_ML + len_S + (len_PC*len_ML) + (k - len_PC)*len_S + j][0] < 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) < 0) \
+# 					or (agent.belieftree[who][len_PC + len_ML + len_S + (len_PC*len_ML) + (k - len_PC)*len_S + j][0] > 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) > 0):
+# 					S_numerator = S_numerator + abs(agent.belieftree[who][len_PC + len_ML + len_S + (len_PC*len_ML) + (k - len_PC)*len_S + j][0]*\
 # 						  (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]))
 # 				else:
 # 					S_numerator = S_numerator
 # 			else:
 # 				S_numerator = S_numerator
-# 			if agent.belieftree[who][len_Pr + len_PC + j][0] != 'No':
-# 				if agent.belieftree[who][len_Pr + len_PC + j][1] != None and agent.belieftree[who][len_Pr + len_PC + j][0] != None:
-# 					S_numerator = S_numerator + abs(agent.belieftree[who][len_Pr + len_PC + j][1] - agent.belieftree[who][len_Pr + len_PC + j][0])
+# 			if agent.belieftree[who][len_PC + len_ML + j][0] != 'No':
+# 				if agent.belieftree[who][len_PC + len_ML + j][1] != None and agent.belieftree[who][len_PC + len_ML + j][0] != None:
+# 					S_numerator = S_numerator + abs(agent.belieftree[who][len_PC + len_ML + j][1] - agent.belieftree[who][len_PC + len_ML + j][0])
 # 				else:
 # 					S_numerator = 0
 # 			if S_denominator != 0:
-# 				agent.belieftree[who][len_Pr+len_PC+j][2] = S_numerator/S_denominator 
+# 				agent.belieftree[who][len_PC+len_ML+j][2] = S_numerator/S_denominator 
 # 			else:
-# 				agent.belieftree[who][len_Pr+len_PC+j][2] = 0
+# 				agent.belieftree[who][len_PC+len_ML+j][2] = 0
 
 # 		##################################################################################################
 # 		# 2/ Calculation of the grade of each of the instruments based on impact on the secondary issues #
@@ -5942,19 +5942,19 @@ from agent import Policymakers, Policyentres
 # 		agent.instrument_preferences[who] = [0 for h in range(len(instruments))]
 # 		for i in range(len(instruments)):
 # 			for j in range(len_S):
-# 				if agent.belieftree[who][len_Pr + len_PC + j][0] != 'No':
-# 					if agent.belieftree[who][len_Pr + len_PC + j][1] != None and agent.belieftree[who][len_Pr + len_PC + j][0] != None:
-# 						if (instruments[i][j] > 0 and (agent.belieftree[who][len_Pr + len_PC + j][1] - agent.belieftree[who][len_Pr + len_PC + j][0]) > 0 ) \
-# 							or (instruments[i][j] < 0 and (agent.belieftree[who][len_Pr + len_PC + j][1] - agent.belieftree[who][len_Pr + len_PC + j][0]) < 0 ):
+# 				if agent.belieftree[who][len_PC + len_ML + j][0] != 'No':
+# 					if agent.belieftree[who][len_PC + len_ML + j][1] != None and agent.belieftree[who][len_PC + len_ML + j][0] != None:
+# 						if (instruments[i][j] > 0 and (agent.belieftree[who][len_PC + len_ML + j][1] - agent.belieftree[who][len_PC + len_ML + j][0]) > 0 ) \
+# 							or (instruments[i][j] < 0 and (agent.belieftree[who][len_PC + len_ML + j][1] - agent.belieftree[who][len_PC + len_ML + j][0]) < 0 ):
 # 							# print(' ')
 # 							# print('agent.instrument_preferences[who][i]: ' + str(agent.instrument_preferences[who][i]))
 # 							# print('instruments[i][j]: ' + str(instruments[i][j]))
-# 							# print('agent.belieftree[' + str(who) + '][len_Pr + len_PC + ' + str(j) + '][1]: ' + str(agent.belieftree[who][len_Pr + len_PC + j][1]))
-# 							# print('agent.belieftree[' + str(who) + '][len_Pr + len_PC + ' + str(j) + '][0]: ' + str(agent.belieftree[who][len_Pr + len_PC + j][0]))
-# 							# print('agent.belieftree[' + str(who) + '][len_Pr + len_PC + ' + str(j) + '][2]: ' + str(agent.belieftree[who][len_Pr + len_PC + j][2]))
+# 							# print('agent.belieftree[' + str(who) + '][len_PC + len_ML + ' + str(j) + '][1]: ' + str(agent.belieftree[who][len_PC + len_ML + j][1]))
+# 							# print('agent.belieftree[' + str(who) + '][len_PC + len_ML + ' + str(j) + '][0]: ' + str(agent.belieftree[who][len_PC + len_ML + j][0]))
+# 							# print('agent.belieftree[' + str(who) + '][len_PC + len_ML + ' + str(j) + '][2]: ' + str(agent.belieftree[who][len_PC + len_ML + j][2]))
 # 							agent.instrument_preferences[who][i] = agent.instrument_preferences[who][i] + \
-# 								(instruments[i][j] * (agent.belieftree[who][len_Pr + len_PC + j][1] - agent.belieftree[who][len_Pr + len_PC + j][0]) * \
-# 								(agent.belieftree[who][len_Pr + len_PC + j][2]))
+# 								(instruments[i][j] * (agent.belieftree[who][len_PC + len_ML + j][1] - agent.belieftree[who][len_PC + len_ML + j][0]) * \
+# 								(agent.belieftree[who][len_PC + len_ML + j][2]))
 # 							# print('agent.instrument_preferences[who][i]: ' + str(agent.instrument_preferences[who][i]))
 # 					else:
 # 						agent.instrument_preferences[who][i] = 0
@@ -6214,7 +6214,7 @@ from agent import Policymakers, Policyentres
 		
 # 		return results
 
-# 	def pm_pe_actions_as(self, agents, link_list, deep_core, policy_core, secondary, resources_weight_action, resources_potency, affiliation_weights):
+# 	def pm_pe_actions_as(self, agents, link_list, deep_core, mid_level, secondary, resources_weight_action, resources_potency, affiliation_weights):
 
 # 		"""
 # 		The PEs and PMs actions function (agenda setting)
@@ -6230,16 +6230,16 @@ from agent import Policymakers, Policyentres
 
 # 		"""
 
-# 		len_Pr = len(deep_core)
-# 		len_PC = len(policy_core)
+# 		len_PC = len(deep_core)
+# 		len_ML = len(mid_level)
 # 		len_S = len(secondary)
-# 		total_issue_number = len_Pr + len_PC + len_S
+# 		total_issue_number = len_PC + len_ML + len_S
 
 # 		# Selection of the cw of interest
 # 		cw_of_interest = []
 # 		# We only consider the causal relations related to the problem on the agenda
 # 		for cw_choice in range(len(deep_core)):
-# 				cw_of_interest.append(len_Pr + len_PC + len_S + (agents.select_as_issue - len_Pr) + cw_choice * len(policy_core))
+# 				cw_of_interest.append(len_PC + len_ML + len_S + (agents.select_as_issue - len_PC) + cw_choice * len(mid_level))
 
 # 		# print(' ')
 # 		# print('Causal relations of interest: ' + str(cw_of_interest))
@@ -6357,7 +6357,7 @@ from agent import Policymakers, Policyentres
 # 			# agents.resources_actions -= agents.resources
 # 			agents.resources_actions -= agents.resources[0] * resources_weight_action
 
-# 	def pm_pe_actions_pf(self, agents, link_list, deep_core, policy_core, secondary, causalrelation_number, agenda_as_issue, instruments, resources_weight_action, resources_potency, AS_theory, affiliation_weights):
+# 	def pm_pe_actions_pf(self, agents, link_list, deep_core, mid_level, secondary, causalrelation_number, agenda_as_issue, instruments, resources_weight_action, resources_potency, AS_theory, affiliation_weights):
 
 # 		"""
 # 		The PEs and PMs actions function (policy formulation)
@@ -6373,10 +6373,10 @@ from agent import Policymakers, Policyentres
 
 # 		"""
 
-# 		len_Pr = len(deep_core)
-# 		len_PC = len(policy_core)
+# 		len_PC = len(deep_core)
+# 		len_ML = len(mid_level)
 # 		len_S = len(secondary)
-# 		total_issue_number = len_Pr + len_PC + len_S
+# 		total_issue_number = len_PC + len_ML + len_S
 
 # 		# Here are the modifications related to the policy formulation
 # 		# Looking for the relevant causal relations for the policy formulation
@@ -6384,16 +6384,16 @@ from agent import Policymakers, Policyentres
 # 		cw_of_interest = []
 # 		# We only consider the causal relations related to the problem on the agenda
 # 		for cw_choice in range(len(secondary)):
-# 			if agents.belieftree[0][len_Pr + len_PC + len_S + (len_Pr * len_PC) + (agenda_as_issue - len_Pr)*len_S + cw_choice][0] \
+# 			if agents.belieftree[0][len_PC + len_ML + len_S + (len_PC * len_ML) + (agenda_as_issue - len_PC)*len_S + cw_choice][0] \
 # 				* instruments[agents.select_pinstrument][cw_choice] != 0:
-# 				cw_of_interest.append(len_Pr + len_PC + len_S + (len_Pr * len_PC) + (agenda_as_issue - len_Pr)*len_S + cw_choice)
+# 				cw_of_interest.append(len_PC + len_ML + len_S + (len_PC * len_ML) + (agenda_as_issue - len_PC)*len_S + cw_choice)
 # 		of_interest.append(cw_of_interest)
 
 # 		# Looking for the relevant issues for the policy formulation
 # 		issue_of_interest = []
 # 		for issue_choice in range(len(secondary)):
 # 			if instruments[agents.select_pinstrument][issue_choice] != 0:
-# 				issue_of_interest.append(len_Pr + len_PC + issue_choice)
+# 				issue_of_interest.append(len_PC + len_ML + issue_choice)
 # 		of_interest.append(issue_of_interest)
 
 # 		# Making sure there are enough resources
@@ -6506,7 +6506,7 @@ from agent import Policymakers, Policyentres
 # 			# print('Resources left: ' + str(agents.resources_actions))
 # 			agents.resources_actions -= agents.resources[0] * resources_weight_action
 
-# 	def pm_pe_actions_as_3S(self, agents, link_list, deep_core, policy_core, secondary, resources_weight_action, resources_potency, affiliation_weights, conflict_level_coef):
+# 	def pm_pe_actions_as_3S(self, agents, link_list, deep_core, mid_level, secondary, resources_weight_action, resources_potency, affiliation_weights, conflict_level_coef):
 
 # 		"""
 # 		The PEs and PMs actions function - three streams (agenda setting)
@@ -6526,16 +6526,16 @@ from agent import Policymakers, Policyentres
 
 # 		"""
 
-# 		len_Pr = len(deep_core)
-# 		len_PC = len(policy_core)
+# 		len_PC = len(deep_core)
+# 		len_ML = len(mid_level)
 # 		len_S = len(secondary)
-# 		total_issue_number = len_Pr + len_PC + len_S
+# 		total_issue_number = len_PC + len_ML + len_S
 
 # 		# Selection of the cw of interest
 # 		cw_of_interest = []
 # 		# We only consider the causal relations related to the problem selected by the agent
 # 		for cw_choice in range(len(deep_core)):
-# 				cw_of_interest.append(len_Pr + len_PC + len_S + (agents.select_problem_3S_as - len_Pr) + cw_choice * len(policy_core))
+# 				cw_of_interest.append(len_PC + len_ML + len_S + (agents.select_problem_3S_as - len_PC) + cw_choice * len(mid_level))
 
 # 		# Selection of the impact of interest
 # 		impact_number = len(agents.belieftree_policy[0][agents.select_policy_3S_as])
@@ -7580,7 +7580,7 @@ from agent import Policymakers, Policyentres
 # 			# agents.resources_actions -= agents.resources
 # 			agents.resources_actions -= agents.resources[0] * resources_weight_action
 
-# 	def pm_pe_actions_pf_3S(self, agents, link_list, deep_core, policy_core, secondary, resources_weight_action, resources_potency, agenda_prob_3S_as, affiliation_weights, conflict_level_coef):
+# 	def pm_pe_actions_pf_3S(self, agents, link_list, deep_core, mid_level, secondary, resources_weight_action, resources_potency, agenda_prob_3S_as, affiliation_weights, conflict_level_coef):
 
 # 		"""
 # 		The PEs and PMs actions function - three streams (policy formulation)
@@ -7600,23 +7600,23 @@ from agent import Policymakers, Policyentres
 
 # 		"""
 
-# 		len_Pr = len(deep_core)
-# 		len_PC = len(policy_core)
+# 		len_PC = len(deep_core)
+# 		len_ML = len(mid_level)
 # 		len_S = len(secondary)
-# 		total_issue_number = len_Pr + len_PC + len_S
+# 		total_issue_number = len_PC + len_ML + len_S
 
 # 		# Selection of the cw of interest
 # 		cw_of_interest = []
 # 		# Select one by one the Pr
 # 		j = agenda_prob_3S_as
-# 		# for j in range(len_PC):
+# 		# for j in range(len_ML):
 # 		# Selecting the causal relations starting from Pr
 # 		for k in range(len_S):
 # 			# Contingency for partial knowledge issues
-# 			# print(len_Pr + len_PC + len_S + len_PC*len_Pr + (j-len_Pr) + k*len_PC)
-# 			if (agents.belieftree[0][len_Pr + len_PC + len_S + len_PC*len_Pr + (j-len_Pr) + k*len_PC][0] < 0 and (agents.belieftree[0][j][1] - agents.belieftree[0][j][0]) < 0) \
-# 			  or (agents.belieftree[0][len_Pr + len_PC + len_S + len_PC*len_Pr + (j-len_Pr) + k*len_PC][0] > 0 and (agents.belieftree[0][j][1] - agents.belieftree[0][j][0]) > 0):
-# 				cw_of_interest.append(len_Pr + len_PC + len_S + len_PC*len_Pr + (j-len_Pr) + k*len_PC)
+# 			# print(len_PC + len_ML + len_S + len_ML*len_PC + (j-len_PC) + k*len_ML)
+# 			if (agents.belieftree[0][len_PC + len_ML + len_S + len_ML*len_PC + (j-len_PC) + k*len_ML][0] < 0 and (agents.belieftree[0][j][1] - agents.belieftree[0][j][0]) < 0) \
+# 			  or (agents.belieftree[0][len_PC + len_ML + len_S + len_ML*len_PC + (j-len_PC) + k*len_ML][0] > 0 and (agents.belieftree[0][j][1] - agents.belieftree[0][j][0]) > 0):
+# 				cw_of_interest.append(len_PC + len_ML + len_S + len_ML*len_PC + (j-len_PC) + k*len_ML)
 
 # 		# Selection of the impact of interest
 # 		impact_number = len(agents.belieftree_instrument[0][agents.select_policy_3S_pf])
@@ -8685,7 +8685,7 @@ from agent import Policymakers, Policyentres
 # 			# agents.resources_actions -= agents.resources
 # 			agents.resources_actions -= agents.resources[0] * resources_weight_action
 
-# 	def preference_udapte_as_PC(self, agent, who, len_Pr, len_PC, len_S):
+# 	def preference_udapte_as_PC(self, agent, who, len_PC, len_ML, len_S):
 
 # 		"""
 # 		The preference update for policy cores function (agenda setting)
@@ -8702,58 +8702,58 @@ from agent import Policymakers, Policyentres
 # 		# Preference calculation for the policy core issues
 # 		PC_denominator = 0
 # 		# Select one by one the Pr
-# 		for j in range(len_PC):
+# 		for j in range(len_ML):
 # 			PC_denominator = 0
 # 			# Selecting the causal relations starting from Pr
-# 			for k in range(len_Pr):
+# 			for k in range(len_PC):
 # 				# Contingency for partial knowledge issues
-# 				if agent.belieftree[who][k][1] == None or agent.belieftree[who][k][0] == None or agent.belieftree[who][len_Pr+len_PC+len_S+j+(k*len_PC)][0] == None:
+# 				if agent.belieftree[who][k][1] == None or agent.belieftree[who][k][0] == None or agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0] == None:
 # 					PC_denominator = 0
 # 				else:
 # 					# Check if causal relation and gap are both positive of both negative
-# 					if (agent.belieftree[who][len_Pr+len_PC+len_S+j+(k*len_PC)][0] < 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) < 0) \
-# 					  or (agent.belieftree[who][len_Pr+len_PC+len_S+j+(k*len_PC)][0] > 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) > 0):
-# 						PC_denominator = PC_denominator + abs(agent.belieftree[who][len_Pr+len_PC+len_S+j+(k*len_PC)][0]*\
+# 					if (agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0] < 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) < 0) \
+# 					  or (agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0] > 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) > 0):
+# 						PC_denominator = PC_denominator + abs(agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0]*\
 # 						  (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]))
 # 					else:
 # 						PC_denominator = PC_denominator	
 # 		# Then adding the gap of the policy core:
-# 		for i in range(len_PC):
+# 		for i in range(len_ML):
 # 			# Contingency for partial knowledge issues
-# 			if agent.belieftree[who][len_Pr + i][1] == None or agent.belieftree[who][len_Pr + i][0] == None:
+# 			if agent.belieftree[who][len_PC + i][1] == None or agent.belieftree[who][len_PC + i][0] == None:
 # 				PC_denominator = PC_denominator
 # 			else:
-# 				PC_denominator = PC_denominator + abs(agent.belieftree[who][len_Pr + i][1] - agent.belieftree[who][len_Pr + i][0])
+# 				PC_denominator = PC_denominator + abs(agent.belieftree[who][len_PC + i][1] - agent.belieftree[who][len_PC + i][0])
 		
 # 		# Calculating the numerator and the preference of all policy core issues:
 # 		# Select one by one the Pr
-# 		for j in range(len_PC):
+# 		for j in range(len_ML):
 # 			PC_numerator = 0
 # 			# Selecting the causal relations starting from Pr
-# 			for k in range(len_Pr):
+# 			for k in range(len_PC):
 # 				# Contingency for partial knowledge issues
-# 				if agent.belieftree[who][k][1] == None or agent.belieftree[who][k][0] == None or agent.belieftree[who][len_Pr+len_PC+len_S+j+(k*len_PC)][0] == None: 
+# 				if agent.belieftree[who][k][1] == None or agent.belieftree[who][k][0] == None or agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0] == None: 
 # 					PC_numerator = 0
 # 				else:
 # 					# Check if causal relation and gap are both positive of both negative
-# 					if (agent.belieftree[who][len_Pr+len_PC+len_S+j+(k*len_PC)][0] < 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) < 0) \
-# 					  or (agent.belieftree[who][len_Pr+len_PC+len_S+j+(k*len_PC)][0] > 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) > 0):
-# 						PC_numerator = PC_numerator + abs(agent.belieftree[who][len_Pr+len_PC+len_S+j+(k*len_PC)][0]*\
+# 					if (agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0] < 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) < 0) \
+# 					  or (agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0] > 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) > 0):
+# 						PC_numerator = PC_numerator + abs(agent.belieftree[who][len_PC+len_ML+len_S+j+(k*len_ML)][0]*\
 # 						  (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]))
 # 					else:
 # 						PC_numerator = PC_numerator	
 # 			# Contingency for partial knowledge issues
-# 			if agent.belieftree[who][len_Pr + j][1] == None or agent.belieftree[who][len_Pr + j][0] == None:
+# 			if agent.belieftree[who][len_PC + j][1] == None or agent.belieftree[who][len_PC + j][0] == None:
 # 				PC_numerator = 0
 # 			else:
 # 				# Then adding the gap of the policy core:
-# 				PC_numerator = PC_numerator + abs(agent.belieftree[who][len_Pr + j][1] - agent.belieftree[who][len_Pr + j][0])
+# 				PC_numerator = PC_numerator + abs(agent.belieftree[who][len_PC + j][1] - agent.belieftree[who][len_PC + j][0])
 # 			if PC_denominator != 0:
-# 				agent.belieftree[who][len_Pr+j][2] = PC_numerator/PC_denominator 
+# 				agent.belieftree[who][len_PC+j][2] = PC_numerator/PC_denominator 
 # 			else:
-# 				agent.belieftree[who][len_Pr+j][2] = 0
+# 				agent.belieftree[who][len_PC+j][2] = 0
 
-# 	def preference_udapte_pf_PC(self, agent, who, len_Pr, len_PC, len_S, agenda_prob_3S_as):
+# 	def preference_udapte_pf_PC(self, agent, who, len_PC, len_ML, len_S, agenda_prob_3S_as):
 
 # 		"""
 # 		The preference update for policy cores function (policy formulation)
@@ -8774,19 +8774,19 @@ from agent import Policymakers, Policyentres
 # 		S_denominator = 0
 # 		for j in range(len_S):
 # 			# print('Selection S' + str(j+1))
-# 			# print('State of the S' + str(j+1) + ': ' + str(agent.belieftree[0][len_Pr + j][0])) # the state printed
+# 			# print('State of the S' + str(j+1) + ': ' + str(agent.belieftree[0][len_PC + j][0])) # the state printed
 # 			# Selecting the causal relations starting from PC
 # 			# print(' ')
-# 			# print(len_Pr + len_PC + len_S + len_Pr*len_PC + j*len_PC + (k-len_Pr))
+# 			# print(len_PC + len_ML + len_S + len_PC*len_ML + j*len_ML + (k-len_PC))
 # 			# Contingency for partial knowledge issues
-# 			if agent.belieftree[0][k][1] != None and agent.belieftree[0][k][0] != None and agent.belieftree[0][len_Pr + len_PC + len_S + len_Pr*len_PC + j*len_PC + (k-len_Pr)][0] != None:
-# 				# print('Causal Relation S' + str(j+1) + ' - PC' + str(k+1) + ': ' + str(agent.belieftree[0][len_Pr+len_PC+len_S+(j+(k*len_PC))][0]))
+# 			if agent.belieftree[0][k][1] != None and agent.belieftree[0][k][0] != None and agent.belieftree[0][len_PC + len_ML + len_S + len_PC*len_ML + j*len_ML + (k-len_PC)][0] != None:
+# 				# print('Causal Relation S' + str(j+1) + ' - PC' + str(k+1) + ': ' + str(agent.belieftree[0][len_PC+len_ML+len_S+(j+(k*len_ML))][0]))
 # 				# print('Gap of PC' + str(k+1) + ': ' + str(agent.belieftree[0][k][1] - agent.belieftree[0][k][0]))
 # 				# Check if causal relation and gap are both positive of both negative
-# 				if (agent.belieftree[0][len_Pr + len_PC + len_S + len_Pr*len_PC + j*len_PC + (k-len_Pr)][0] < 0 and (agent.belieftree[0][k][1] - agent.belieftree[0][k][0]) < 0) \
-# 					or (agent.belieftree[0][len_Pr + len_PC + len_S + len_Pr*len_PC + j*len_PC + (k-len_Pr)][0] > 0 and (agent.belieftree[0][k][1] - agent.belieftree[0][k][0]) > 0):
+# 				if (agent.belieftree[0][len_PC + len_ML + len_S + len_PC*len_ML + j*len_ML + (k-len_PC)][0] < 0 and (agent.belieftree[0][k][1] - agent.belieftree[0][k][0]) < 0) \
+# 					or (agent.belieftree[0][len_PC + len_ML + len_S + len_PC*len_ML + j*len_ML + (k-len_PC)][0] > 0 and (agent.belieftree[0][k][1] - agent.belieftree[0][k][0]) > 0):
 # 					# print('Calculating')
-# 					S_denominator = S_denominator + abs(agent.belieftree[0][len_Pr + len_PC + len_S + len_Pr*len_PC + j*len_PC + (k-len_Pr)][0] * \
+# 					S_denominator = S_denominator + abs(agent.belieftree[0][len_PC + len_ML + len_S + len_PC*len_ML + j*len_ML + (k-len_PC)][0] * \
 # 						(agent.belieftree[0][k][1] - agent.belieftree[0][k][0]))
 # 					# print('This is the PC numerator: ' + str(S_denominator))
 # 				else:
@@ -8794,12 +8794,12 @@ from agent import Policymakers, Policyentres
 # 			else:
 # 				S_denominator = 0
 # 			# Contingency for partial knowledge issues
-# 			if agent.belieftree[0][len_Pr + len_PC + j][1] == None or agent.belieftree[0][len_Pr + len_PC + j][0] == None:
+# 			if agent.belieftree[0][len_PC + len_ML + j][1] == None or agent.belieftree[0][len_PC + len_ML + j][0] == None:
 # 				S_denominator = S_denominator
 # 			else:
 # 				# Then adding the gap of the policy core:
-# 				# print('This is the gap for the S' + str(j+1) + ': ' + str(agent.belieftree[0][len_Pr + len_PC + j][1] - agent.belieftree[0][len_Pr + len_PC + j][0]))
-# 				S_denominator = S_denominator + abs(agent.belieftree[0][len_Pr + len_PC + j][1] - agent.belieftree[0][len_Pr + len_PC + j][0])
+# 				# print('This is the gap for the S' + str(j+1) + ': ' + str(agent.belieftree[0][len_PC + len_ML + j][1] - agent.belieftree[0][len_PC + len_ML + j][0]))
+# 				S_denominator = S_denominator + abs(agent.belieftree[0][len_PC + len_ML + j][1] - agent.belieftree[0][len_PC + len_ML + j][0])
 
 
 # 		# Calculating the numerator and the preference of all policy core issues:
@@ -8807,12 +8807,12 @@ from agent import Policymakers, Policyentres
 # 		for j in range(len_S):
 # 			S_numerator = 0
 # 			# Contingency for partial knowledge issues
-# 			if agent.belieftree[0][k][1] != None and agent.belieftree[0][k][0] != None and agent.belieftree[0][len_Pr + len_PC + len_S + len_Pr*len_PC + j*len_PC + (k-len_Pr)][0] != None:
+# 			if agent.belieftree[0][k][1] != None and agent.belieftree[0][k][0] != None and agent.belieftree[0][len_PC + len_ML + len_S + len_PC*len_ML + j*len_ML + (k-len_PC)][0] != None:
 # 				# Check if causal relation and gap are both positive of both negative
-# 				if (agent.belieftree[0][len_Pr + len_PC + len_S + len_Pr*len_PC + j*len_PC + (k-len_Pr)][0] < 0 and (agent.belieftree[0][k][1] - agent.belieftree[0][k][0]) < 0) \
-# 					or (agent.belieftree[0][len_Pr + len_PC + len_S + len_Pr*len_PC + j*len_PC + (k-len_Pr)][0] > 0 and (agent.belieftree[0][k][1] - agent.belieftree[0][k][0]) > 0):
+# 				if (agent.belieftree[0][len_PC + len_ML + len_S + len_PC*len_ML + j*len_ML + (k-len_PC)][0] < 0 and (agent.belieftree[0][k][1] - agent.belieftree[0][k][0]) < 0) \
+# 					or (agent.belieftree[0][len_PC + len_ML + len_S + len_PC*len_ML + j*len_ML + (k-len_PC)][0] > 0 and (agent.belieftree[0][k][1] - agent.belieftree[0][k][0]) > 0):
 # 					# print('Calculating')
-# 					S_numerator = S_numerator + abs(agent.belieftree[0][len_Pr + len_PC + len_S + len_Pr*len_PC + j*len_PC + (k-len_Pr)][0] * \
+# 					S_numerator = S_numerator + abs(agent.belieftree[0][len_PC + len_ML + len_S + len_PC*len_ML + j*len_ML + (k-len_PC)][0] * \
 # 						(agent.belieftree[0][k][1] - agent.belieftree[0][k][0]))
 # 					# print('This is the PC numerator: ' + str(S_numerator))
 # 				else:
@@ -8820,17 +8820,17 @@ from agent import Policymakers, Policyentres
 # 			else:
 # 				S_numerator = 0
 # 			# Contingency for partial knowledge issues
-# 			if agent.belieftree[0][len_Pr + len_PC + j][1] == None or agent.belieftree[0][len_Pr + len_PC + j][0] == None:
+# 			if agent.belieftree[0][len_PC + len_ML + j][1] == None or agent.belieftree[0][len_PC + len_ML + j][0] == None:
 # 				S_numerator = 0
 # 			else:
 # 				# Then adding the gap of the policy core:
-# 				S_numerator = S_numerator + abs(agent.belieftree[0][len_Pr + len_PC + j][1] - agent.belieftree[0][len_Pr + len_PC + j][0])
+# 				S_numerator = S_numerator + abs(agent.belieftree[0][len_PC + len_ML + j][1] - agent.belieftree[0][len_PC + len_ML + j][0])
 # 			if S_denominator != 0:
-# 				agent.belieftree[who][len_Pr + len_PC + j][2] = S_numerator/S_denominator 
+# 				agent.belieftree[who][len_PC + len_ML + j][2] = S_numerator/S_denominator 
 # 			else:
-# 				agent.belieftree[who][len_Pr + len_PC + j][2] = 0
+# 				agent.belieftree[who][len_PC + len_ML + j][2] = 0
 
-# 	def instrument_preference_update(self, agent, who, AS_theory, len_Pr, len_PC, len_S, instruments):
+# 	def instrument_preference_update(self, agent, who, AS_theory, len_PC, len_ML, len_S, instruments):
 
 # 		"""
 # 		Instrument preference update function
@@ -8873,10 +8873,10 @@ from agent import Policymakers, Policyentres
 # 		if AS_theory == 2:
 # 			j = agent.select_problem_3S_as
 # 		for k in range(len_S):
-# 			if agent.belieftree[who][j][1] != None and agent.belieftree[who][j][0] != None and agent.belieftree[who][len_Pr + len_PC + len_S + (len_Pr*len_PC) + (j - len_Pr)*len_S + k][0] != None:
-# 				if (agent.belieftree[who][len_Pr + len_PC + len_S + (len_Pr*len_PC) + (j - len_Pr)*len_S + k][0] < 0 and (agent.belieftree[who][j][1] - agent.belieftree[who][j][0]) < 0) \
-# 					or (agent.belieftree[who][len_Pr + len_PC + len_S + (len_Pr*len_PC) + (j - len_Pr)*len_S + k][0] > 0 and (agent.belieftree[who][j][1] - agent.belieftree[who][j][0]) > 0):
-# 					S_denominator = S_denominator + abs(agent.belieftree[who][len_Pr + len_PC + len_S + (len_Pr*len_PC) + (j - len_Pr)*len_S + k][0]*\
+# 			if agent.belieftree[who][j][1] != None and agent.belieftree[who][j][0] != None and agent.belieftree[who][len_PC + len_ML + len_S + (len_PC*len_ML) + (j - len_PC)*len_S + k][0] != None:
+# 				if (agent.belieftree[who][len_PC + len_ML + len_S + (len_PC*len_ML) + (j - len_PC)*len_S + k][0] < 0 and (agent.belieftree[who][j][1] - agent.belieftree[who][j][0]) < 0) \
+# 					or (agent.belieftree[who][len_PC + len_ML + len_S + (len_PC*len_ML) + (j - len_PC)*len_S + k][0] > 0 and (agent.belieftree[who][j][1] - agent.belieftree[who][j][0]) > 0):
+# 					S_denominator = S_denominator + abs(agent.belieftree[who][len_PC + len_ML + len_S + (len_PC*len_ML) + (j - len_PC)*len_S + k][0]*\
 # 					  (agent.belieftree[who][j][1] - agent.belieftree[who][j][0]))
 # 				else:
 # 					S_denominator = S_denominator
@@ -8884,9 +8884,9 @@ from agent import Policymakers, Policyentres
 # 				S_denominator = S_denominator
 
 # 		for i in range(len_S):
-# 			if agent.belieftree[who][len_Pr + len_PC + i][0] != 'No':
-# 				if agent.belieftree[who][len_Pr + len_PC + i][1] != None and agent.belieftree[who][len_Pr + len_PC + i][0] != None:
-# 					S_denominator = S_denominator + abs(agent.belieftree[who][len_Pr + len_PC + i][1] - agent.belieftree[who][len_Pr + len_PC + i][0])
+# 			if agent.belieftree[who][len_PC + len_ML + i][0] != 'No':
+# 				if agent.belieftree[who][len_PC + len_ML + i][1] != None and agent.belieftree[who][len_PC + len_ML + i][0] != None:
+# 					S_denominator = S_denominator + abs(agent.belieftree[who][len_PC + len_ML + i][1] - agent.belieftree[who][len_PC + len_ML + i][0])
 # 				else:
 # 					S_denominator = 0
 
@@ -8898,24 +8898,24 @@ from agent import Policymakers, Policyentres
 # 				k = agent.select_as_issue
 # 			if AS_theory == 2:
 # 				k = agent.select_problem_3S_as
-# 			if agent.belieftree[who][k][1] != None and agent.belieftree[who][k][0] != None and agent.belieftree[who][len_Pr + len_PC + len_S + (len_Pr*len_PC) + (k - len_Pr)*len_S + j][0] != None:
-# 				if (agent.belieftree[who][len_Pr + len_PC + len_S + (len_Pr*len_PC) + (k - len_Pr)*len_S + j][0] < 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) < 0) \
-# 					or (agent.belieftree[who][len_Pr + len_PC + len_S + (len_Pr*len_PC) + (k - len_Pr)*len_S + j][0] > 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) > 0):
-# 					S_numerator = S_numerator + abs(agent.belieftree[who][len_Pr + len_PC + len_S + (len_Pr*len_PC) + (k - len_Pr)*len_S + j][0]*\
+# 			if agent.belieftree[who][k][1] != None and agent.belieftree[who][k][0] != None and agent.belieftree[who][len_PC + len_ML + len_S + (len_PC*len_ML) + (k - len_PC)*len_S + j][0] != None:
+# 				if (agent.belieftree[who][len_PC + len_ML + len_S + (len_PC*len_ML) + (k - len_PC)*len_S + j][0] < 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) < 0) \
+# 					or (agent.belieftree[who][len_PC + len_ML + len_S + (len_PC*len_ML) + (k - len_PC)*len_S + j][0] > 0 and (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]) > 0):
+# 					S_numerator = S_numerator + abs(agent.belieftree[who][len_PC + len_ML + len_S + (len_PC*len_ML) + (k - len_PC)*len_S + j][0]*\
 # 						  (agent.belieftree[who][k][1] - agent.belieftree[who][k][0]))
 # 				else:
 # 					S_numerator = S_numerator
 # 			else:
 # 				S_numerator = S_numerator
-# 			if agent.belieftree[who][len_Pr + len_PC + j][0] != 'No':
-# 				if agent.belieftree[who][len_Pr + len_PC + j][1] != None and agent.belieftree[who][len_Pr + len_PC + j][0] != None:
-# 					S_numerator = S_numerator + abs(agent.belieftree[who][len_Pr + len_PC + j][1] - agent.belieftree[who][len_Pr + len_PC + j][0])
+# 			if agent.belieftree[who][len_PC + len_ML + j][0] != 'No':
+# 				if agent.belieftree[who][len_PC + len_ML + j][1] != None and agent.belieftree[who][len_PC + len_ML + j][0] != None:
+# 					S_numerator = S_numerator + abs(agent.belieftree[who][len_PC + len_ML + j][1] - agent.belieftree[who][len_PC + len_ML + j][0])
 # 				else:
 # 					S_numerator = 0
 # 			if S_denominator != 0:
-# 				agent.belieftree[who][len_Pr+len_PC+j][2] = S_numerator/S_denominator 
+# 				agent.belieftree[who][len_PC+len_ML+j][2] = S_numerator/S_denominator 
 # 			else:
-# 				agent.belieftree[who][len_Pr+len_PC+j][2] = 0
+# 				agent.belieftree[who][len_PC+len_ML+j][2] = 0
 
 # 		##################################################################################################
 # 		# 2/ Calculation of the grade of each of the instruments based on impact on the secondary issues #
@@ -8924,19 +8924,19 @@ from agent import Policymakers, Policyentres
 # 		agent.instrument_preferences[who] = [0 for h in range(len(instruments))]
 # 		for i in range(len(instruments)):
 # 			for j in range(len_S):
-# 				if agent.belieftree[who][len_Pr + len_PC + j][0] != 'No':
-# 					if agent.belieftree[who][len_Pr + len_PC + j][1] != None and agent.belieftree[who][len_Pr + len_PC + j][0] != None:
-# 						if (instruments[i][j] > 0 and (agent.belieftree[who][len_Pr + len_PC + j][1] - agent.belieftree[who][len_Pr + len_PC + j][0]) > 0 ) \
-# 							or (instruments[i][j] < 0 and (agent.belieftree[who][len_Pr + len_PC + j][1] - agent.belieftree[who][len_Pr + len_PC + j][0]) < 0 ):
+# 				if agent.belieftree[who][len_PC + len_ML + j][0] != 'No':
+# 					if agent.belieftree[who][len_PC + len_ML + j][1] != None and agent.belieftree[who][len_PC + len_ML + j][0] != None:
+# 						if (instruments[i][j] > 0 and (agent.belieftree[who][len_PC + len_ML + j][1] - agent.belieftree[who][len_PC + len_ML + j][0]) > 0 ) \
+# 							or (instruments[i][j] < 0 and (agent.belieftree[who][len_PC + len_ML + j][1] - agent.belieftree[who][len_PC + len_ML + j][0]) < 0 ):
 # 							# print(' ')
 # 							# print('agent.instrument_preferences[who][i]: ' + str(agent.instrument_preferences[who][i]))
 # 							# print('instruments[i][j]: ' + str(instruments[i][j]))
-# 							# print('agent.belieftree[' + str(who) + '][len_Pr + len_PC + ' + str(j) + '][1]: ' + str(agent.belieftree[who][len_Pr + len_PC + j][1]))
-# 							# print('agent.belieftree[' + str(who) + '][len_Pr + len_PC + ' + str(j) + '][0]: ' + str(agent.belieftree[who][len_Pr + len_PC + j][0]))
-# 							# print('agent.belieftree[' + str(who) + '][len_Pr + len_PC + ' + str(j) + '][2]: ' + str(agent.belieftree[who][len_Pr + len_PC + j][2]))
+# 							# print('agent.belieftree[' + str(who) + '][len_PC + len_ML + ' + str(j) + '][1]: ' + str(agent.belieftree[who][len_PC + len_ML + j][1]))
+# 							# print('agent.belieftree[' + str(who) + '][len_PC + len_ML + ' + str(j) + '][0]: ' + str(agent.belieftree[who][len_PC + len_ML + j][0]))
+# 							# print('agent.belieftree[' + str(who) + '][len_PC + len_ML + ' + str(j) + '][2]: ' + str(agent.belieftree[who][len_PC + len_ML + j][2]))
 # 							agent.instrument_preferences[who][i] = agent.instrument_preferences[who][i] + \
-# 								(instruments[i][j] * (agent.belieftree[who][len_Pr + len_PC + j][1] - agent.belieftree[who][len_Pr + len_PC + j][0]) * \
-# 								(agent.belieftree[who][len_Pr + len_PC + j][2]))
+# 								(instruments[i][j] * (agent.belieftree[who][len_PC + len_ML + j][1] - agent.belieftree[who][len_PC + len_ML + j][0]) * \
+# 								(agent.belieftree[who][len_PC + len_ML + j][2]))
 # 							# print('agent.instrument_preferences[who][i]: ' + str(agent.instrument_preferences[who][i]))
 # 					else:
 # 						agent.instrument_preferences[who][i] = 0

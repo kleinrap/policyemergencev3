@@ -3,11 +3,11 @@ import random
 class Technical_Model():
 
 	
-	def __init__(self, len_Pr, len_PC, len_S):
-		self.len_Pr = len_Pr
+	def __init__(self, len_PC, len_ML, len_S):
 		self.len_PC = len_PC
+		self.len_ML = len_ML
 		self.len_S = len_S
-		self.belieftree_truth = [None for i in range(len_Pr + len_PC + len_S)]
+		self.belieftree_truth = [None for i in range(len_PC + len_ML + len_S)]
 
 		self.cells_repository = []
 		# belieftree_truth = []

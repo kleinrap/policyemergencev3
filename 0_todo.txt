@@ -13,12 +13,15 @@ Research Questions:
 
 To do to make the model pluggable:
 -!!! Purge the entire forest fire model (note, all functions below should be written in such a way that they can be easily rewritten for other models later on)
+	- Creation of an arbitrary belief tree (2PC, 3ML and 5S)
 	- Remove elements of the forest fire model
-	- Create a function that reads the outputs from the model
+	- Create a function that reads the outputs from the model (reading from text file)
 	- Create a new function for the calculation of the states
 	- Create a new function where the policy instruments are defined
 	- Create a function that will send the inputs
 	- Within the model, introduce a way to stop the model to wait for the technical model to run
+-! Create a file to save all outputs from the technical model
 -! Differentiate how the inputs are set
 -! Differentiate how the outputs are outputted
 -! Differentiate how the experiments (batches) are run
+- Reformat the initialisation files

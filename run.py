@@ -22,7 +22,7 @@ inputs_dict = dict()
 # random.seed(42)
 
 # ACF principle belief of interest
-Pr_ACF_interest = 0
+PC_ACF_interest = 0
 
 # Method chosen:
 # 0: Backbone, 1: Backbone+, 2: 3S, 3: ACF
@@ -271,7 +271,7 @@ for run_number in range(run_number_total):
 				})
 
 		# Running the model
-		test_model = PolicyEmergence(Pr_ACF_interest, datacollector, run_number, inputs_dict, events)
+		test_model = PolicyEmergence(PC_ACF_interest, datacollector, run_number, inputs_dict, events)
 		for i in range(ticks):
 			print('   ')
 			print('--------------------- STEP ' + str(i+1) + ' ---------------------')
