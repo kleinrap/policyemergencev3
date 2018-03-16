@@ -1,14 +1,31 @@
-# This is file 0. This file control the entire model including the two main parts: the policy emergence model and the 
-# technical model whatever it might be.
+
+
+"""
+This is file 0. This file control the entire model including the two main parts: the policy emergence model and the technical model whatever it might be.
+
+Some additional notes and remarks on the model below:
+- For the moment, the possibilities to run a multitude of experimentation has been removed from the model.
+- It is advised to keep to the backbone+ or the ACF models, the 3S approach is not mature and requires additional work.
+
+
+NOTE:
+- CHANGE THIS! text is added to the part that still need to be changed.
+"""
+
+
+
 
 #####################################################################
 # Import of the different modules required for the run of the model #
+#####################################################################
+
 #####################################################################
 # General imports
 import copy
 import random
 import pandas as pd
 
+#####################################################################
 # Policy emergence model imports
 from model import PolicyEmergence
 from mesa.batchrunner import BatchRunner
@@ -19,18 +36,36 @@ from technical_model import Technical_Model
 from datacollection import DataCollector
 from agent import Policymakers, Electorate, Externalparties, Truth, Policyentres
 
+#####################################################################
 # Technical model imports
+
+
+
 
 
 #####################################################################
 ####### Initialisations of the different parts of the models ########
 #####################################################################
 
-# Input dictionnary
-inputs_dict = dict()
+"""
+This part of the model contains all the inputs require to initialise the model with external parameters. This is the out of model intialisation that does not require random changes for each run. The in model initialisation is placed in the model run function as it will lead to changes (usually random ones) needed for each run.
+"""
 
-# Pseudo random generator seed
+#####################################################################
+# General initialisation
+
+# Pseudo random generator seed - for verification and validation purposes
 # random.seed(42)
+
+# For tailored runs:
+min_run_number = 0
+max_run_number = 1
+
+#####################################################################
+# Policy emergence model initialisation
+
+# Input dictionnary containing all inputs related to the policy emergence model
+inputs_dict_emergence = dict()
 
 # ACF principle belief of interest
 PC_ACF_interest = 0
@@ -64,59 +99,73 @@ if exploration == True and AS_theory == 2:
 if exploration == True and AS_theory == 3:
 	experiment_input = pd.read_csv("Exploration_LHS_ACF.data",header=None)
 
-
+# CHANGE THIS! - Should include the ratio of steps between the technical model and the policy emergence model
 run_number_total = len(experiment_input.index)
 if exploration == True:
 	ticks = 250
 else:
 	ticks = 500
 
+# CHANGE THIS! - This will need to be much more advanced, and preferably removed from the main step file where it currently resides
 events = [0, event1, event2, event3, event4]
 
 
+# Decision on the number of agents considered
 policymaker_number = 6
 externalparties_number = 6
 agent_inputs = [policymaker_number, externalparties_number]
 
-# The frames used to save the data output
-# frames_model = []
-# frames_agents = []
-# frames_links = []
-# frames_teams_as = []
-# frames_teams_pf = []
-# frames_coalitions_as = []
-# frames_coalitions_pf = []
+#####################################################################
+# Technical model initialisation
+
+
+
+
+
+
+#####################################################################
+##################### Running the model #############################
+#####################################################################
+
+
+"""
+This is the part of the script that is used to run the model. It contains the running of the model through the different steps but also the collection of the data for the policy emergence model.
+
+
+Warning:
+For the time being, the experimentation part is being removed, only one experiment can be run at a time.
+"""
 
 # Setting the number of times the model will need to run
 for run_number in range(run_number_total):
 
-
-	if run_number >= 16 and run_number < 30:
+	if run_number >= min_run_number and run_number < max_run_number:
 
 		print('   ')
-		print('-------------------------------------------------------------------------')
-		print('--------------------- RUN ' + str(run_number) + ' ---------------------')
-		print('-------------------------------------------------------------------------')
+		print('----------------------------------------------------')
+		print('----------------------- RUN ' + str(run_number) + ' ---------------------')
+		print('----------------------------------------------------')
 		print('   ')
 
+		#####################################################################
+		# IN-MODEL INITIALISATION - Policy emergence model
 
 		# Running the function to fill the input dictionary
 		if exploration == False:
-			initial_values(inputs_dict, experiment_input, run_number, agent_inputs, AS_theory, PF_theory)
+			initial_values(inputs_dict_emergence, experiment_input, run_number, agent_inputs, AS_theory, PF_theory)
 		else:
-			initial_values_exploration(inputs_dict, experiment_input, run_number, agent_inputs,  AS_theory, PF_theory)
+			initial_values_exploration(inputs_dict_emergence, experiment_input, run_number, agent_inputs,  AS_theory, PF_theory)
 
-
+		# Creation of the agent lists required for the policy emergence model
 		agent_action_list = []
-		for agents in inputs_dict["Agents"]:
+		for agents in inputs_dict_emergence["Agents"]:
 			if type(agents) == Policymakers or type(agents) == Policyentres or type(agents) == Externalparties:
 				agent_action_list.append(agents)
-
 
 		# Assigning the run number of the action agents and the simulation
 		for agents in agent_action_list:
 			agents.run_number = run_number
-		inputs_dict["Run_number"] = run_number
+		inputs_dict_emergence["Run_number"] = run_number
 
 		# Selecting the data that needs to be collected throughout the model
 		if AS_theory == 0 or PF_theory == 0:
@@ -250,9 +299,11 @@ for run_number in range(run_number_total):
 				"Members": lambda c: c.members_id,
 				"Resources" : lambda c: c.resources[0]
 				})
+	
+		#####################################################################
+		# RUNNING THE MODEL
 
-		# Running the model
-		test_model = PolicyEmergence(PC_ACF_interest, datacollector, run_number, inputs_dict, events)
+		test_model = PolicyEmergence(PC_ACF_interest, datacollector, run_number, inputs_dict_emergence, events)
 		for i in range(ticks):
 			print('   ')
 			print('--------------------- STEP ' + str(i+1) + ' ---------------------')
@@ -260,7 +311,9 @@ for run_number in range(run_number_total):
 
 			test_model.step(AS_theory, PF_theory)
 
-		# Storing the data
+		#####################################################################
+		# Storing the data for the policy emergence model
+
 		# For backbone and backbone+
 		if AS_theory == 0 or PF_theory == 0:
 			if exploration == False and event1 == False and event2 == False and event3 == False and event4 == False:
@@ -305,6 +358,7 @@ for run_number in range(run_number_total):
 				df_electorate.to_csv('1_electorate_B_event4_' + str(run_number) + '.csv')
 				df_agents = test_model.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('1_agents_B_event4_' + str(run_number) + '.csv')
+		# For the backbone+
 		if AS_theory == 1 or PF_theory == 1:
 			if exploration == False and event1 == False and event2 == False and event3 == False and event4 == False:
 				df_model = test_model.datacollector.get_model_vars_dataframe()
