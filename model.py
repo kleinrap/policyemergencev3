@@ -129,7 +129,7 @@ class PolicyEmergence(Model):
 		# 1.1.8 Initial update of the conflict levels
 		self.conflict_level_update(self.link_list, self.policy_core, self.mid_level, self.secondary, self.conflict_level_coef)
 		
-		# 1.1 9 Initialisation of 3S-related parameters
+		# 1.1.9 Initialisation of 3S-related parameters
 		# For the three streams theory, creation of the team lists:
 		# This is the list of active teams (agenda setting)
 		self.team_list_as = []
@@ -155,7 +155,7 @@ class PolicyEmergence(Model):
 		self.threeS_link_list_pf_total = []
 		self.threeS_link_id_pf =[0]
 
-		# 1.1 10 Initialisation of 3S-related parameters
+		# 1.1.10 Initialisation of 3S-related parameters
 		# For the ACF theory, creation of the coalitions lists:
 		self.coalitions_list_as = []
 		self.coalitions_list_as_total = []

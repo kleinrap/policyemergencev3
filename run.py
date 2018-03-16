@@ -61,6 +61,9 @@ This part of the model contains all the inputs require to initialise the model w
 min_run_number = 0
 max_run_number = 1
 
+# For the total number of steps in years
+run_time_year = 20
+
 #####################################################################
 # Policy emergence model initialisation
 
@@ -115,11 +118,16 @@ policymaker_number = 6
 externalparties_number = 6
 agent_inputs = [policymaker_number, externalparties_number]
 
+# Selecting the time step for the policy emergence model (time step interval in years)
+time_step_emergence = 1
+
 #####################################################################
 # Technical model initialisation
 
+# Selecting the time step for the system dynamics model (time step interval in years)
+time_step_SD = 0.0078125
 
-
+# CHANGE THIS! - The initialisation of the policy instruments should be here considering they are related to the technical model
 
 
 
@@ -303,18 +311,35 @@ for run_number in range(run_number_total):
 		#####################################################################
 		# RUNNING THE MODEL
 
+		# This initialise the policy emergence model (runs the __init__ part of the PolicyEmergence file)
 		test_model = PolicyEmergence(PC_ACF_interest, datacollector, run_number, inputs_dict_emergence, events)
-		for i in range(ticks):
-			print('   ')
-			print('--------------------- STEP ' + str(i+1) + ' ---------------------')
-			print('   ')
 
-			test_model.step(AS_theory, PF_theory)
+		# Deciding on the number of steps that should be considered
+		if time_step_SD < time_step_emergence:
+			time_step_model = time_step_SD
+		else:
+			time_step_model = time_step_emergence
+
+		# For loop for the running of the model
+		for n in range(int(run_time_year/time_step_model)):
+
+			# CHANGE THIS! - Here should be added the running of the technical model for a certain period of time (1 year in this case)
+
+			# This is placed to run the policy emergence model at the right intervals
+			if n % (time_step_emergence/time_step_model) == 0:
+				# This performs one step of the policy emergence model
+				print('   ')
+				print('--------------------- STEP ' + str(int(n*time_step_model)) + ' ---------------------')
+				print('   ')
+				# CHANGE THIS - The communication of the states must be placed into the step function
+				test_model.step(AS_theory, PF_theory)
+
+			# CHANGE THIS - Somewhere here should be the introduction of the policy instrument into the technical model
 
 		#####################################################################
-		# Storing the data for the policy emergence model
+		# STORING THE DATA - Policy emergence model
 
-		# For backbone and backbone+
+		# For the backbone
 		if AS_theory == 0 or PF_theory == 0:
 			if exploration == False and event1 == False and event2 == False and event3 == False and event4 == False:
 				df_model = test_model.datacollector.get_model_vars_dataframe()
@@ -414,7 +439,7 @@ for run_number in range(run_number_total):
 				df_agents.to_csv('1_agents_B+_event4_' + str(run_number) + '.csv')
 				df_links = test_model.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('1_links_B+_event4_' + str(run_number) + '.csv')
-		# For 3S
+		# For the 3S
 		if AS_theory == 2 or PF_theory == 2:
 			if exploration == False and event1 == False and event2 == False and event3 == False and event4 == False:
 				# frames_model.append(test_model.datacollector.get_model_vars_dataframe())
@@ -498,7 +523,7 @@ for run_number in range(run_number_total):
 				df_team_pf.to_csv('1_teams_pf_3S_event4_' + str(run_number) + '.csv')
 				df_links = test_model.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('1_links_3S_event4_' + str(run_number) + '.csv')
-		# For ACF
+		# For the ACF
 		if AS_theory == 3 or PF_theory == 3:
 			if exploration == False and event1 == False and event2 == False and event3 == False and event4 == False:
 				# frames_model.append(test_model.datacollector.get_model_vars_dataframe())
@@ -582,6 +607,8 @@ for run_number in range(run_number_total):
 				df_links = test_model.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('1_links_ACF_event4_' + str(run_number) + '.csv')
 
+		# CHANGE THIS! - The data from the system dynamics model should also be saved
+
 
 
 # Assembling the dataframes and printing to file
@@ -599,4 +626,3 @@ for run_number in range(run_number_total):
 # 	result_coalitions_as.to_csv('1_coalitions_as_file2.csv')
 # 	result_coalitions_pf = pd.concat(frames_coalitions_pf)
 # 	result_coalitions_pf.to_csv('1_coalitions_pf_file2.csv')
-
