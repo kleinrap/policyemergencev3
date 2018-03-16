@@ -38,7 +38,8 @@ from agent import Policymakers, Electorate, Externalparties, Truth, Policyentres
 
 #####################################################################
 # Technical model imports
-
+import pysd
+import numpy as np
 
 
 
@@ -312,7 +313,10 @@ for run_number in range(run_number_total):
 		# RUNNING THE MODEL
 
 		# This initialise the policy emergence model (runs the __init__ part of the PolicyEmergence file)
-		test_model = PolicyEmergence(PC_ACF_interest, datacollector, run_number, inputs_dict_emergence, events)
+		model_emergence = PolicyEmergence(PC_ACF_interest, datacollector, run_number, inputs_dict_emergence, events)
+
+		# This initialises the technical model and transforms it from vensim to python.
+		model_technical = pysd.read_vensim('Flood_Levees_14_Final.mdl')
 
 		# Deciding on the number of steps that should be considered
 		if time_step_SD < time_step_emergence:
@@ -332,7 +336,7 @@ for run_number in range(run_number_total):
 				print('--------------------- STEP ' + str(int(n*time_step_model)) + ' ---------------------')
 				print('   ')
 				# CHANGE THIS - The communication of the states must be placed into the step function
-				test_model.step(AS_theory, PF_theory)
+				model_emergence.step(AS_theory, PF_theory)
 
 			# CHANGE THIS - Somewhere here should be the introduction of the policy instrument into the technical model
 
