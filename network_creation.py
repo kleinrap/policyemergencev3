@@ -70,7 +70,7 @@ class PolicyNetworkLinks(Agent):
 		
 		return conflict_level[issue]
 
-	def conflict_level_calculation(groups, outsider_agent, conflict_level_coef, conflict_level_option, agent_with_highest_awareness, len_Pr, len_PC, len_S):
+	def conflict_level_calculation(groups, outsider_agent, conflict_level_coef, conflict_level_option, agent_with_highest_awareness, len_PC, len_ML, len_S):
 		"""
 		The conflict level calculation function - three streams shadow network
 		===========================
@@ -86,7 +86,7 @@ class PolicyNetworkLinks(Agent):
 		# 	     [Aim , State, Causal relations]
 		# First for the aim and the state of the selected issue and then appending all possible causal relations in the belief tree
 		conflict_level = [conflict_level_coef[1], conflict_level_coef[1]]
-		for p in range(len_Pr*len_PC + len_PC*len_S):
+		for p in range(len_PC*len_ML + len_ML*len_S):
 			conflict_level.append(conflict_level_coef[1])
 
 		# 1. Aim and state conflict level calculations (only for teams)
@@ -161,19 +161,19 @@ class PolicyNetworkLinks(Agent):
 
 		# 2. Causal relations conflict level calculations
 		cw_average = []
-		for p in range(len_Pr*len_PC + len_PC*len_S):
+		for p in range(len_PC*len_ML + len_ML*len_S):
 			cw_list = []
 			for agent_cf in groups.members:
-				cw_list.append(agent_cf.belieftree[0][len_Pr+len_PC+len_S+p][0])
+				cw_list.append(agent_cf.belieftree[0][len_PC+len_ML+len_S+p][0])
 			cw_average.append(sum(cw_list)/len(cw_list))
 
-		for p in range(len_Pr*len_PC + len_PC*len_S):
+		for p in range(len_PC*len_ML + len_ML*len_S):
 			if conflict_level_option == 0:
-				cw_difference = abs(outsider_agent.belieftree[0][len_Pr + len_PC + len_S + p][0] - cw_average[p])
+				cw_difference = abs(outsider_agent.belieftree[0][len_PC + len_ML + len_S + p][0] - cw_average[p])
 			if conflict_level_option == 1:
-				cw_difference = abs(agent_with_highest_awareness.belieftree[1 + outsider_agent.unique_id][len_Pr + len_PC + len_S + p][0] - cw_average[p])
+				cw_difference = abs(agent_with_highest_awareness.belieftree[1 + outsider_agent.unique_id][len_PC + len_ML + len_S + p][0] - cw_average[p])
 			if conflict_level_option == 2:
-				cw_difference = abs(groups.lead.belieftree[1 + outsider_agent.unique_id][len_Pr + len_PC + len_S + p][0] - groups.lead.belieftree[0][len_Pr + len_PC + len_S + p][0])
+				cw_difference = abs(groups.lead.belieftree[1 + outsider_agent.unique_id][len_PC + len_ML + len_S + p][0] - groups.lead.belieftree[0][len_PC + len_ML + len_S + p][0])
 			
 			conflict_level[2+p] = PolicyNetworkLinks.conflict_level_value_calculation(2 + p, conflict_level, conflict_level_coef, cw_difference)
 

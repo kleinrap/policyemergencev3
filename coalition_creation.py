@@ -23,7 +23,7 @@ class Coalition():
 	# def __str__(self):
 	# 	return 'Coalition - ' + str(self.unique_id)
 
-	def coalition_belief_actions_ACF_as(self, coalitions, causalrelation_number, deep_core, policy_core, secondary, agent_action_list, ACF_link_list_as, ACF_link_list_as_total, \
+	def coalition_belief_actions_ACF_as(self, coalitions, causalrelation_number, deep_core, mid_level, secondary, agent_action_list, ACF_link_list_as, ACF_link_list_as_total, \
 		ACF_link_id_as, link_list, affiliation_weights, conflict_level_coef, resources_weight_action, resources_potency):
 
 		"""
@@ -39,8 +39,8 @@ class Coalition():
 
 		"""
 
-		len_Pr = len(deep_core)
-		len_PC = len(policy_core)
+		len_PC = len(deep_core)
+		len_ML = len(mid_level)
 		len_S = len(secondary)
 
 		# print(coalitions)
@@ -55,7 +55,7 @@ class Coalition():
 			cw_of_interest = []
 			# We only consider the causal relations related to the problem on the agenda
 			for cw_choice in range(len(deep_core)):
-					cw_of_interest.append(len_Pr + len_PC + len_S + (coalitions.issue - len_Pr) + cw_choice * len(policy_core))
+					cw_of_interest.append(len_PC + len_ML + len_S + (coalitions.issue - len_PC) + cw_choice * len(mid_level))
 			# print(' ')
 			# print('cw_of_interest: ' + str(cw_of_interest))
 
@@ -207,7 +207,7 @@ class Coalition():
 					if agent_network.belieftree[0][coalitions.issue][0] != 'No':
 						# print(' ')
 						# print('Added 1 - ' + str(agent_network))
-						self.new_link_ACF_as(link_list, agent_network, coalitions, ACF_link_list_as, ACF_link_list_as_total, ACF_link_id_as, len_Pr, len_PC, len_S, conflict_level_coef)
+						self.new_link_ACF_as(link_list, agent_network, coalitions, ACF_link_list_as, ACF_link_list_as_total, ACF_link_id_as, len_PC, len_ML, len_S, conflict_level_coef)
 
 				# Performing the actions using the shadow network and the individual agents within the team
 
@@ -240,25 +240,25 @@ class Coalition():
 									# Grade calculation using the likelihood method
 									# Same affiliation
 									if coalitions.lead.affiliation == links.agent2.affiliation:
-										cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_Pr + len_PC + len_S)] * links.aware * actionWeight
+										cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_PC + len_ML + len_S)] * links.aware * actionWeight
 										total_agent_grades.append(cw_grade)
 
 									# Affiliation 1-2
 									if (coalitions.lead.affiliation == 0 and links.agent2.affiliation == 1) or \
 										(coalitions.lead.affiliation == 1 and links.agent2.affiliation == 0):
-										cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_Pr + len_PC + len_S)] * links.aware * actionWeight * affiliation_weights[0]
+										cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_PC + len_ML + len_S)] * links.aware * actionWeight * affiliation_weights[0]
 										total_agent_grades.append(cw_grade)
 
 									# Affiliation 1-3
 									if (coalitions.lead.affiliation == 0 and links.agent2.affiliation == 2) or \
 										(coalitions.lead.affiliation == 2 and links.agent2.affiliation == 0):
-										cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_Pr + len_PC + len_S)] * links.aware * actionWeight * affiliation_weights[1]
+										cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_PC + len_ML + len_S)] * links.aware * actionWeight * affiliation_weights[1]
 										total_agent_grades.append(cw_grade)
 
 									# Affiliation 2-3
 									if (coalitions.lead.affiliation == 1 and links.agent2.affiliation == 2) or \
 										(coalitions.lead.affiliation == 2 and links.agent2.affiliation == 1):
-										cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_Pr + len_PC + len_S)] * links.aware * actionWeight * affiliation_weights[2]
+										cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_PC + len_ML + len_S)] * links.aware * actionWeight * affiliation_weights[2]
 										total_agent_grades.append(cw_grade)
 									
 								# State influence actions
@@ -341,7 +341,7 @@ class Coalition():
 						# print('cw_of_interest: ' + str(cw_of_interest))
 						# print('cw_of_interest[best_action]: ' + str(cw_of_interest[best_action]))
 
-						# print('Before: ', list_links_coalitions[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(policy_core) + len(secondary) + best_action - 1][0])
+						# print('Before: ', list_links_coalitions[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(mid_level) + len(secondary) + best_action - 1][0])
 
 						if coalitions.lead.affiliation == list_links_coalitions[acted_upon_agent].agent2.affiliation:
 							list_links_coalitions[acted_upon_agent].agent2.belieftree[0][cw_of_interest[best_action]][0] += \
@@ -369,7 +369,7 @@ class Coalition():
 								(coalitions.lead.belieftree[0][cw_of_interest[best_action]][0] - list_links_coalitions[acted_upon_agent].agent2.belieftree[0][cw_of_interest[best_action]][0]) * \
 								coalitions.resources[0] * 0.1 * affiliation_weights[2]
 
-						# print('After: ', list_links_coalitions[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(policy_core) + len(secondary) + best_action - 1][0])
+						# print('After: ', list_links_coalitions[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(mid_level) + len(secondary) + best_action - 1][0])
 						
 						# 1-1 check
 						list_links_coalitions[acted_upon_agent].agent2.belieftree[0][cw_of_interest[best_action]][0] = \
@@ -472,7 +472,7 @@ class Coalition():
 					if coalitions.resources[1] <= 0 * coalitions.resources[0]:
 						break
 			
-	def coalition_belief_actions_ACF_pf(self, coalitions, causalrelation_number, deep_core, policy_core, secondary, agent_action_list, ACF_link_list_pf, ACF_link_list_pf_total, \
+	def coalition_belief_actions_ACF_pf(self, coalitions, causalrelation_number, deep_core, mid_level, secondary, agent_action_list, ACF_link_list_pf, ACF_link_list_pf_total, \
 		ACF_link_id_pf, link_list, affiliation_weights, agenda_as_issue, instruments, conflict_level_coef, resources_weight_action, resources_potency):
 
 		"""
@@ -491,8 +491,8 @@ class Coalition():
 
 		"""
 
-		len_Pr = len(deep_core)
-		len_PC = len(policy_core)
+		len_PC = len(deep_core)
+		len_ML = len(mid_level)
 		len_S = len(secondary)
 
 		# print(coalitions)
@@ -509,9 +509,9 @@ class Coalition():
 			cw_of_interest = []
 			# We only consider the causal relations related to the problem on the agenda
 			for cw_choice in range(len(secondary)):
-				if coalitions.lead.belieftree[0][len_Pr + len_PC + len_S + (len_Pr * len_PC) + (agenda_as_issue - len_Pr)*len_S + cw_choice][0] \
+				if coalitions.lead.belieftree[0][len_PC + len_ML + len_S + (len_PC * len_ML) + (agenda_as_issue - len_PC)*len_S + cw_choice][0] \
 					* instruments[coalitions.issue][cw_choice] != 0:
-					cw_of_interest.append(len_Pr + len_PC + len_S + (len_Pr * len_PC) + (agenda_as_issue - len_Pr)*len_S + cw_choice)
+					cw_of_interest.append(len_PC + len_ML + len_S + (len_PC * len_ML) + (agenda_as_issue - len_PC)*len_S + cw_choice)
 			of_interest.append(cw_of_interest)
 			# Looking for the relevant issues for the policy formulation
 			# That is we choose the secondary issues that are impacted by the policy instrument
@@ -519,7 +519,7 @@ class Coalition():
 			issue_of_interest = []
 			for issue_choice in range(len(secondary)):
 				if instruments[coalitions.issue][issue_choice] != 0:
-					issue_of_interest.append(len_Pr + len_PC + issue_choice)
+					issue_of_interest.append(len_PC + len_ML + issue_choice)
 			of_interest.append(issue_of_interest)
 			# print(' ')
 			# print('of_interest: ' + str(of_interest))
@@ -539,7 +539,7 @@ class Coalition():
 					# Exchange of knowledge on the causal relations
 
 					for cw in range(causalrelation_number):
-						self.knowledge_exchange_coalition(coalitions, len_Pr + len_PC + len_S + cw, 0)
+						self.knowledge_exchange_coalition(coalitions, len_PC + len_ML + len_S + cw, 0)
 					
 					# b. Compiling all actions for each actor
 
@@ -672,7 +672,7 @@ class Coalition():
 					if agent_network.belieftree[0][coalitions.issue][0] != 'No':
 						# print(' ')
 						# print('Added 1 - ' + str(agent_network))
-						self.new_link_ACF_pf(link_list, agent_network, coalitions, ACF_link_list_pf, ACF_link_list_pf_total, ACF_link_id_pf, len_Pr, len_PC, len_S, conflict_level_coef)
+						self.new_link_ACF_pf(link_list, agent_network, coalitions, ACF_link_list_pf, ACF_link_list_pf_total, ACF_link_id_pf, len_PC, len_ML, len_S, conflict_level_coef)
 
 				# Performing the actions using the shadow network and the individual agents within the team
 
@@ -704,25 +704,25 @@ class Coalition():
 									# Grade calculation using the likelihood method
 									# Same affiliation
 									if coalitions.lead.affiliation == links.agent2.affiliation:
-										cw_grade = links.conflict_level[len_S + cw_of_interest[cw] - (len_Pr + len_PC + len_S)] * links.aware * actionWeight
+										cw_grade = links.conflict_level[len_S + cw_of_interest[cw] - (len_PC + len_ML + len_S)] * links.aware * actionWeight
 										total_agent_grades.append(cw_grade)
 
 									# Affiliation 1-2
 									if (coalitions.lead.affiliation == 0 and links.agent2.affiliation == 1) or \
 										(coalitions.lead.affiliation == 1 and links.agent2.affiliation == 0):
-										cw_grade = links.conflict_level[len_S + cw_of_interest[cw] - (len_Pr + len_PC + len_S)] * links.aware * actionWeight * affiliation_weights[0]
+										cw_grade = links.conflict_level[len_S + cw_of_interest[cw] - (len_PC + len_ML + len_S)] * links.aware * actionWeight * affiliation_weights[0]
 										total_agent_grades.append(cw_grade)
 
 									# Affiliation 1-3
 									if (coalitions.lead.affiliation == 0 and links.agent2.affiliation == 2) or \
 										(coalitions.lead.affiliation == 2 and links.agent2.affiliation == 0):
-										cw_grade = links.conflict_level[len_S + cw_of_interest[cw] - (len_Pr + len_PC + len_S)] * links.aware * actionWeight * affiliation_weights[1]
+										cw_grade = links.conflict_level[len_S + cw_of_interest[cw] - (len_PC + len_ML + len_S)] * links.aware * actionWeight * affiliation_weights[1]
 										total_agent_grades.append(cw_grade)
 
 									# Affiliation 2-3
 									if (coalitions.lead.affiliation == 1 and links.agent2.affiliation == 2) or \
 										(coalitions.lead.affiliation == 2 and links.agent2.affiliation == 1):
-										cw_grade = links.conflict_level[len_S + cw_of_interest[cw] - (len_Pr + len_PC + len_S)] * links.aware * actionWeight * affiliation_weights[2]
+										cw_grade = links.conflict_level[len_S + cw_of_interest[cw] - (len_PC + len_ML + len_S)] * links.aware * actionWeight * affiliation_weights[2]
 										total_agent_grades.append(cw_grade)
 								
 								# State influence actions
@@ -731,25 +731,25 @@ class Coalition():
 									# Grade calculation using the likelihood method
 									# Same affiliation
 									if coalitions.lead.affiliation == links.agent2.affiliation:
-										state_grade = links.conflict_level[issue_of_interest[issue_num] - (len_Pr + len_PC)][0] * links.aware * actionWeight
+										state_grade = links.conflict_level[issue_of_interest[issue_num] - (len_PC + len_ML)][0] * links.aware * actionWeight
 										total_agent_grades.append(state_grade)
 
 									# Affiliation 1-2
 									if (coalitions.lead.affiliation == 0 and links.agent2.affiliation == 1) or \
 										(coalitions.lead.affiliation == 1 and links.agent2.affiliation == 0):
-										state_grade = links.conflict_level[issue_of_interest[issue_num] - (len_Pr + len_PC)][0] * links.aware * actionWeight * affiliation_weights[0]
+										state_grade = links.conflict_level[issue_of_interest[issue_num] - (len_PC + len_ML)][0] * links.aware * actionWeight * affiliation_weights[0]
 										total_agent_grades.append(state_grade)
 
 									# Affiliation 1-3
 									if (coalitions.lead.affiliation == 0 and links.agent2.affiliation == 2) or \
 										(coalitions.lead.affiliation == 2 and links.agent2.affiliation == 0):
-										state_grade = links.conflict_level[issue_of_interest[issue_num] - (len_Pr + len_PC)][0] * links.aware * actionWeight * affiliation_weights[1]
+										state_grade = links.conflict_level[issue_of_interest[issue_num] - (len_PC + len_ML)][0] * links.aware * actionWeight * affiliation_weights[1]
 										total_agent_grades.append(state_grade)
 
 									# Affiliation 2-3
 									if (coalitions.lead.affiliation == 1 and links.agent2.affiliation == 2) or \
 										(coalitions.lead.affiliation == 2 and links.agent2.affiliation == 1):
-										state_grade = links.conflict_level[issue_of_interest[issue_num] - (len_Pr + len_PC)][0] * links.aware * actionWeight * affiliation_weights[2]
+										state_grade = links.conflict_level[issue_of_interest[issue_num] - (len_PC + len_ML)][0] * links.aware * actionWeight * affiliation_weights[2]
 										total_agent_grades.append(state_grade)
 
 								# Aim influence actions
@@ -758,25 +758,25 @@ class Coalition():
 									# Grade calculation using the likelihood method
 									# Same affiliation
 									if coalitions.lead.affiliation == links.agent2.affiliation:
-										aim_grade = links.conflict_level[issue_of_interest[issue_num] - (len_Pr + len_PC)][1] * links.aware * actionWeight
+										aim_grade = links.conflict_level[issue_of_interest[issue_num] - (len_PC + len_ML)][1] * links.aware * actionWeight
 										total_agent_grades.append(aim_grade)
 
 									# Affiliation 1-2
 									if (coalitions.lead.affiliation == 0 and links.agent2.affiliation == 1) or \
 										(coalitions.lead.affiliation == 1 and links.agent2.affiliation == 0):
-										aim_grade = links.conflict_level[issue_of_interest[issue_num] - (len_Pr + len_PC)][1] * links.aware * actionWeight * affiliation_weights[0]
+										aim_grade = links.conflict_level[issue_of_interest[issue_num] - (len_PC + len_ML)][1] * links.aware * actionWeight * affiliation_weights[0]
 										total_agent_grades.append(aim_grade)
 
 									# Affiliation 1-3
 									if (coalitions.lead.affiliation == 0 and links.agent2.affiliation == 2) or \
 										(coalitions.lead.affiliation == 2 and links.agent2.affiliation == 0):
-										aim_grade = links.conflict_level[issue_of_interest[issue_num] - (len_Pr + len_PC)][1] * links.aware * actionWeight * affiliation_weights[1]
+										aim_grade = links.conflict_level[issue_of_interest[issue_num] - (len_PC + len_ML)][1] * links.aware * actionWeight * affiliation_weights[1]
 										total_agent_grades.append(aim_grade)
 
 									# Affiliation 2-3
 									if (coalitions.lead.affiliation == 1 and links.agent2.affiliation == 2) or \
 										(coalitions.lead.affiliation == 2 and links.agent2.affiliation == 1):
-										aim_grade = links.conflict_level[issue_of_interest[issue_num] - (len_Pr + len_PC)][1] * links.aware * actionWeight * affiliation_weights[2]
+										aim_grade = links.conflict_level[issue_of_interest[issue_num] - (len_PC + len_ML)][1] * links.aware * actionWeight * affiliation_weights[2]
 										total_agent_grades.append(aim_grade)								
 
 					# Choosing the best action
@@ -809,7 +809,7 @@ class Coalition():
 						# print('best_action: ' + str(best_action))
 						# print(of_interest[0][best_action])
 
-						# print('Before: ' + str(list_links_coalitions[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(policy_core) + len(secondary) + best_action - 1][0]))
+						# print('Before: ' + str(list_links_coalitions[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(mid_level) + len(secondary) + best_action - 1][0]))
 
 						# Same affiliation
 						if coalitions.lead.affiliation == list_links_coalitions[acted_upon_agent].agent2.affiliation:
@@ -838,7 +838,7 @@ class Coalition():
 								(coalitions.lead.belieftree[0][of_interest[0][best_action]][0] - list_links_coalitions[acted_upon_agent].agent2.belieftree[0][of_interest[0][best_action]][0]) * \
 								coalitions.resources[0] * 0.1 * affiliation_weights[2]
 
-						# print('After: ' + str(list_links_coalitions[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(policy_core) + len(secondary) + best_action - 1][0]))
+						# print('After: ' + str(list_links_coalitions[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(mid_level) + len(secondary) + best_action - 1][0]))
 						
 						# 1-1 check
 						list_links_coalitions[acted_upon_agent].agent2.belieftree[0][of_interest[0][best_action]][0] = \
@@ -953,7 +953,7 @@ class Coalition():
 					if coalitions.resources[1] <= 0 * coalitions.resources[0]:
 						break
 	
-	def new_link_ACF_as(self, link_list, outsider_agent, coalitions, ACF_link_list_as, ACF_link_list_as_total, ACF_link_id_as, len_Pr, len_PC, len_S, conflict_level_coef):
+	def new_link_ACF_as(self, link_list, outsider_agent, coalitions, ACF_link_list_as, ACF_link_list_as_total, ACF_link_id_as, len_PC, len_ML, len_S, conflict_level_coef):
 
 		"""
 		The new link function - ACF shadow network (agenda setting)
@@ -977,7 +977,7 @@ class Coalition():
 		conflict_level_option = 2
 		agent_with_highest_awareness = coalitions.lead
 
-		conflict_level = PolicyNetworkLinks.conflict_level_calculation(coalitions, outsider_agent, conflict_level_coef, conflict_level_option, agent_with_highest_awareness, len_Pr, len_PC, len_S)
+		conflict_level = PolicyNetworkLinks.conflict_level_calculation(coalitions, outsider_agent, conflict_level_coef, conflict_level_option, agent_with_highest_awareness, len_PC, len_ML, len_S)
 
 		# 3. We set the aware decay
 		aware_decay = 0
@@ -988,7 +988,7 @@ class Coalition():
 		ACF_link_list_as_total.append(coalition_link)
 		ACF_link_id_as[0] += 1
 
-	def new_link_ACF_pf(self, link_list, outsider_agent, coalitions, ACF_link_list_pf, ACF_link_list_pf_total, ACF_link_id_pf, len_Pr, len_PC, len_S, conflict_level_coef):
+	def new_link_ACF_pf(self, link_list, outsider_agent, coalitions, ACF_link_list_pf, ACF_link_list_pf_total, ACF_link_id_pf, len_PC, len_ML, len_S, conflict_level_coef):
 
 		"""
 		The new link function - ACF shadow network (policy formulation)
@@ -1014,25 +1014,25 @@ class Coalition():
 		for p in range(len_S):
 			conflict_level.append(copy.copy(conflict_level_init))
 
-		for p in range(len_Pr*len_PC + len_PC*len_S):
+		for p in range(len_PC*len_ML + len_ML*len_S):
 			conflict_level.append(conflict_level_coef[1])
 
 		# Looking at the state and aim to calculate the conflict level
 		for p in range(len_S):
 			check_none0 = 0
-			if coalitions.lead.belieftree[1 + outsider_agent.unique_id][len_Pr + len_PC + p][0] == None:
-				coalitions.lead.belieftree[1 + outsider_agent.unique_id][len_Pr + len_PC + p][0] = 0
+			if coalitions.lead.belieftree[1 + outsider_agent.unique_id][len_PC + len_ML + p][0] == None:
+				coalitions.lead.belieftree[1 + outsider_agent.unique_id][len_PC + len_ML + p][0] = 0
 				check_none0 = 1
 			check_none1 = 0
-			if coalitions.lead.belieftree[1 + outsider_agent.unique_id][len_Pr + len_PC + p][1] == None:
-				coalitions.lead.belieftree[1 + outsider_agent.unique_id][len_Pr + len_PC + p][1] = 0
+			if coalitions.lead.belieftree[1 + outsider_agent.unique_id][len_PC + len_ML + p][1] == None:
+				coalitions.lead.belieftree[1 + outsider_agent.unique_id][len_PC + len_ML + p][1] = 0
 				check_none1 = 1
-			state_cf_difference = abs(coalitions.lead.belieftree[1 + outsider_agent.unique_id][len_Pr + len_PC + p][0] - coalitions.lead.belieftree[0][len_Pr + len_PC + p][0])
-			aim_cf_difference = abs(coalitions.lead.belieftree[1 + outsider_agent.unique_id][len_Pr + len_PC + p][1] - coalitions.lead.belieftree[0][len_Pr + len_PC + p][1])
+			state_cf_difference = abs(coalitions.lead.belieftree[1 + outsider_agent.unique_id][len_PC + len_ML + p][0] - coalitions.lead.belieftree[0][len_PC + len_ML + p][0])
+			aim_cf_difference = abs(coalitions.lead.belieftree[1 + outsider_agent.unique_id][len_PC + len_ML + p][1] - coalitions.lead.belieftree[0][len_PC + len_ML + p][1])
 			if check_none0 == 1:
-				coalitions.lead.belieftree[1 + outsider_agent.unique_id][len_Pr + len_PC + p][0] = None
+				coalitions.lead.belieftree[1 + outsider_agent.unique_id][len_PC + len_ML + p][0] = None
 			if check_none1 == 1:
-				coalitions.lead.belieftree[1 + outsider_agent.unique_id][len_Pr + len_PC + p][1] = None
+				coalitions.lead.belieftree[1 + outsider_agent.unique_id][len_PC + len_ML + p][1] = None
 
 			# State conflict level
 			if state_cf_difference <= 0.25:
@@ -1051,8 +1051,8 @@ class Coalition():
 				conflict_level[p][1] = conflict_level_coef[1]
 
 		# Conflict level for the causal relations
-		for p in range(len_Pr*len_PC + len_PC*len_S):
-			cw_difference = abs(coalitions.lead.belieftree[1 + outsider_agent.unique_id][len_Pr + len_PC + len_S + p][0] - coalitions.lead.belieftree[0][len_Pr + len_PC + len_S + p][0])
+		for p in range(len_PC*len_ML + len_ML*len_S):
+			cw_difference = abs(coalitions.lead.belieftree[1 + outsider_agent.unique_id][len_PC + len_ML + len_S + p][0] - coalitions.lead.belieftree[0][len_PC + len_ML + len_S + p][0])
 			if cw_difference <= 0.25:
 				conflict_level[len_S + p] = conflict_level_coef[0]
 			if cw_difference > 0.25 and cw_difference <=1.75:

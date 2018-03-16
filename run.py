@@ -33,7 +33,7 @@ inputs_dict = dict()
 # random.seed(42)
 
 # ACF principle belief of interest
-Pr_ACF_interest = 0
+PC_ACF_interest = 0
 
 # Method chosen:
 # 0: Backbone, 1: Backbone+, 2: 3S, 3: ACF
@@ -123,13 +123,6 @@ for run_number in range(run_number_total):
 			datacollector = DataCollector(
 				# Model
 				{"Run_number": lambda m: m.run_number,
-				"Empty": lambda m: m.technical_model.cell_count("Empty"),
-				"Burnt": lambda m: m.technical_model.cell_count("Burnt"),
-				"Camp_site": lambda m: m.technical_model.cell_count("Camp site"),
-				"Thin_forest": lambda m: m.technical_model.cell_count("Thin forest"),
-				"Thick_forest": lambda m: m.technical_model.cell_count("Thick forest"),
-				"Firefighters": lambda m: m.firefighter_force,
-				"Prevention": lambda m: m.thin_burning_probability,
 				"Agenda_issue": lambda m: m.agenda_as_issue,
 				"Chosen_instrument": lambda m: m.agenda_instrument,
 				"Belieftruth_tree": lambda m: m.belieftree_truth
@@ -150,13 +143,6 @@ for run_number in range(run_number_total):
 			datacollector = DataCollector(
 				# Model
 				{"Run_number": lambda m: m.run_number,
-				"Empty": lambda m: m.technical_model.cell_count("Empty"),
-				"Burnt": lambda m: m.technical_model.cell_count("Burnt"),
-				"Camp_site": lambda m: m.technical_model.cell_count("Camp site"),
-				"Thin_forest": lambda m: m.technical_model.cell_count("Thin forest"),
-				"Thick_forest": lambda m: m.technical_model.cell_count("Thick forest"),
-				"Firefighters": lambda m: m.firefighter_force,
-				"Prevention": lambda m: m.thin_burning_probability,
 				"Agenda_issue": lambda m: m.agenda_as_issue,
 				"Chosen_instrument": lambda m: m.agenda_instrument,
 				"Belieftruth_tree": lambda m: m.belieftree_truth
@@ -182,14 +168,6 @@ for run_number in range(run_number_total):
 			datacollector = DataCollector(
 				# Model
 				{"Run_number": lambda m: m.run_number,
-				"Empty": lambda m: m.technical_model.cell_count("Empty"),
-				"Burnt": lambda m: m.technical_model.cell_count("Burnt"),
-				"Camp_site": lambda m: m.technical_model.cell_count("Camp site"),
-				"Thin_forest": lambda m: m.technical_model.cell_count("Thin forest"),
-				"Thick_forest": lambda m: m.technical_model.cell_count("Thick forest"),
-				# "Instruments": lambda m: m.agenda_instrument,
-				"Firefighters": lambda m: m.firefighter_force,
-				"Prevention": lambda m: m.thin_burning_probability,
 				"Agenda_issue": lambda m: m.agenda_as_issue,
 				"Chosen_instrument": lambda m: m.agenda_instrument,
 				"Belieftruth_tree": lambda m: m.truthagent.belieftree_truth,
@@ -235,14 +213,6 @@ for run_number in range(run_number_total):
 			datacollector = DataCollector(
 				# Model
 				{"Run_number": lambda m: m.run_number,
-				"Empty": lambda m: m.technical_model.cell_count("Empty"),
-				"Burnt": lambda m: m.technical_model.cell_count("Burnt"),
-				"Camp_site": lambda m: m.technical_model.cell_count("Camp site"),
-				"Thin_forest": lambda m: m.technical_model.cell_count("Thin forest"),
-				"Thick_forest": lambda m: m.technical_model.cell_count("Thick forest"),
-				# "Instruments": lambda m: m.agenda_instrument,
-				"Firefighters": lambda m: m.firefighter_force,
-				"Prevention": lambda m: m.thin_burning_probability,
 				"Agenda_issue": lambda m: m.agenda_as_issue,
 				"Chosen_instrument": lambda m: m.agenda_instrument,
 				"Belieftruth_tree": lambda m: m.truthagent.belieftree_truth
@@ -282,7 +252,7 @@ for run_number in range(run_number_total):
 				})
 
 		# Running the model
-		test_model = PolicyEmergence(Pr_ACF_interest, datacollector, run_number, inputs_dict, events)
+		test_model = PolicyEmergence(PC_ACF_interest, datacollector, run_number, inputs_dict, events)
 		for i in range(ticks):
 			print('   ')
 			print('--------------------- STEP ' + str(i+1) + ' ---------------------')

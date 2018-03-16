@@ -22,7 +22,7 @@ class Team():
 	# def __str__(self):
 	# 	return 'Team - ' + str(self.unique_id)
 
-	def team_belief_actions_threeS_as(self, teams, causalrelation_number, deep_core, policy_core, secondary, agent_action_list, threeS_link_list_as, \
+	def team_belief_actions_threeS_as(self, teams, causalrelation_number, deep_core, mid_level, secondary, agent_action_list, threeS_link_list_as, \
 		threeS_link_list_as_total, threeS_link_id_as, link_list, affiliation_weights, conflict_level_coef, resources_weight_action, resources_potency, conflict_level_option):
 
 		"""
@@ -40,8 +40,8 @@ class Team():
 
 		"""
 
-		len_Pr = len(deep_core)
-		len_PC = len(policy_core)
+		len_PC = len(deep_core)
+		len_ML = len(mid_level)
 		len_S = len(secondary)
 
 		# print('The belief actions now have to be performed for each team!')
@@ -68,7 +68,7 @@ class Team():
 					cw_of_interest = []
 					# We only consider the causal relations related to the problem on the agenda
 					for cw_choice in range(len(deep_core)):
-							cw_of_interest.append(len_Pr + len_PC + len_S + len_Pr + (teams.issue - len_Pr) + cw_choice * len(policy_core))
+							cw_of_interest.append(len_PC + len_ML + len_S + len_PC + (teams.issue - len_PC) + cw_choice * len(mid_level))
 					# print(' ')
 					# print('cw_of_interest: ' + str(cw_of_interest))
 
@@ -354,7 +354,7 @@ class Team():
 					if agent_network.belieftree[0][teams.issue][0] != 'No':
 						# print(' ')
 						# print('Added 1 - ' + str(agent_network))
-						self.new_link_threeS_as(link_list, agent_network, teams, threeS_link_list_as, threeS_link_list_as_total, threeS_link_id_as, len_Pr, len_PC, len_S, conflict_level_coef, conflict_level_option)
+						self.new_link_threeS_as(link_list, agent_network, teams, threeS_link_list_as, threeS_link_list_as_total, threeS_link_id_as, len_PC, len_ML, len_S, conflict_level_coef, conflict_level_option)
 
 			# If the shadow network exists then update the aware, conflict level, aware_decay
 			if network_existence_check == True:
@@ -400,7 +400,7 @@ class Team():
 						if new_team_agent.belieftree[0][teams.issue][0] != 'No':
 							# print(' ')
 							# print('Added 2: ' + str(new_team_agent))
-							self.new_link_threeS_as(link_list, new_team_agent, teams, threeS_link_list_as, threeS_link_list_as_total, threeS_link_id_as, len_Pr, len_PC, len_S, conflict_level_coef, conflict_level_option)
+							self.new_link_threeS_as(link_list, new_team_agent, teams, threeS_link_list_as, threeS_link_list_as_total, threeS_link_id_as, len_PC, len_ML, len_S, conflict_level_coef, conflict_level_option)
 
 				# For updates:
 				# Go through all the links
@@ -413,7 +413,7 @@ class Team():
 							team_aware, agent_with_highest_awareness = PolicyNetworkLinks.awareness_level_selection(link_list, teams, links.agent2)
 
 							# Update of the conflict level
-							conflict_level = PolicyNetworkLinks.conflict_level_calculation(teams, links.agent2, conflict_level_coef, conflict_level_option, agent_with_highest_awareness, len_Pr, len_PC, len_S)
+							conflict_level = PolicyNetworkLinks.conflict_level_calculation(teams, links.agent2, conflict_level_coef, conflict_level_option, agent_with_highest_awareness, len_PC, len_ML, len_S)
 
 							# Placing the new conflict level in the link itself
 							links.conflict_level = conflict_level
@@ -431,7 +431,7 @@ class Team():
 					cw_of_interest = []
 					# We only consider the causal relations related to the problem on the agenda
 					for cw_choice in range(len(deep_core)):
-							cw_of_interest.append(len_Pr + len_PC + len_S + len_Pr + (teams.issue - len_Pr) + cw_choice * len(policy_core))
+							cw_of_interest.append(len_PC + len_ML + len_S + len_PC + (teams.issue - len_PC) + cw_choice * len(mid_level))
 					# print(' ')
 					# print('cw_of_interest: ' + str(cw_of_interest))
 
@@ -456,25 +456,25 @@ class Team():
 									# Grade calculation using the likelihood method
 									# Same affiliation
 									if agents_in_team.affiliation == links.agent2.affiliation:
-										cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_Pr + len_PC + len_S)] * links.aware * actionWeight
+										cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_PC + len_ML + len_S)] * links.aware * actionWeight
 										total_agent_grades.append(cw_grade)
 
 									# Affiliation 1-2
 									if (agents_in_team.affiliation == 0 and links.agent2.affiliation == 1) or \
 										(agents_in_team.affiliation == 1 and links.agent2.affiliation == 0):
-										cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_Pr + len_PC + len_S)] * links.aware * actionWeight * affiliation_weights[0]
+										cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_PC + len_ML + len_S)] * links.aware * actionWeight * affiliation_weights[0]
 										total_agent_grades.append(cw_grade)
 
 									# Affiliation 1-3
 									if (agents_in_team.affiliation == 0 and links.agent2.affiliation == 2) or \
 										(agents_in_team.affiliation == 2 and links.agent2.affiliation == 0):
-										cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_Pr + len_PC + len_S)] * links.aware * actionWeight * affiliation_weights[1]
+										cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_PC + len_ML + len_S)] * links.aware * actionWeight * affiliation_weights[1]
 										total_agent_grades.append(cw_grade)
 
 									# Affiliation 2-3
 									if (agents_in_team.affiliation == 1 and links.agent2.affiliation == 2) or \
 										(agents_in_team.affiliation == 2 and links.agent2.affiliation == 1):
-										cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_Pr + len_PC + len_S)] * links.aware * actionWeight * affiliation_weights[2]
+										cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_PC + len_ML + len_S)] * links.aware * actionWeight * affiliation_weights[2]
 										total_agent_grades.append(cw_grade)	
 
 									
@@ -564,7 +564,7 @@ class Team():
 						# print('cw_of_interest: ' + str(cw_of_interest))
 						# print('cw_of_interest[best_action]: ' + str(cw_of_interest[best_action]))
 
-						# print('Before: ' + str(list_links_teams[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(policy_core) + len(secondary) + best_action - 1][0]))
+						# print('Before: ' + str(list_links_teams[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(mid_level) + len(secondary) + best_action - 1][0]))
 
 						# Same affiliation
 						if teams.members[acting_agent].affiliation == list_links_teams[acted_upon_agent].agent2.affiliation:
@@ -852,7 +852,7 @@ class Team():
 						# print('Performing a causal relation framing action')
 						# print('best_action: ' + str(best_action))
 
-						# print('Before: ' + str(list_links_teams[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(policy_core) + len(secondary) + best_action][0]))
+						# print('Before: ' + str(list_links_teams[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(mid_level) + len(secondary) + best_action][0]))
 
 						# Same affiliation
 						if teams.members[acting_agent].affiliation == list_links_teams[acted_upon_agent].agent2.affiliation:
@@ -881,7 +881,7 @@ class Team():
 								(teams.members[acting_agent].belieftree_policy[0][teams.issue][best_action] - list_links_teams[acted_upon_agent].agent2.belieftree_policy[0][teams.issue][best_action]) * \
 								teams.resources[0] * 0.1 * affiliation_weights[2]
 
-						# print('After: ' + str(list_links_teams[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(policy_core) + len(secondary) + best_action][0]))
+						# print('After: ' + str(list_links_teams[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(mid_level) + len(secondary) + best_action][0]))
 						
 						# 1-1 check
 						list_links_teams[acted_upon_agent].agent2.belieftree_policy[0][teams.issue][best_action] = ActionFunctions.one_minus_one_check(list_links_teams[acted_upon_agent].agent2.belieftree_policy[0][teams.issue][best_action])
@@ -972,7 +972,7 @@ class Team():
 					if teams.resources[1] <= 0 * teams.resources[0]:
 						break
 
-	def team_belief_actions_threeS_pf(self, teams, causalrelation_number, deep_core, policy_core, secondary, agent_action_list, threeS_link_list_pf, \
+	def team_belief_actions_threeS_pf(self, teams, causalrelation_number, deep_core, mid_level, secondary, agent_action_list, threeS_link_list_pf, \
 		threeS_link_list_pf_total, threeS_link_id_pf, link_list, affiliation_weights, agenda_prob_3S_as, conflict_level_coef, resources_weight_action, resources_potency, conflict_level_option):
 
 		"""
@@ -990,8 +990,8 @@ class Team():
 
 		"""
 
-		len_Pr = len(deep_core)
-		len_PC = len(policy_core)
+		len_PC = len(deep_core)
+		len_ML = len(mid_level)
 		len_S = len(secondary)
 
 		# print('The belief actions now have to be performed for each team!')
@@ -1018,12 +1018,12 @@ class Team():
 					cw_of_interest = []
 					# We only consider the causal relations related to the problem on the agenda
 					for cw_choice in range(len(secondary)):
-						cw_of_interest.append(len_Pr + len_PC + len_S + (len_Pr * len_PC) + (agenda_prob_3S_as - len_Pr)*len_S + cw_choice)
+						cw_of_interest.append(len_PC + len_ML + len_S + (len_PC * len_ML) + (agenda_prob_3S_as - len_PC)*len_S + cw_choice)
 					# print(' ')
 					# print('cw_of_interest: ' + str(cw_of_interest))
 
 					for cw in range(causalrelation_number):
-						self.knowledge_exchange_team(teams, len_Pr + len_PC + len_S + cw, 0)
+						self.knowledge_exchange_team(teams, len_PC + len_ML + len_S + cw, 0)
 					
 					# b. Compiling all actions for each actor
 
@@ -1301,7 +1301,7 @@ class Team():
 					if agent_network.belieftree[0][teams.issue][0] != 'No':
 						# print(' ')
 						# print('Added 1 - ' + str(agent_network))
-						self.new_link_threeS_pf(link_list, agent_network, teams, threeS_link_list_pf, threeS_link_list_pf_total, threeS_link_id_pf, len_Pr, len_PC, len_S, conflict_level_coef, conflict_level_option)
+						self.new_link_threeS_pf(link_list, agent_network, teams, threeS_link_list_pf, threeS_link_list_pf_total, threeS_link_id_pf, len_PC, len_ML, len_S, conflict_level_coef, conflict_level_option)
 
 			# If the shadow network exists then update the aware, conflict level, aware_decay
 			if network_existence_check == True:
@@ -1347,7 +1347,7 @@ class Team():
 						if new_team_agent.belieftree[0][teams.issue][0] != 'No':
 							# print(' ')
 							# print('Added 2: ' + str(new_team_agent))
-							self.new_link_threeS_pf(link_list, new_team_agent, teams, threeS_link_list_pf, threeS_link_list_pf_total, threeS_link_id_pf, len_Pr, len_PC, len_S, conflict_level_coef, conflict_level_option)
+							self.new_link_threeS_pf(link_list, new_team_agent, teams, threeS_link_list_pf, threeS_link_list_pf_total, threeS_link_id_pf, len_PC, len_ML, len_S, conflict_level_coef, conflict_level_option)
 
 				# For updates:
 				# Go through all the links
@@ -1360,7 +1360,7 @@ class Team():
 							team_aware, agent_with_highest_awareness = PolicyNetworkLinks.awareness_level_selection(link_list, teams, links.agent2)
 
 							# Update of the conflict level
-							conflict_level = PolicyNetworkLinks.conflict_level_calculation(teams, links.agent2, conflict_level_coef, conflict_level_option, agent_with_highest_awareness, len_Pr, len_PC, len_S)
+							conflict_level = PolicyNetworkLinks.conflict_level_calculation(teams, links.agent2, conflict_level_coef, conflict_level_option, agent_with_highest_awareness, len_PC, len_ML, len_S)
 
 							# Placing the new conflict level in the link itself
 							links.conflict_level = conflict_level
@@ -1378,7 +1378,7 @@ class Team():
 					cw_of_interest = []
 					# We only consider the causal relations related to the problem on the agenda
 					for cw_choice in range(len(secondary)):
-						cw_of_interest.append(len_Pr + len_PC + len_S + (len_Pr * len_PC) + (agenda_prob_3S_as - len_Pr)*len_S + cw_choice)
+						cw_of_interest.append(len_PC + len_ML + len_S + (len_PC * len_ML) + (agenda_prob_3S_as - len_PC)*len_S + cw_choice)
 					# print(' ')
 					# print('cw_of_interest: ' + str(cw_of_interest))
 
@@ -1405,25 +1405,25 @@ class Team():
 										# Grade calculation using the likelihood method
 										# Same affiliation
 										if agents_in_team.affiliation == links.agent2.affiliation:
-											cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_Pr + len_PC + len_S)] * links.aware * actionWeight
+											cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_PC + len_ML + len_S)] * links.aware * actionWeight
 											total_agent_grades.append(cw_grade)
 
 										# Affiliation 1-2
 										if (agents_in_team.affiliation == 0 and links.agent2.affiliation == 1) or \
 											(agents_in_team.affiliation == 1 and links.agent2.affiliation == 0):
-											cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_Pr + len_PC + len_S)] * links.aware * actionWeight * affiliation_weights[0]
+											cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_PC + len_ML + len_S)] * links.aware * actionWeight * affiliation_weights[0]
 											total_agent_grades.append(cw_grade)
 
 										# Affiliation 1-3
 										if (agents_in_team.affiliation == 0 and links.agent2.affiliation == 2) or \
 											(agents_in_team.affiliation == 2 and links.agent2.affiliation == 0):
-											cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_Pr + len_PC + len_S)] * links.aware * actionWeight * affiliation_weights[1]
+											cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_PC + len_ML + len_S)] * links.aware * actionWeight * affiliation_weights[1]
 											total_agent_grades.append(cw_grade)
 
 										# Affiliation 2-3
 										if (agents_in_team.affiliation == 1 and links.agent2.affiliation == 2) or \
 											(agents_in_team.affiliation == 2 and links.agent2.affiliation == 1):
-											cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_Pr + len_PC + len_S)] * links.aware * actionWeight * affiliation_weights[2]
+											cw_grade = links.conflict_level[2 + cw_of_interest[cw] - (len_PC + len_ML + len_S)] * links.aware * actionWeight * affiliation_weights[2]
 											total_agent_grades.append(cw_grade)	
 										
 									# State influence actions
@@ -1515,7 +1515,7 @@ class Team():
 						# print('cw_of_interest: ' + str(cw_of_interest))
 						# print('cw_of_interest[best_action]: ' + str(cw_of_interest[best_action]))
 
-						# print('Before: ' + str(list_links_teams[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(policy_core) + len(secondary) + best_action - 1][0]))
+						# print('Before: ' + str(list_links_teams[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(mid_level) + len(secondary) + best_action - 1][0]))
 
 						# Same affiliation
 						if teams.members[acting_agent].affiliation == list_links_teams[acted_upon_agent].agent2.affiliation:
@@ -1544,7 +1544,7 @@ class Team():
 								(teams.members[acting_agent].belieftree[0][cw_of_interest[best_action]][0] - list_links_teams[acted_upon_agent].agent2.belieftree[0][cw_of_interest[best_action]][0]) * \
 								teams.resources[0] * 0.1 * affiliation_weights[2]
 
-						# print('After: ' + str(list_links_teams[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(policy_core) + len(secondary) + best_action - 1][0]))
+						# print('After: ' + str(list_links_teams[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(mid_level) + len(secondary) + best_action - 1][0]))
 						
 						# 1-1 check
 						list_links_teams[acted_upon_agent].agent2.belieftree[0][cw_of_interest[best_action]][0] = ActionFunctions.one_minus_one_check(list_links_teams[acted_upon_agent].agent2.belieftree[0][cw_of_interest[best_action]][0])
@@ -1800,7 +1800,7 @@ class Team():
 						# print('Performing a causal relation framing action')
 						# print('best_action: ' + str(best_action))
 
-						# print('Before: ' + str(list_links_teams[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(policy_core) + len(secondary) + best_action][0]))
+						# print('Before: ' + str(list_links_teams[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(mid_level) + len(secondary) + best_action][0]))
 
 						# Same affiliation
 						if teams.members[acting_agent].affiliation == list_links_teams[acted_upon_agent].agent2.affiliation:
@@ -1829,7 +1829,7 @@ class Team():
 								(teams.members[acting_agent].belieftree_instrument[0][teams.issue][best_action] - list_links_teams[acted_upon_agent].agent2.belieftree_instrument[0][teams.issue][best_action]) * \
 								teams.resources[0] * 0.1 * affiliation_weights[2]
 
-						# print('After: ' + str(list_links_teams[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(policy_core) + len(secondary) + best_action][0]))
+						# print('After: ' + str(list_links_teams[acted_upon_agent].agent2.belieftree[0][len(deep_core) + len(mid_level) + len(secondary) + best_action][0]))
 						
 						# 1-1 check
 						list_links_teams[acted_upon_agent].agent2.belieftree_instrument[0][teams.issue][best_action] = ActionFunctions.one_minus_one_check(list_links_teams[acted_upon_agent].agent2.belieftree_instrument[0][teams.issue][best_action])
@@ -1920,7 +1920,7 @@ class Team():
 					if teams.resources[1] <= 0 * teams.resources[0]:
 						break
 
-	def new_link_threeS(self, conflict_level_coef, link_list, outsider_agent, teams, conflict_level_option, len_Pr, len_PC, len_S):
+	def new_link_threeS(self, conflict_level_coef, link_list, outsider_agent, teams, conflict_level_option, len_PC, len_ML, len_S):
 
 		"""
 		The new link function - three streams shadow network
@@ -1946,14 +1946,14 @@ class Team():
 		#	0. Uses full knowledge for the calculation
 		#	1. Uses the partial knowledge of the agent with the highest amount of awareness for the calculation
 
-		conflict_level = PolicyNetworkLinks.conflict_level_calculation(teams, outsider_agent, conflict_level_coef, conflict_level_option, agent_with_highest_awareness, len_Pr, len_PC, len_S)
+		conflict_level = PolicyNetworkLinks.conflict_level_calculation(teams, outsider_agent, conflict_level_coef, conflict_level_option, agent_with_highest_awareness, len_PC, len_ML, len_S)
 
 		# 3. We set the aware decay
 		aware_decay = 0
 
 		return conflict_level, aware_decay, team_aware
 
-	def new_link_threeS_as(self, link_list, outsider_agent, teams, threeS_link_list_as, threeS_link_list_as_total, threeS_link_id_as, len_Pr, len_PC, len_S, conflict_level_coef, conflict_level_option):
+	def new_link_threeS_as(self, link_list, outsider_agent, teams, threeS_link_list_as, threeS_link_list_as_total, threeS_link_id_as, len_PC, len_ML, len_S, conflict_level_coef, conflict_level_option):
 
 		"""
 		The new link function - three streams shadow network (agenda setting)
@@ -1969,7 +1969,7 @@ class Team():
 		"""
 
 		# 1/2/3. Initial part of the new link creation (common to AS and PF)
-		conflict_level, aware_decay, team_aware = self.new_link_threeS(conflict_level_coef, link_list, outsider_agent, teams, conflict_level_option, len_Pr, len_PC, len_S)
+		conflict_level, aware_decay, team_aware = self.new_link_threeS(conflict_level_coef, link_list, outsider_agent, teams, conflict_level_option, len_PC, len_ML, len_S)
 
 		# 4. We create the link
 		team_link = PolicyNetworkLinks(threeS_link_id_as[0], teams, outsider_agent, team_aware, aware_decay, conflict_level)
@@ -1977,7 +1977,7 @@ class Team():
 		threeS_link_list_as_total.append(team_link)
 		threeS_link_id_as[0] += 1
 
-	def new_link_threeS_pf(self, link_list, outsider_agent, teams, threeS_link_list_pf, threeS_link_list_pf_total, threeS_link_id_pf, len_Pr, len_PC, len_S, conflict_level_coef, conflict_level_option):
+	def new_link_threeS_pf(self, link_list, outsider_agent, teams, threeS_link_list_pf, threeS_link_list_pf_total, threeS_link_id_pf, len_PC, len_ML, len_S, conflict_level_coef, conflict_level_option):
 
 		"""
 		The new link function - three streams shadow network (policy formulation)
@@ -1993,7 +1993,7 @@ class Team():
 		"""
 
 		# 1/2/3. Initial part of the new link creation (common to AS and PF)
-		conflict_level, aware_decay, team_aware = self.new_link_threeS(conflict_level_coef, link_list, outsider_agent, teams, conflict_level_option, len_Pr, len_PC, len_S)
+		conflict_level, aware_decay, team_aware = self.new_link_threeS(conflict_level_coef, link_list, outsider_agent, teams, conflict_level_option, len_PC, len_ML, len_S)
 
 		# 4. We create the link
 		team_link = PolicyNetworkLinks(threeS_link_id_pf[0], teams, outsider_agent, team_aware, aware_decay, conflict_level)
