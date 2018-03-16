@@ -1,19 +1,30 @@
-# This is the file where things will be run from:
+# This is file 0. This file control the entire model including the two main parts: the policy emergence model and the 
+# technical model whatever it might be.
 
+#####################################################################
+# Import of the different modules required for the run of the model #
+#####################################################################
+# General imports
+import copy
+import random
+import pandas as pd
 
-# For experiments (event1) currently missing 145 onwards for Backbone+ because of some weird error
-
+# Policy emergence model imports
 from model import PolicyEmergence
 from mesa.batchrunner import BatchRunner
 from initialisation import initial_values
 from initialisation_exploration import initial_values_exploration
-import random
-import pandas as pd
 import matplotlib.pyplot as plt
-import copy
 from technical_model import Technical_Model
 from datacollection import DataCollector
 from agent import Policymakers, Electorate, Externalparties, Truth, Policyentres
+
+# Technical model imports
+
+
+#####################################################################
+####### Initialisations of the different parts of the models ########
+#####################################################################
 
 # Input dictionnary
 inputs_dict = dict()
