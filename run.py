@@ -79,7 +79,7 @@ PC_ACF_interest = 0
 # Note right now several parts of the model require that the same method be used for both
 # parts of the model - this is mostly related to the input method. This will be changed
 # in the future.
-AS_theory = 2
+AS_theory = 3
 PF_theory = AS_theory
 
 # This is set up to use only in the case of exploration
@@ -324,10 +324,33 @@ for run_number in range(run_number_total):
 		else:
 			time_step_model = time_step_emergence
 
+		# Running the technical model first:
+		model_technical_output = model_technical.run(params={'FINAL TIME':time_step_emergence})
+
+		print(model_technical_output)
+
 		# For loop for the running of the model
 		for n in range(int(run_time_year/time_step_model)):
 
 			# CHANGE THIS! - Here should be added the running of the technical model for a certain period of time (1 year in this case)
+
+			print('****')
+			print(1+int(n*time_step_model)+1)
+			print(1+int(n*time_step_model)+10)
+
+			stocks2 = model_technical.run(initial_condition='current', return_timestamps=range(1+int(n*time_step_model)+1,1+int(n*time_step_model)+int(time_step_emergence/time_step_model)))
+			model_technical_output.append(stocks2)
+
+			print('\n\n')
+			print('qeqweqeqeqweqwneqweqweqwe')
+			print(stocks2)
+
+			# CHANGE THIS! - The append is not working - and also the time step is weird - Check the time step problem (if it is one) in the tm_import.py file
+
+			print('\n\n')
+			print('qeqweqeqeqweqwneqweqweqwe')
+			print(model_technical_output)
+			# There seems to be a problem with the time step when the model is restarted - it does steps of one
 
 			# This is placed to run the policy emergence model at the right intervals
 			if n % (time_step_emergence/time_step_model) == 0:
