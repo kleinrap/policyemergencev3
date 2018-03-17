@@ -324,44 +324,31 @@ for run_number in range(run_number_total):
 		else:
 			time_step_model = time_step_emergence
 
-		# Running the technical model first:
+		# Running the technical model first (for one year time step only:
 		model_technical_output = model_technical.run(params={'FINAL TIME':time_step_emergence})
 
-		print(model_technical_output)
+		# For loop for the running of the model (-1 as an initial step has already been run)
+		for n in range(run_time_year - 1):
 
-		# For loop for the running of the model
-		for n in range(int(run_time_year/time_step_model)):
-
-			# CHANGE THIS! - Here should be added the running of the technical model for a certain period of time (1 year in this case)
-
-			print('****')
-			print(1+int(n*time_step_model)+1)
-			print(1+int(n*time_step_model)+10)
-
-			stocks2 = model_technical.run(initial_condition='current', return_timestamps=range(1+int(n*time_step_model)+1,1+int(n*time_step_model)+int(time_step_emergence/time_step_model)))
-			model_technical_output.append(stocks2)
-
-			print('\n\n')
-			print('qeqweqeqeqweqwneqweqweqwe')
-			print(stocks2)
-
-			# CHANGE THIS! - The append is not working - and also the time step is weird - Check the time step problem (if it is one) in the tm_import.py file
-
-			print('\n\n')
-			print('qeqweqeqeqweqwneqweqweqwe')
-			print(model_technical_output)
-			# There seems to be a problem with the time step when the model is restarted - it does steps of one
-
-			# This is placed to run the policy emergence model at the right intervals
-			if n % (time_step_emergence/time_step_model) == 0:
-				# This performs one step of the policy emergence model
-				print('   ')
-				print('--------------------- STEP ' + str(int(n*time_step_model)) + ' ---------------------')
-				print('   ')
-				# CHANGE THIS - The communication of the states must be placed into the step function
-				model_emergence.step(AS_theory, PF_theory)
+			# This performs one step of the policy emergence model
+			print('   ')
+			print('--------------------- STEP ' + str(int(n*time_step_model)) + ' ---------------------')
+			print('   ')
+			# CHANGE THIS - The communication of the states must be placed into the step function
+			model_emergence.step(AS_theory, PF_theory)
 
 			# CHANGE THIS - Somewhere here should be the introduction of the policy instrument into the technical model
+
+			# This performs 1 years worth of steps for the system dynamics model
+			model_technical_output_intermediate = model_technical.run(initial_condition='current', return_timestamps=np.linspace(1+n,1+n+1, 1/0.0078125))
+			model_technical_output = model_technical_output.append(model_technical_output_intermediate)
+
+			print('\n\n\n', n, '\n\n\n')
+
+
+		# Plotting all of the results of the technical model
+		model_technical_output.plot()
+		plt.show()
 
 		#####################################################################
 		# STORING THE DATA - Policy emergence model
