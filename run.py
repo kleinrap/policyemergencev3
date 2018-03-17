@@ -330,6 +330,11 @@ for run_number in range(run_number_total):
 		# For loop for the running of the model (-1 as an initial step has already been run)
 		for n in range(run_time_year - 1):
 
+			# CHANGE THIS - The model are now running fine - What is missing is:
+			# - Policy instruments
+			# - Communication of the states
+			# - Implementation of the policy instruments
+
 			# This performs one step of the policy emergence model
 			print('   ')
 			print('--------------------- STEP ' + str(int(n*time_step_model)) + ' ---------------------')
