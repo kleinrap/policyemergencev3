@@ -40,6 +40,7 @@ from agent import Policymakers, Electorate, Externalparties, Truth, Policyentres
 # Technical model imports
 import pysd
 import numpy as np
+from states import states_calculation, states_definition
 
 
 
@@ -130,6 +131,45 @@ time_step_SD = 0.0078125
 
 # CHANGE THIS! - The initialisation of the policy instruments should be here considering they are related to the technical model
 
+states_technical = dict()
+
+states_technical['AT_state'] = 0
+states_technical['OT_state'] = 0
+states_technical['DT_state'] = 0
+states_technical['FPT_state'] = 0
+states_technical['ERC_state'] = 0
+states_technical['RT_state'] = 0
+states_technical['AdT_state'] = 0
+states_technical['PH_state'] = 0
+states_technical['RS_state'] = 0
+states_technical['CT_state'] = 0
+states_technical['Ex_state'] = 0
+states_technical['PP_state'] = 0
+states_technical['RA_state'] = 0
+states_technical['IL_state'] = 0
+states_technical['FPS_state'] = 0
+states_technical['Sa_state'] = 0
+
+'''''
+What are the states that are needed from the technical model?
+
+1. Ageing time - endogenous (AT_state)
+2. Obscolescence time - endogenous (OT_state)
+3. Design time - endogenous (DT_state)
+4. Flood perception time - endogenous (FPT_state)
+5. Effects on renovation and construction - endogenous (ERC_state)
+6. Renovation time - endogenous (RT_state)
+7. Adjustment time - endogenous (AdT_state)
+8. Planning horizon - endogenous (PH_state)
+9. Renovation standard - endogenous (RS_state)
+10. Construction time - endogenous (CT_state)
+11. Expertise - calculated (Ex_state)
+12. Public perception - calculated (PP_state)
+13. Resource allocation - calculated (RA_state)
+14. Investment level - calculated (IL_state)
+15. Flood perception spending - calculated (FPS_state)
+16. Safety - calculated (Sa_state)
+'''''
 
 
 #####################################################################
@@ -330,17 +370,22 @@ for run_number in range(run_number_total):
 		# For loop for the running of the model (-1 as an initial step has already been run)
 		for n in range(run_time_year - 1):
 
+			print('   ')
+			print('--------------------- STEP ' + str(int(n+1)) + ' ---------------------')
+			print('   ')
+
 			# CHANGE THIS - The model are now running fine - What is missing is:
 			# - Policy instruments
 			# - Communication of the states
 			# - Implementation of the policy instruments
 
+			# Obtention of the states values from the technical model outputs
+			states_technical = states_definition(model_technical, states_technical)
+
 			# This performs one step of the policy emergence model
-			print('   ')
-			print('--------------------- STEP ' + str(int(n*time_step_model)) + ' ---------------------')
-			print('   ')
 			# CHANGE THIS - The communication of the states must be placed into the step function
-			model_emergence.step(AS_theory, PF_theory)
+			emergence_states = states_calculation(states_technical)
+			# model_emergence.step(AS_theory, PF_theory)
 
 			# CHANGE THIS - Somewhere here should be the introduction of the policy instrument into the technical model
 
@@ -348,7 +393,9 @@ for run_number in range(run_number_total):
 			model_technical_output_intermediate = model_technical.run(initial_condition='current', return_timestamps=np.linspace(1+n,1+n+1, 1/0.0078125))
 			model_technical_output = model_technical_output.append(model_technical_output_intermediate)
 
-			print('\n\n\n', n, '\n\n\n')
+
+
+
 
 
 		# Plotting all of the results of the technical model

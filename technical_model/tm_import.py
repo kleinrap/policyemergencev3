@@ -11,8 +11,6 @@ model_flood = pysd.read_vensim('Flood_Levees_14_Final.mdl')
 
 time_step_SD = 0.0078125
 
-print(int((20-5)/0.0078125))
-
 # Notes:
 # To output specific data, use: return_columns=['',''] filling in with the parameter names
 # To input specific data, use: params={'':, '':}
@@ -30,7 +28,7 @@ plt.xlim((0,20))
 plt.ylim((0,1))
 
 
-print(stocks2)
+print('printing the last row only: \n', stocks2.loc['safety owing to levee quality'])
 stocks2.plot()
 plt.xlim((0,20))
 plt.ylim((0,1))
@@ -41,4 +39,4 @@ stocks3.plot()
 plt.xlim((0,20))
 plt.ylim((0,2))
 
-plt.show()
+# plt.show()
