@@ -179,7 +179,6 @@ technical_param_values = []
 ##################### Running the model #############################
 #####################################################################
 
-
 """
 This is the part of the script that is used to run the model. It contains the running of the model through the different steps but also the collection of the data for the policy emergence model.
 
@@ -740,21 +739,3 @@ for run_number in range(run_number_total):
 				df_coalition_pf.to_csv('1_coalitions_pf_ACF_event4_' + str(run_number) + '.csv')
 				df_links = model_emergence.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('1_links_ACF_event4_' + str(run_number) + '.csv')
-
-
-
-# Assembling the dataframes and printing to file
-# result_model = pd.concat(frames_model)
-# result_model.to_csv('1_model_backbone.csv')
-# result_agents = pd.concat(frames_agents)
-# result_agents.to_csv('1_agent_backbone.csv')
-# if AS_theory == 2 or PF_theory == 2:
-# 	result_teams_as = pd.concat(frames_teams_as)
-# 	result_teams_as.to_csv('1_teams_as_file2.csv')
-# 	result_teams_pf = pd.concat(frames_teams_pf)
-# 	result_teams_pf.to_csv('1_teams_pf_file2.csv')
-# if AS_theory == 3 or PF_theory == 3:
-# 	result_coalitions_as = pd.concat(frames_coalitions_as)
-# 	result_coalitions_as.to_csv('1_coalitions_as_file2.csv')
-# 	result_coalitions_pf = pd.concat(frames_coalitions_pf)
-# 	result_coalitions_pf.to_csv('1_coalitions_pf_file2.csv')
