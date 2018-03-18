@@ -41,6 +41,7 @@ from agent import Policymakers, Electorate, Externalparties, Truth, Policyentres
 import pysd
 import numpy as np
 from states import states_calculation, states_definition
+from policy_implementation import policy_package_implementation
 
 
 
@@ -165,6 +166,8 @@ PH_value = 55
 RS_value = 0.2
 CT_value = 5
 
+technical_param_values = []
+
 
 #####################################################################
 ##################### Running the model #############################
@@ -202,12 +205,12 @@ for run_number in range(run_number_total):
 			if type(agents) == Policymakers or type(agents) == Policyentres or type(agents) == Externalparties:
 				agent_action_list.append(agents)
 
-		# Assigning the run number of the action agents and the simulation
+		# Assigning the run number of the action agents and the simulation for the policy emergence model
 		for agents in agent_action_list:
 			agents.run_number = run_number
 		inputs_dict_emergence["Run_number"] = run_number
 
-		# Selecting the data that needs to be collected throughout the model
+		# Selecting the data that needs to be collected for the policy emergence model
 		if AS_theory == 0 or PF_theory == 0:
 			datacollector = DataCollector(
 				# Model
@@ -339,18 +342,24 @@ for run_number in range(run_number_total):
 				"Members": lambda c: c.members_id,
 				"Resources" : lambda c: c.resources[0]
 				})
-	
-		#####################################################################
-		# RUNNING THE MODEL
 
 		# This initialise the policy emergence model (runs the __init__ part of the PolicyEmergence file)
 		model_emergence = PolicyEmergence(PC_ACF_interest, datacollector, run_number, inputs_dict_emergence, events)
+
+		print('Cleared initialisation of the policy emergence model.')
+		print('   ')
+
+		#####################################################################
+		# IN-MODEL INITIALISATION - Technical model
 
 		# This initialises the technical model and transforms it from vensim to python.
 		model_technical = pysd.read_vensim('Flood_Levees_14_Final.mdl')
 
 		print('Cleared initialisation of the technical model.')
 		print('   ')
+	
+		#####################################################################
+		# RUNNING THE MODEL
 
 		print('STEP 1 -------------')
 		print('   ')
@@ -371,6 +380,8 @@ for run_number in range(run_number_total):
 			# CHANGE THIS! - The model are now running fine - What is missing is:
 			# - Policy instruments
 			# - Implementation of the policy instruments
+			# - Change the belief trees so that they account for the new model (more S and more ML)
+			# - Check that the impact of the policy instruments act on the difference of states in the belief systems of the actors when they are graded and not on the overall state (which would make it pass the -1 and 1 limits in some cases.)
 
 			# Obtention of the states values from the technical model outputs
 			states_technical = states_definition(model_technical, states_technical)
@@ -383,12 +394,16 @@ for run_number in range(run_number_total):
 			print('   ')
 			print('POLICY EMERGENCE MODEL RUN ---')
 			print('   ')
-			model_emergence.step(AS_theory, PF_theory, states_emergence)
+			policy_selected = model_emergence.step(AS_theory, PF_theory, states_emergence)
+
+			print(policy_selected)
 
 			# This is the part where the policy instruments are implemented
 			# CHANGE THIS! - The function has not been written yet
 
-			# CHANGE THIS! - Somewhere here should be the introduction of the policy instrument into the technical model
+			# This performs the implementation of the policy instruments on the exogenous parameters from the technical model
+			if policy_selected != None:
+				AT_value, OT_value, DT_value, FPT_value, ERC_value, RT_value, AdT_value, PH_value, RS_value, CT_value = policy_package_implementation(policy_selected, AT_value, OT_value, DT_value, FPT_value, ERC_value, RT_value, AdT_value, PH_value, RS_value, CT_value)
 
 			# This performs 1 years worth of steps for the system dynamics model
 			print('   ')
@@ -401,9 +416,7 @@ for run_number in range(run_number_total):
 
 
 
-
-
-
+		# CHANGE THIS! - This needs to be removed and instead saved to file.
 		# Plotting all of the results of the technical model
 		model_technical_output.plot()
 		plt.show()

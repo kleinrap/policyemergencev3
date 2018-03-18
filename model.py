@@ -175,9 +175,6 @@ class PolicyEmergence(Model):
 		self.ACF_link_list_pf_total = []
 		self.ACF_link_id_pf =[0]
 
-		print('Cleared initialisation of the policy emergence model.')
-		print('   ')
-
 	def step(self, AS_theory, PF_theory, states_emergence):	
 
 		"""
@@ -875,6 +872,13 @@ class PolicyEmergence(Model):
 		# 2. Export to an text file for the technical model to be able to read
 		# 3. Something to pause this model to let the technical model run and restart once the technical model is done
 		# 		This could be done by deleting the output file and only continuing once a new output file has been created (probe the file until it appears)
+
+		if self.agenda_instrument != None:
+			policy_selected = self.instruments[self.agenda_instrument]
+		else:
+			policy_selected = None
+
+		return policy_selected
 
 	def agenda_selection(self):
 
@@ -1591,6 +1595,8 @@ class PolicyEmergence(Model):
 		If not, nothing will happen and no instrument will be implemented.
 
 		"""
+		# Reset the agenda instrument selection to not select the same instrument by default if there is a lack of consensus
+		self.agenda_instrument = None
 
 		agents_policymakers = []
 		for agents in self.agent_action_list:
@@ -1601,11 +1607,10 @@ class PolicyEmergence(Model):
 		for i in range(len(agents_policymakers)):
 			instrument_pref_list.append(agents_policymakers[i].select_pinstrument)
 			# print('This loop has ran ' +  str(i+1) + ' times so far and this is the current list: ' + str(instrument_pref_list))
-		print(instrument_pref_list)
+		# print(instrument_pref_list)
 		count_instrument_pref_list = Counter(instrument_pref_list)
 		most_common_instrument = count_instrument_pref_list.most_common(1)
 		if most_common_instrument[0][1] > (len(agents_policymakers)/2):
-			
 			self.agenda_instrument = most_common_instrument[0][0]	
 			print('Instrument ' + str(self.agenda_instrument) + ' has been chosen and can be implemented!')
 		else:
