@@ -238,8 +238,6 @@ class PolicyEmergence(Model):
 							- agents.belieftree[0][self.len_PC + self.len_ML + self.len_S + cw][0]
 
 		# 1.2.X Reading of the states from an output file
-		# CHANGE THIS! - The new belief tree is much larger than the older one - This needs to be adjusted here but also in the initialisation file where new initial values need to be added for the new beliefs but also for the causal relations - There might be additional impacts throughout the code that need to be checked
-
 		self.belieftree_truth[0] = states_emergence["AT_state"]
 		self.belieftree_truth[1] = states_emergence["OT_state"]
 		self.belieftree_truth[2] = states_emergence["DT_state"]
@@ -250,12 +248,12 @@ class PolicyEmergence(Model):
 		self.belieftree_truth[7] = states_emergence["PH_state"]
 		self.belieftree_truth[8] = states_emergence["RS_state"]
 		self.belieftree_truth[9] = states_emergence["CT_state"]
-		# self.belieftree_truth[10] = states_emergence["ML1_state"]
-		# self.belieftree_truth[11] = states_emergence["ML2_state"]
-		# self.belieftree_truth[12] = states_emergence["ML3_state"]
-		# self.belieftree_truth[13] = states_emergence["ML4_state"]
-		# self.belieftree_truth[14] = states_emergence["FPS_state"]
-		# self.belieftree_truth[15] = states_emergence["Sa_state"]
+		self.belieftree_truth[10] = states_emergence["SLS_state"]
+		self.belieftree_truth[11] = states_emergence["OLS_state"]
+		self.belieftree_truth[12] = states_emergence["SL_state"]
+		self.belieftree_truth[13] = states_emergence["OL_state"]
+		self.belieftree_truth[14] = states_emergence["IP_state"]
+		self.belieftree_truth[15] = states_emergence["Sa_state"]
 
 		# 1.2.5 Electorate actions on policy makers
 		# [Backbone/Backbone+/3S/ACF]

@@ -18,14 +18,14 @@ Secondary beliefs (S)
 10. Construction time - endogenous (CT_state)
 
 Mid-level beliefs (ML)
-11. ML1_state
-12. ML2_state
-13. ML3_state
-14. ML4_state
+11. Standard levee safety - endogenous (SLS_state)
+12. Old levee safety - endogenous (OLS_state)
+13. Standard levees - endogenous (SL_state)
+14. Old levees - endogenous (OL_state)
 
 Policy core beliefs (PC)
-15. Flood perception spending - calculated (FPS_state)
-16. Safety - calculated (Sa_state)
+15. Investment priority - calculated as OL_state/SL_state (IP_state)
+16. Safety - calculated as half perceived safety and hald technical safety (Sa_state)
 '''''
 
 def states_definition(model_technical, states_technical):
@@ -46,15 +46,12 @@ def states_definition(model_technical, states_technical):
 	states_technical["PH_state"] = model_technical.components.planning_horizon()
 	states_technical["RS_state"] = model_technical.components.renovation_standard()
 	states_technical["CT_state"] = model_technical.components.construction_time()
-	# CHANGE THIS! - The ML beliefs need to be changed still
-	states_technical["ML1_state"] = 0
-	states_technical["ML2_state"] = 0
-	states_technical["ML3_state"] = 0
-	states_technical["ML4_state"] = 0
-
-	# CHANGE THIS! - The PC beliefs need to be changed still
-	states_technical["FPS_state"] = 0
-	states_technical["Sa_state"] = 0
+	states_technical["SLS_state"] = model_technical.components.safety_sl()
+	states_technical["OLS_state"] = model_technical.components.safety_ol()
+	states_technical["SL_state"] = model_technical.components.standard_levees()
+	states_technical["OL_state"] = model_technical.components.old_levees()
+	states_technical["IP_state"] = model_technical.components.old_levees()/model_technical.components.standard_levees()
+	states_technical["Sa_state"] = (model_technical.components.perceived_current_safety()+model_technical.components.official_current_safety())/2
 
 	return states_technical
 
@@ -114,35 +111,37 @@ def states_calculation(states_technical, emergence_states):
 	max_CT = 15
 	emergence_states["CT_state"] = ((states_technical["CT_state"] / (max_CT-min_CT)) * 2) - 1
 
-	# CHANGE THIS! These need to be adjusted (ML and PC calculations)
-	# Calculation of the ML1
-	min_ML1 = 0
-	max_ML1 = 10
-	emergence_states["ML1_state"] = ((states_technical["ML1_state"] / (max_ML1-min_ML1)) * 2) - 1
+	# Calculation of the standard levy safety
+	min_SLS = 0
+	max_SLS = 80000
+	emergence_states["SLS_state"] = ((states_technical["SLS_state"] / (max_SLS-min_SLS)) * 2) - 1
 
-	# Calculation of the ML2
-	min_ML2 = 0
-	max_ML2 = 10
-	emergence_states["ML2_state"] = ((states_technical["ML2_state"] / (max_ML2-min_ML2)) * 2) - 1
+	# Calculation of the old levee safety
+	min_OLS = 0
+	max_OLS = 80000
+	emergence_states["OLS_state"] = ((states_technical["OLS_state"] / (max_OLS-min_OLS)) * 2) - 1
 
-	# Calculation of the ML3
-	min_ML3 = 0
-	max_ML3 = 10
-	emergence_states["ML3_state"] = ((states_technical["ML3_state"] / (max_ML3-min_ML3)) * 2) - 1
+	# Calculation of the standard levee length
+	min_SL = 0
+	max_SL = 12000
+	emergence_states["SL_state"] = ((states_technical["SL_state"] / (max_SL-min_SL)) * 2) - 1
 
-	# Calculation of the ML4
-	min_ML4 = 0
-	max_ML4 = 10
-	emergence_states["ML4_state"] = ((states_technical["ML4_state"] / (max_ML4-min_ML4)) * 2) - 1
+	# Calculation of the old levee length
+	min_OL = 0
+	max_OL = 12000
+	emergence_states["OL_state"] = ((states_technical["OL_state"] / (max_OL-min_OL)) * 2) - 1
 
-	# Calculation of the FPS
-	min_FPS = 0
-	max_FPS = 10
-	emergence_states["FPS_state"] = ((states_technical["FPS_state"] / (max_FPS-min_FPS)) * 2) - 1
+	# Calculation of the investment priority
+	min_IP = 0
+	max_IP  = 15
+	emergence_states["IP_state"] = ((states_technical["IP_state"] / (max_IP-min_IP)) * 2) - 1
+	# Check considering the low level required for max_IP
+	if emergence_states["IP_state"] < -1 or emergence_states["IP_state"] > 1:
+		print('There is a problem for the calculation of the IP_state.')
 
 	# Calculation of the safety
 	min_Sa = 0
-	max_Sa = 10
+	max_Sa = 1
 	emergence_states["Sa_state"] = ((states_technical["Sa_state"] / (max_Sa-min_Sa)) * 2) - 1
 
 	return emergence_states

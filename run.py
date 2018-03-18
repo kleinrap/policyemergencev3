@@ -10,10 +10,18 @@ Some additional notes and remarks on the model below:
 
 NOTE:
 - CHANGE THIS! text is added to the part that still need to be changed.
+- NOTICE! text is added when a part will need to be changed but not for March 28th proof of concept
+
+WHAT STILL NEEDS TO BE DONE:
+- Introduce new policy instruments that are related to what is in the report (about ten instruments are needed). The instruments should be mild and not crazy values (so increases of 5-10% are sufficient)
+- The introduction of ERC does not currently work - this needs to be changed (lookup cannot be changed using PySD)
+- Change the belief initialisation of the actors to match what could be in real life
+- Check that the impact of the policy instruments act on the difference of states in the belief systems of the actors when they are graded and not on the overall state (which would make it pass the -1 and 1 limits in some cases.)
+- Should a warm up period be introduced for the technical model considering that some of the levee stocks start at 1
+- How do agents verify that their causal relations understanding are correct? There is no communications of these causal relations, they only change based on power ... no truth whatsoever.
+- For the belieftree initialisation make three profiles (once as functions) and then remove 90% of the code.
+- Change the initialisation such that it also includes policy and instrument tree when considering the three stream approach (this will allow to comment the notices for the randomiser)
 """
-
-
-
 
 #####################################################################
 # Import of the different modules required for the run of the model #
@@ -104,7 +112,6 @@ if exploration == True and AS_theory == 2:
 if exploration == True and AS_theory == 3:
 	experiment_input = pd.read_csv("Exploration_LHS_ACF.data",header=None)
 
-# CHANGE THIS! - Should include the ratio of steps between the technical model and the policy emergence model
 run_number_total = len(experiment_input.index)
 if exploration == True:
 	ticks = 250
@@ -135,7 +142,6 @@ time_step_SD = 0.0078125
 # CHANGE THIS! - The initialisation of the policy instruments should be here considering they are related to the technical model
 
 states_technical = dict()
-
 states_technical['AT_state'] = 0
 states_technical['OT_state'] = 0
 states_technical['DT_state'] = 0
@@ -145,12 +151,11 @@ states_technical['RT_state'] = 0
 states_technical['AdT_state'] = 0
 states_technical['PH_state'] = 0
 states_technical['RS_state'] = 0
-states_technical['CT_state'] = 0
-states_technical['Ex_state'] = 0
-states_technical['PP_state'] = 0
-states_technical['RA_state'] = 0
-states_technical['IL_state'] = 0
-states_technical['FPS_state'] = 0
+states_technical["SLS_state"] = 0
+states_technical["OLS_state"] = 0
+states_technical["SL_state"] = 0
+states_technical["OL_state"] = 0
+states_technical['IP_state'] = 0
 states_technical['Sa_state'] = 0
 
 # These are the initial values for the exogenous parameters that can be changed through the model policy instruments and packages
@@ -377,12 +382,6 @@ for run_number in range(run_number_total):
 			print('STEP ', n+2, ' -------------')
 			print('   ')
 
-			# CHANGE THIS! - The model are now running fine - What is missing is:
-			# - Policy instruments
-			# - Implementation of the policy instruments
-			# - Change the belief trees so that they account for the new model (more S and more ML)
-			# - Check that the impact of the policy instruments act on the difference of states in the belief systems of the actors when they are graded and not on the overall state (which would make it pass the -1 and 1 limits in some cases.)
-
 			# Obtention of the states values from the technical model outputs
 			states_technical = states_definition(model_technical, states_technical)
 
@@ -390,20 +389,16 @@ for run_number in range(run_number_total):
 			states_emergence = states_calculation(states_technical, emergence_states)
 
 			# This performs one step of the policy emergence model
-			# CHANGE THIS! - The communication of the states must be placed into the step function
 			print('   ')
 			print('POLICY EMERGENCE MODEL RUN ---')
 			print('   ')
 			policy_selected = model_emergence.step(AS_theory, PF_theory, states_emergence)
 
-			print(policy_selected)
-
-			# This is the part where the policy instruments are implemented
-			# CHANGE THIS! - The function has not been written yet
-
 			# This performs the implementation of the policy instruments on the exogenous parameters from the technical model
 			if policy_selected != None:
 				AT_value, OT_value, DT_value, FPT_value, ERC_value, RT_value, AdT_value, PH_value, RS_value, CT_value = policy_package_implementation(policy_selected, AT_value, OT_value, DT_value, FPT_value, ERC_value, RT_value, AdT_value, PH_value, RS_value, CT_value)
+
+			print('\n\n\n\n', type(model_technical_output), '\n\n\n\n')
 
 			# This performs 1 years worth of steps for the system dynamics model
 			print('   ')
@@ -414,285 +409,336 @@ for run_number in range(run_number_total):
 			model_technical_output_intermediate = model_technical.run(params={'aging time':AT_value, 'obsolescence time':OT_value, 'design time':DT_value, 'flood perception time':FPT_value, 'renovation time':RT_value, 'adjustment time':AdT_value, 'planning horizon':PH_value, 'renovation standard':RS_value, 'construction time':CT_value}, initial_condition='current', return_timestamps=np.linspace(1+n,1+n+1, 1/0.0078125))
 			model_technical_output = model_technical_output.append(model_technical_output_intermediate)
 
-
-
-		# CHANGE THIS! - This needs to be removed and instead saved to file.
-		# Plotting all of the results of the technical model
-		model_technical_output.plot()
-		plt.show()
-
 		#####################################################################
-		# STORING THE DATA - Policy emergence model
-
+		# STORING THE DATA - Technical model
+		print('WRITING Technical model to file ----')
 		# For the backbone
 		if AS_theory == 0 or PF_theory == 0:
 			if exploration == False and event1 == False and event2 == False and event3 == False and event4 == False:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				model_technical_output.to_csv('1_TM_B_' + str(run_number) + '.csv')
+			if exploration == True:
+				model_technical_output.to_csv('1_TM_B_exp_' + str(run_number) + '.csv')
+			if exploration == False and event1 == True:
+				model_technical_output.to_csv('1_TM_B_event1_' + str(run_number) + '.csv')
+			if exploration == False and event2 == True:
+				model_technical_output.to_csv('1_TM_B_event2_' + str(run_number) + '.csv')
+			if exploration == False and event3 == True:
+				model_technical_output.to_csv('1_TM_B_event3_' + str(run_number) + '.csv')
+			if exploration == False and event4 == True:
+				model_technical_output.to_csv('1_TM_B_event4_' + str(run_number) + '.csv')
+		# For the backbone+
+		if AS_theory == 1 or PF_theory == 1:
+			if exploration == False and event1 == False and event2 == False and event3 == False and event4 == False:
+				model_technical_output.to_csv('1_TM_B+_' + str(run_number) + '.csv')
+			if exploration == True:
+				model_technical_output.to_csv('1_TM_B+_exp_' + str(run_number) + '.csv')
+			if exploration == False and event1 == True:
+				model_technical_output.to_csv('1_TM_B+_event1_' + str(run_number) + '.csv')
+			if exploration == False and event2 == True:
+				model_technical_output.to_csv('1_TM_B+_event2_' + str(run_number) + '.csv')
+			if exploration == False and event3 == True:
+				model_technical_output.to_csv('1_TM_B+_event3_' + str(run_number) + '.csv')
+			if exploration == False and event4 == True:
+				model_technical_output.to_csv('1_TM_B+_event4_' + str(run_number) + '.csv')
+		# For the 3S
+		if AS_theory == 2 or PF_theory == 2:
+			if exploration == False and event1 == False and event2 == False and event3 == False and event4 == False:
+				model_technical_output.to_csv('1_TM_3S_' + str(run_number) + '.csv')
+			if exploration == True:
+				model_technical_output.to_csv('1_TM_3S_exp_' + str(run_number) + '.csv')
+			if exploration == False and event1 == True:
+				model_technical_output.to_csv('1_TM_3S_event1_' + str(run_number) + '.csv')
+			if exploration == False and event2 == True:
+				model_technical_output.to_csv('1_TM_3S_event2_' + str(run_number) + '.csv')
+			if exploration == False and event3 == True:
+				model_technical_output.to_csv('1_TM_3S_event3_' + str(run_number) + '.csv')
+			if exploration == False and event4 == True:
+				model_technical_output.to_csv('1_TM_3S_event4_' + str(run_number) + '.csv')
+		# For the ACF
+		if AS_theory == 3 or PF_theory == 3:
+			if exploration == False and event1 == False and event2 == False and event3 == False and event4 == False:
+				model_technical_output.to_csv('1_TM_ACF_' + str(run_number) + '.csv')
+			if exploration == True:
+				model_technical_output.to_csv('1_TM_ACF_exp_' + str(run_number) + '.csv')
+			if exploration == False and event1 == True:
+				model_technical_output.to_csv('1_TM_ACF_event1_' + str(run_number) + '.csv')
+			if exploration == False and event2 == True:
+				model_technical_output.to_csv('1_TM_ACF_event2_' + str(run_number) + '.csv')
+			if exploration == False and event3 == True:
+				model_technical_output.to_csv('1_TM_ACF_event3_' + str(run_number) + '.csv')
+			if exploration == False and event4 == True:
+				model_technical_output.to_csv('1_TM_ACF_event4_' + str(run_number) + '.csv')
+
+		#####################################################################
+		# STORING THE DATA - Policy emergence model
+		print('WRITING Policy emergence model to file ----')
+		# For the backbone
+		if AS_theory == 0 or PF_theory == 0:
+			if exploration == False and event1 == False and event2 == False and event3 == False and event4 == False:
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('1_model_B_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('1_electorate_B_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('1_agents_B_' + str(run_number) + '.csv')
 			if exploration == True:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('1_model_B_exp_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('1_electorate_B_exp_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('1_agents_B_exp_' + str(run_number) + '.csv')
 			if exploration == False and event1 == True:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('2_model_B_event1_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('2_electorate_B_event1_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('2_agents_B_event1_' + str(run_number) + '.csv')
 			if exploration == False and event2 == True:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('2_model_B_event2_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('2_electorate_B_event2_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('2_agents_B_event2_' + str(run_number) + '.csv')
 			if exploration == False and event3 == True:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('1_model_B_event3_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('1_electorate_B_event3_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('1_agents_B_event3_' + str(run_number) + '.csv')
 			if exploration == False and event4 == True:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('1_model_B_event4_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('1_electorate_B_event4_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('1_agents_B_event4_' + str(run_number) + '.csv')
 		# For the backbone+
 		if AS_theory == 1 or PF_theory == 1:
 			if exploration == False and event1 == False and event2 == False and event3 == False and event4 == False:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('1_model_B+_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('1_electorate_B+_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('1_agents_B+_' + str(run_number) + '.csv')
-				df_links = test_model.datacollector.get_links_vars_dataframe()
+				df_links = model_emergence.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('1_links_B+_' + str(run_number) + '.csv')
 			if exploration == True:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('1_model_B+_exp_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('1_electorate_B+_exp_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('1_agents_B+_exp_' + str(run_number) + '.csv')
-				df_links = test_model.datacollector.get_links_vars_dataframe()
+				df_links = model_emergence.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('1_links_B+_exp_' + str(run_number) + '.csv')
 			if exploration == False and event1 == True:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('2_model_B+_event1_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('2_electorate_B+_event1_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('2_agents_B+_event1_' + str(run_number) + '.csv')
-				df_links = test_model.datacollector.get_links_vars_dataframe()
+				df_links = model_emergence.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('2_links_B+_event1_' + str(run_number) + '.csv')
 			if exploration == False and event2 == True:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('_model_B+_event2_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('1_electorate_B+_event2_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('1_agents_B+_event2_' + str(run_number) + '.csv')
-				df_links = test_model.datacollector.get_links_vars_dataframe()
+				df_links = model_emergence.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('1_links_B+_event_2_' + str(run_number) + '.csv')
 			if exploration == False and event3 == True:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('1_model_B+_event3_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('1_electorate_B+_event3_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('1_agents_B+_event3_' + str(run_number) + '.csv')
-				df_links = test_model.datacollector.get_links_vars_dataframe()
+				df_links = model_emergence.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('1_links_B+_event3_' + str(run_number) + '.csv')
 			if exploration == False and event4 == True:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('1_model_B+_event4_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('1_electorate_B+_event4_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('1_agents_B+_event4_' + str(run_number) + '.csv')
-				df_links = test_model.datacollector.get_links_vars_dataframe()
+				df_links = model_emergence.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('1_links_B+_event4_' + str(run_number) + '.csv')
 		# For the 3S
 		if AS_theory == 2 or PF_theory == 2:
 			if exploration == False and event1 == False and event2 == False and event3 == False and event4 == False:
-				# frames_model.append(test_model.datacollector.get_model_vars_dataframe())
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				# frames_model.append(model_emergence.datacollector.get_model_vars_dataframe())
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('1_model_3S_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('1_electorate_3S_' + str(run_number) + '.csv')
-				# frames_agents.append(test_model.datacollector.get_agent_vars_dataframe())
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				# frames_agents.append(model_emergence.datacollector.get_agent_vars_dataframe())
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('1_agents_3S_' + str(run_number) + '.csv')
-				# frames_teams_as.append(test_model.datacollector.get_team_as_vars_dataframe())
-				df_team_as = test_model.datacollector.get_team_as_vars_dataframe()
+				# frames_teams_as.append(model_emergence.datacollector.get_team_as_vars_dataframe())
+				df_team_as = model_emergence.datacollector.get_team_as_vars_dataframe()
 				df_team_as.to_csv('1_teams_as_3S_' + str(run_number) + '.csv')
-				# frames_teams_pf.append(test_model.datacollector.get_team_pf_vars_dataframe())
-				df_team_pf = test_model.datacollector.get_team_pf_vars_dataframe()
+				# frames_teams_pf.append(model_emergence.datacollector.get_team_pf_vars_dataframe())
+				df_team_pf = model_emergence.datacollector.get_team_pf_vars_dataframe()
 				df_team_pf.to_csv('1_teams_pf_3S_' + str(run_number) + '.csv')
-				df_links = test_model.datacollector.get_links_vars_dataframe()
+				df_links = model_emergence.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('1_links_3S_' + str(run_number) + '.csv')
 			if exploration == True:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('1_model_3S_exp_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('1_electorate_3S_exp_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('1_agents_3S_exp_' + str(run_number) + '.csv')
-				df_team_as = test_model.datacollector.get_team_as_vars_dataframe()
+				df_team_as = model_emergence.datacollector.get_team_as_vars_dataframe()
 				df_team_as.to_csv('1_teams_as_3S_exp_' + str(run_number) + '.csv')
-				df_team_pf = test_model.datacollector.get_team_pf_vars_dataframe()
+				df_team_pf = model_emergence.datacollector.get_team_pf_vars_dataframe()
 				df_team_pf.to_csv('1_teams_pf_3S_exp_' + str(run_number) + '.csv')
-				df_links = test_model.datacollector.get_links_vars_dataframe()
+				df_links = model_emergence.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('1_links_3S_exp_' + str(run_number) + '.csv')
 			if exploration == False and event1 == True:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('2_model_3S_event1_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('2_electorate_3S_event1_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('2_agents_3S_event1_' + str(run_number) + '.csv')
-				df_team_as = test_model.datacollector.get_team_as_vars_dataframe()
+				df_team_as = model_emergence.datacollector.get_team_as_vars_dataframe()
 				df_team_as.to_csv('2_teams_as_3S_event1_' + str(run_number) + '.csv')
-				df_team_pf = test_model.datacollector.get_team_pf_vars_dataframe()
+				df_team_pf = model_emergence.datacollector.get_team_pf_vars_dataframe()
 				df_team_pf.to_csv('2_teams_pf_3S_event1_' + str(run_number) + '.csv')
-				df_links = test_model.datacollector.get_links_vars_dataframe()
+				df_links = model_emergence.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('2_links_3S_event1_' + str(run_number) + '.csv')
 			if exploration == False and event2 == True:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('1_model_3S_event2_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('1_electorate_3S_event2_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('1_agents_3S_event2_' + str(run_number) + '.csv')
-				df_team_as = test_model.datacollector.get_team_as_vars_dataframe()
+				df_team_as = model_emergence.datacollector.get_team_as_vars_dataframe()
 				df_team_as.to_csv('1_teams_as_3S_event2_' + str(run_number) + '.csv')
-				df_team_pf = test_model.datacollector.get_team_pf_vars_dataframe()
+				df_team_pf = model_emergence.datacollector.get_team_pf_vars_dataframe()
 				df_team_pf.to_csv('1_teams_pf_3S_event2_' + str(run_number) + '.csv')
-				df_links = test_model.datacollector.get_links_vars_dataframe()
+				df_links = model_emergence.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('1_links_3S_event2_' + str(run_number) + '.csv')
 			if exploration == False and event3 == True:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('1_model_3S_event3_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('1_electorate_3S_event3_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('1_agents_3S_event3_' + str(run_number) + '.csv')
-				df_team_as = test_model.datacollector.get_team_as_vars_dataframe()
+				df_team_as = model_emergence.datacollector.get_team_as_vars_dataframe()
 				df_team_as.to_csv('1_teams_as_3S_event3_' + str(run_number) + '.csv')
-				df_team_pf = test_model.datacollector.get_team_pf_vars_dataframe()
+				df_team_pf = model_emergence.datacollector.get_team_pf_vars_dataframe()
 				df_team_pf.to_csv('1_teams_pf_3S_event3_' + str(run_number) + '.csv')
-				df_links = test_model.datacollector.get_links_vars_dataframe()
+				df_links = model_emergence.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('1_links_3S_event3_' + str(run_number) + '.csv')
 			if exploration == False and event4 == True:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('1_model_3S_event4_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('1_electorate_3S_event4_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('1_agents_3S_event4_' + str(run_number) + '.csv')
-				df_team_as = test_model.datacollector.get_team_as_vars_dataframe()
+				df_team_as = model_emergence.datacollector.get_team_as_vars_dataframe()
 				df_team_as.to_csv('1_teams_as_3S_event4_' + str(run_number) + '.csv')
-				df_team_pf = test_model.datacollector.get_team_pf_vars_dataframe()
+				df_team_pf = model_emergence.datacollector.get_team_pf_vars_dataframe()
 				df_team_pf.to_csv('1_teams_pf_3S_event4_' + str(run_number) + '.csv')
-				df_links = test_model.datacollector.get_links_vars_dataframe()
+				df_links = model_emergence.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('1_links_3S_event4_' + str(run_number) + '.csv')
 		# For the ACF
 		if AS_theory == 3 or PF_theory == 3:
 			if exploration == False and event1 == False and event2 == False and event3 == False and event4 == False:
-				# frames_model.append(test_model.datacollector.get_model_vars_dataframe())
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				# frames_model.append(model_emergence.datacollector.get_model_vars_dataframe())
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('1_model_ACF_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('1_electorate_ACF_' + str(run_number) + '.csv')
-				# frames_agents.append(test_model.datacollector.get_agent_vars_dataframe())
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				# frames_agents.append(model_emergence.datacollector.get_agent_vars_dataframe())
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('1_agents_ACF_' + str(run_number) + '.csv')
-				# frames_coalitions_as.append(test_model.datacollector.get_coalition_as_vars_dataframe())
-				df_coalition_as = test_model.datacollector.get_coalition_as_vars_dataframe()
+				# frames_coalitions_as.append(model_emergence.datacollector.get_coalition_as_vars_dataframe())
+				df_coalition_as = model_emergence.datacollector.get_coalition_as_vars_dataframe()
 				df_coalition_as.to_csv('1_coalitions_as_ACF_' + str(run_number) + '.csv')
-				df_coalition_pf = test_model.datacollector.get_coalition_pf_vars_dataframe()
+				df_coalition_pf = model_emergence.datacollector.get_coalition_pf_vars_dataframe()
 				df_coalition_pf.to_csv('1_coalitions_pf_ACF_' + str(run_number) + '.csv')
-				df_links = test_model.datacollector.get_links_vars_dataframe()
+				df_links = model_emergence.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('1_links_ACF_' + str(run_number) + '.csv')
 			if exploration == True:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('1_model_ACF_exp_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('1_electorate_ACF_exp_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('1_agents_ACF_exp_' + str(run_number) + '.csv')
-				df_coalition_as = test_model.datacollector.get_coalition_as_vars_dataframe()
+				df_coalition_as = model_emergence.datacollector.get_coalition_as_vars_dataframe()
 				df_coalition_as.to_csv('1_coalitions_as_ACF_exp_' + str(run_number) + '.csv')
-				df_coalition_pf = test_model.datacollector.get_coalition_pf_vars_dataframe()
+				df_coalition_pf = model_emergence.datacollector.get_coalition_pf_vars_dataframe()
 				df_coalition_pf.to_csv('1_coalitions_pf_ACF_exp_' + str(run_number) + '.csv')
-				df_links = test_model.datacollector.get_links_vars_dataframe()
+				df_links = model_emergence.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('1_links_ACF_exp_' + str(run_number) + '.csv')
 			if exploration == False and event1 == True:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('2_model_ACF_event1_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('2_electorate_ACF_event1_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('2_agents_ACF_event1_' + str(run_number) + '.csv')
-				df_coalition_as = test_model.datacollector.get_coalition_as_vars_dataframe()
+				df_coalition_as = model_emergence.datacollector.get_coalition_as_vars_dataframe()
 				df_coalition_as.to_csv('2_coalitions_as_ACF_event1_' + str(run_number) + '.csv')
-				df_coalition_pf = test_model.datacollector.get_coalition_pf_vars_dataframe()
+				df_coalition_pf = model_emergence.datacollector.get_coalition_pf_vars_dataframe()
 				df_coalition_pf.to_csv('2_coalitions_pf_ACF_event1_' + str(run_number) + '.csv')
-				df_links = test_model.datacollector.get_links_vars_dataframe()
+				df_links = model_emergence.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('2_links_ACF_event1_' + str(run_number) + '.csv')
 			if exploration == False and event2 == True:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('1_model_ACF_event2_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('1_electorate_ACF_event2_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('1_agents_ACF_event2_' + str(run_number) + '.csv')
-				df_coalition_as = test_model.datacollector.get_coalition_as_vars_dataframe()
+				df_coalition_as = model_emergence.datacollector.get_coalition_as_vars_dataframe()
 				df_coalition_as.to_csv('1_coalitions_as_ACF_event2_' + str(run_number) + '.csv')
-				df_coalition_pf = test_model.datacollector.get_coalition_pf_vars_dataframe()
+				df_coalition_pf = model_emergence.datacollector.get_coalition_pf_vars_dataframe()
 				df_coalition_pf.to_csv('1_coalitions_pf_ACF_event2_' + str(run_number) + '.csv')
-				df_links = test_model.datacollector.get_links_vars_dataframe()
+				df_links = model_emergence.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('1_links_ACF_event2_' + str(run_number) + '.csv')
 			if exploration == False and event3 == True:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('1_model_ACF_event3_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('1_electorate_ACF_event3_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('1_agents_ACF_event3_' + str(run_number) + '.csv')
-				df_coalition_as = test_model.datacollector.get_coalition_as_vars_dataframe()
+				df_coalition_as = model_emergence.datacollector.get_coalition_as_vars_dataframe()
 				df_coalition_as.to_csv('1_coalitions_as_ACF_event3_' + str(run_number) + '.csv')
-				df_coalition_pf = test_model.datacollector.get_coalition_pf_vars_dataframe()
+				df_coalition_pf = model_emergence.datacollector.get_coalition_pf_vars_dataframe()
 				df_coalition_pf.to_csv('1_coalitions_pf_ACF_event3_' + str(run_number) + '.csv')
-				df_links = test_model.datacollector.get_links_vars_dataframe()
+				df_links = model_emergence.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('1_links_ACF_event3_' + str(run_number) + '.csv')
 			if exploration == False and event4 == True:
-				df_model = test_model.datacollector.get_model_vars_dataframe()
+				df_model = model_emergence.datacollector.get_model_vars_dataframe()
 				df_model.to_csv('1_model_ACF_event4_' + str(run_number) + '.csv')
-				df_electorate = test_model.datacollector.get_electorate_vars_dataframe()
+				df_electorate = model_emergence.datacollector.get_electorate_vars_dataframe()
 				df_electorate.to_csv('1_electorate_ACF_event4_' + str(run_number) + '.csv')
-				df_agents = test_model.datacollector.get_agent_vars_dataframe()
+				df_agents = model_emergence.datacollector.get_agent_vars_dataframe()
 				df_agents.to_csv('1_agents_ACF_event4_' + str(run_number) + '.csv')
-				df_coalition_as = test_model.datacollector.get_coalition_as_vars_dataframe()
+				df_coalition_as = model_emergence.datacollector.get_coalition_as_vars_dataframe()
 				df_coalition_as.to_csv('1_coalitions_as_ACF_event4_' + str(run_number) + '.csv')
-				df_coalition_pf = test_model.datacollector.get_coalition_pf_vars_dataframe()
+				df_coalition_pf = model_emergence.datacollector.get_coalition_pf_vars_dataframe()
 				df_coalition_pf.to_csv('1_coalitions_pf_ACF_event4_' + str(run_number) + '.csv')
-				df_links = test_model.datacollector.get_links_vars_dataframe()
+				df_links = model_emergence.datacollector.get_links_vars_dataframe()
 				df_links.to_csv('1_links_ACF_event4_' + str(run_number) + '.csv')
-
-		# CHANGE THIS! - The data from the system dynamics model should also be saved
 
 
 
