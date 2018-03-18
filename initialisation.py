@@ -34,8 +34,6 @@ def initial_values(inputs_dict, experiment_input, run_number, agent_inputs, AS_t
 	####################################################################################################
 	# INITIALISATION of the belief tree
 
-	# CHANGE THIS! There are now not three but four ML beliefs
-
 	# Belief tree structure inputs
 	inputs_dict["policy_core"] = ["PC1", "PC2"]
 	len_PC = len(inputs_dict["policy_core"])

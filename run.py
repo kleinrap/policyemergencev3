@@ -1,5 +1,3 @@
-
-
 """
 This is file 0. This file control the entire model including the two main parts: the policy emergence model and the technical model whatever it might be.
 
@@ -17,6 +15,7 @@ WHAT STILL NEEDS TO BE DONE:
 - Change the belief initialisation of the actors to match what could be in real life
 - For the belieftree initialisation make three profiles (once as functions) and then remove 90% of the code.
 - Change the initialisation such that it also includes policy and instrument tree when considering the three stream approach (this will allow to comment the notices for the randomiser)
+- Design an experimentation system for multiple experiments
 
 REMARKS:
 - Check that the impact of the policy instruments act on the difference of states in the belief systems of the actors when they are graded and not on the overall state (which would make it pass the -1 and 1 limits in some cases.)
@@ -120,7 +119,7 @@ if exploration == True:
 else:
 	ticks = 500
 
-# CHANGE THIS! - This will need to be much more advanced, and preferably removed from the main step file where it currently resides
+# NOTICE! - This will need to be much more advanced, and preferably removed from the main step file where it currently resides
 events = [0, event1, event2, event3, event4]
 
 
