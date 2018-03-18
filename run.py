@@ -44,7 +44,6 @@ from states import states_calculation, states_definition
 
 
 
-
 #####################################################################
 ####### Initialisations of the different parts of the models ########
 #####################################################################
@@ -123,6 +122,9 @@ agent_inputs = [policymaker_number, externalparties_number]
 # Selecting the time step for the policy emergence model (time step interval in years)
 time_step_emergence = 1
 
+# initialisation of the dictionnary containing the states for the policy emergence model
+emergence_states = dict()
+
 #####################################################################
 # Technical model initialisation
 
@@ -155,34 +157,13 @@ AT_value = 20
 OT_value = 25
 DT_value = 2.5
 FPT_value = 0.5
-# CHANGE THIS! This needs to affect the values in the graph only
+# CHANGE THIS! This needs to affect the values in the graph only - ERC changes is currently deactivated in the rest of the code
 ERC_value = 0
 RT_value = 3.5
 AdT_value = 30
 PH_value = 55
 RS_value = 0.2
 CT_value = 5
-
-'''''
-What are the states that are needed from the technical model?
-
-1. Ageing time - endogenous (AT_state)
-2. Obscolescence time - endogenous (OT_state)
-3. Design time - endogenous (DT_state)
-4. Flood perception time - endogenous (FPT_state)
-5. Effects on renovation and construction - endogenous (ERC_state)
-6. Renovation time - endogenous (RT_state)
-7. Adjustment time - endogenous (AdT_state)
-8. Planning horizon - endogenous (PH_state)
-9. Renovation standard - endogenous (RS_state)
-10. Construction time - endogenous (CT_state)
-11. Expertise - calculated (Ex_state)
-12. Public perception - calculated (PP_state)
-13. Resource allocation - calculated (RA_state)
-14. Investment level - calculated (IL_state)
-15. Flood perception spending - calculated (FPS_state)
-16. Safety - calculated (Sa_state)
-'''''
 
 
 #####################################################################
@@ -193,7 +174,6 @@ What are the states that are needed from the technical model?
 """
 This is the part of the script that is used to run the model. It contains the running of the model through the different steps but also the collection of the data for the policy emergence model.
 
-
 Warning:
 For the time being, the experimentation part is being removed, only one experiment can be run at a time.
 """
@@ -203,11 +183,9 @@ for run_number in range(run_number_total):
 
 	if run_number >= min_run_number and run_number < max_run_number:
 
-		print('   ')
-		print('----------------------------------------------------')
+		print('\n----------------------------------------------------')
 		print('----------------------- RUN ' + str(run_number) + ' ---------------------')
-		print('----------------------------------------------------')
-		print('   ')
+		print('----------------------------------------------------\n')
 
 		#####################################################################
 		# IN-MODEL INITIALISATION - Policy emergence model
@@ -371,13 +349,15 @@ for run_number in range(run_number_total):
 		# This initialises the technical model and transforms it from vensim to python.
 		model_technical = pysd.read_vensim('Flood_Levees_14_Final.mdl')
 
-		# Deciding on the number of steps that should be considered
-		if time_step_SD < time_step_emergence:
-			time_step_model = time_step_SD
-		else:
-			time_step_model = time_step_emergence
+		print('Cleared initialisation of the technical model.')
+		print('   ')
 
-		# Running the technical model first (for one year time step only:
+		print('STEP 1 -------------')
+		print('   ')
+
+		# Running the technical model first (for one year time step only
+		print('TECHNICAL MODEL RUN ---')
+		print('   ')
 		# CHANGE THIS! - The function that has been commented out is the one with the ERC in it
 		# model_technical_output = model_technical.run(params={'FINAL TIME':time_step_emergence, 'aging time':AT_value, 'obsolescence time':OT_value, 'design time':DT_value, 'flood perception time':FPT_value, 'effect on renovation and construction':ERC_value, 'renovation time':RT_value, 'adjustment time':AdT_value, 'planning horizon':PH_value, 'renovation standard':RS_value, 'construction time':CT_value})
 		model_technical_output = model_technical.run(params={'FINAL TIME':time_step_emergence, 'aging time':AT_value, 'obsolescence time':OT_value, 'design time':DT_value, 'flood perception time':FPT_value, 'renovation time':RT_value, 'adjustment time':AdT_value, 'planning horizon':PH_value, 'renovation standard':RS_value, 'construction time':CT_value})
@@ -385,23 +365,25 @@ for run_number in range(run_number_total):
 		# For loop for the running of the model (-1 as an initial step has already been run)
 		for n in range(run_time_year - 1):
 
-			print('   ')
-			print('--------------------- STEP ' + str(int(n+1)) + ' ---------------------')
+			print('STEP ', n+2, ' -------------')
 			print('   ')
 
 			# CHANGE THIS! - The model are now running fine - What is missing is:
 			# - Policy instruments
-			# - Communication of the states
 			# - Implementation of the policy instruments
 
 			# Obtention of the states values from the technical model outputs
 			states_technical = states_definition(model_technical, states_technical)
-			print(states_technical)
+
+			# Calculation of the states for the policy emergence model
+			states_emergence = states_calculation(states_technical, emergence_states)
 
 			# This performs one step of the policy emergence model
 			# CHANGE THIS! - The communication of the states must be placed into the step function
-			emergence_states = states_calculation(states_technical)
-			# model_emergence.step(AS_theory, PF_theory)
+			print('   ')
+			print('POLICY EMERGENCE MODEL RUN ---')
+			print('   ')
+			model_emergence.step(AS_theory, PF_theory, states_emergence)
 
 			# This is the part where the policy instruments are implemented
 			# CHANGE THIS! - The function has not been written yet
@@ -409,6 +391,9 @@ for run_number in range(run_number_total):
 			# CHANGE THIS! - Somewhere here should be the introduction of the policy instrument into the technical model
 
 			# This performs 1 years worth of steps for the system dynamics model
+			print('   ')
+			print('TECHNICAL MODEL RUN ---')
+			print('   ')
 			# CHANGE THIS - The function that has been commented out is the one with the ERC in it
 			# model_technical_output_intermediate = model_technical.run(params={'aging time':AT_value, 'obsolescence time':OT_value, 'design time':DT_value, 'flood perception time':FPT_value, 'effect on renovation and construction':ERC_value, 'renovation time':RT_value, 'adjustment time':AdT_value, 'planning horizon':PH_value, 'renovation standard':RS_value, 'construction time':CT_value}, initial_condition='current', return_timestamps=np.linspace(1+n,1+n+1, 1/0.0078125))
 			model_technical_output_intermediate = model_technical.run(params={'aging time':AT_value, 'obsolescence time':OT_value, 'design time':DT_value, 'flood perception time':FPT_value, 'renovation time':RT_value, 'adjustment time':AdT_value, 'planning horizon':PH_value, 'renovation standard':RS_value, 'construction time':CT_value}, initial_condition='current', return_timestamps=np.linspace(1+n,1+n+1, 1/0.0078125))

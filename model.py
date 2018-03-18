@@ -175,12 +175,10 @@ class PolicyEmergence(Model):
 		self.ACF_link_list_pf_total = []
 		self.ACF_link_id_pf =[0]
 
-		
-		print('   ')
-		print('Cleared initialisation.')
+		print('Cleared initialisation of the policy emergence model.')
 		print('   ')
 
-	def step(self, AS_theory, PF_theory):	
+	def step(self, AS_theory, PF_theory, states_emergence):	
 
 		"""
 		1.2 The step function
@@ -198,7 +196,6 @@ class PolicyEmergence(Model):
 
 		####################################################################################################
 		# 1.2.1 - Tick initialisation
-		print('   ')
 		print('--- Tick initialisation ---')
 		print('   ')
 		####################################################################################################
@@ -243,25 +240,25 @@ class PolicyEmergence(Model):
 						agents.belieftree[0][self.len_PC + self.len_ML + self.len_S + cw][0] = \
 							- agents.belieftree[0][self.len_PC + self.len_ML + self.len_S + cw][0]
 
-		# TO BE ADDED
-		# This should be replaced by:
-		# 1. Something to read the output file of the technical model
-		# 2. Something to convert these inputs into states
-		# 3. A replacement for 1.2.4.4 Update of the truth belieftree
-
 		# 1.2.X Reading of the states from an output file
-		technical_model_outputs = pd.read_csv("TechnicalModelOutputs.data",header=None)
+		# CHANGE THIS! - The new belief tree is much larger than the older one - This needs to be adjusted here but also in the initialisation file where new initial values need to be added for the new beliefs but also for the causal relations - There might be additional impacts throughout the code that need to be checked
 
-		for i in range(len(self.belieftree_truth)):
-			self.belieftree_truth[i] = technical_model_outputs[i][0]
-		print(self.belieftree_truth)
-
-		# technical_model_outputs = pd.read_csv("TechnicalModelOutputs.data",header=None)
-		# print(technical_model_outputs)
-		# print(len(technical_model_outputs.index))
-		# print('First selection')
-		# print(technical_model_outputs[4][0])
-		# print('  ')
+		self.belieftree_truth[0] = states_emergence["AT_state"]
+		self.belieftree_truth[1] = states_emergence["OT_state"]
+		self.belieftree_truth[2] = states_emergence["DT_state"]
+		self.belieftree_truth[3] = states_emergence["FPT_state"]
+		self.belieftree_truth[4] = states_emergence["ERC_state"]
+		self.belieftree_truth[5] = states_emergence["RT_state"]
+		self.belieftree_truth[6] = states_emergence["AdT_state"]
+		self.belieftree_truth[7] = states_emergence["PH_state"]
+		self.belieftree_truth[8] = states_emergence["RS_state"]
+		self.belieftree_truth[9] = states_emergence["CT_state"]
+		# self.belieftree_truth[10] = states_emergence["ML1_state"]
+		# self.belieftree_truth[11] = states_emergence["ML2_state"]
+		# self.belieftree_truth[12] = states_emergence["ML3_state"]
+		# self.belieftree_truth[13] = states_emergence["ML4_state"]
+		# self.belieftree_truth[14] = states_emergence["FPS_state"]
+		# self.belieftree_truth[15] = states_emergence["Sa_state"]
 
 		# 1.2.5 Electorate actions on policy makers
 		# [Backbone/Backbone+/3S/ACF]
@@ -353,7 +350,6 @@ class PolicyEmergence(Model):
 
 		####################################################################################################
 		# 1.2.9 - Agenda setting
-		print('   ')
 		print('--- Agenda setting ---')
 		print('   ')
 		
@@ -620,7 +616,6 @@ class PolicyEmergence(Model):
 
 		####################################################################################################
 		# 1.2.13 - Policy formulation
-		print('   ')
 		print('--- Policy formulation ---')
 		print('   ')
 		####################################################################################################
@@ -840,7 +835,6 @@ class PolicyEmergence(Model):
 
 		####################################################################################################
 		# 1.2.18 - End of tick procedures
-		print('   ')
 		print('--- End of tick procedures ---')
 		print('   ')
 		####################################################################################################

@@ -174,11 +174,11 @@ def initial_values(inputs_dict, experiment_input, run_number, agent_inputs, AS_t
 
 	inputs_dict["electorate_influence_coefficient"] = experiment_input[6][run_number]
 	
-	inputs_dict["representation"] = [experiment_input[4][run_number]/100, 1 - (experiment_input[4][run_number]/200), 1 - (experiment_input[4][run_number]/200)]
+	inputs_dict["representation"] = [experiment_input[4][run_number]/100, (1 - (experiment_input[4][run_number]/100))/2, (1 - (experiment_input[4][run_number]/100))/2]
 
 	if sum(inputs_dict["representation"]) != 1 or len(inputs_dict["representation"]) != affiliation_number:
-		print('There is a problem in the electorate representation calculation')
-	print(i)
+		print('WARNING! - There is a problem in the electorate representation calculation')
+
 	for i in range(electorate_number):
 		x = random.randrange(inputs_dict["width"])
 		y = random.randrange(inputs_dict["height"])
