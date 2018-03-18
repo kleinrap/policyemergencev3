@@ -92,23 +92,7 @@ def initial_values(inputs_dict, experiment_input, run_number, agent_inputs, AS_t
 	policies[5]= [0, 0, -0.5]
 	inputs_dict["Policies"] = policies
 
-	# Instruments inputs
-	intstruments_number = 16
-	instruments_start = [0 for i in range(len_S)]
-	instruments = []
-	for k in range(intstruments_number):
-		instruments.append(copy.copy(instruments_start))
-	instruments[0] = [0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-	instruments[1] = [-0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-	instruments[2] = [0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0]
-	instruments[3] = [0, -0.5, 0, 0, 0, 0, 0, 0, 0, 0]
-	instruments[4] = [0, 0, 0.5, 0, 0, 0, 0, 0, 0, 0]
-	instruments[5] = [0, 0, -0.5, 0, 0, 0, 0, 0, 0, 0]
-	instruments[6] = [0, 0, 0, 0.5, 0, 0, 0, 0, 0, 0]
-	instruments[7] = [0, 0, 0, -0.5, 0, 0, 0, 0, 0, 0]
-	instruments[8] = [0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0]
-	instruments[9] = [0, 0, 0, 0, -0.5, 0, 0, 0, 0, 0]
-	inputs_dict["Instruments"] = instruments
+	instruments = inputs_dict["Instruments"]
 
 	####################################################################################################
 	# INITIALISATION of the agents themselves

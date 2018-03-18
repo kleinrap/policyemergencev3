@@ -13,14 +13,15 @@ NOTE:
 - NOTICE! text is added when a part will need to be changed but not for March 28th proof of concept
 
 WHAT STILL NEEDS TO BE DONE:
-- Introduce new policy instruments that are related to what is in the report (about ten instruments are needed). The instruments should be mild and not crazy values (so increases of 5-10% are sufficient)
 - The introduction of ERC does not currently work - this needs to be changed (lookup cannot be changed using PySD)
 - Change the belief initialisation of the actors to match what could be in real life
+- For the belieftree initialisation make three profiles (once as functions) and then remove 90% of the code.
+- Change the initialisation such that it also includes policy and instrument tree when considering the three stream approach (this will allow to comment the notices for the randomiser)
+
+REMARKS:
 - Check that the impact of the policy instruments act on the difference of states in the belief systems of the actors when they are graded and not on the overall state (which would make it pass the -1 and 1 limits in some cases.)
 - Should a warm up period be introduced for the technical model considering that some of the levee stocks start at 1
 - How do agents verify that their causal relations understanding are correct? There is no communications of these causal relations, they only change based on power ... no truth whatsoever.
-- For the belieftree initialisation make three profiles (once as functions) and then remove 90% of the code.
-- Change the initialisation such that it also includes policy and instrument tree when considering the three stream approach (this will allow to comment the notices for the randomiser)
 """
 
 #####################################################################
@@ -50,6 +51,7 @@ import pysd
 import numpy as np
 from states import states_calculation, states_definition
 from policy_implementation import policy_package_implementation
+from policy_initialisation import policy_package_initialisation
 
 
 
@@ -139,7 +141,7 @@ emergence_states = dict()
 # Selecting the time step for the system dynamics model (time step interval in years)
 time_step_SD = 0.0078125
 
-# CHANGE THIS! - The initialisation of the policy instruments should be here considering they are related to the technical model
+inputs_dict_emergence = policy_package_initialisation(inputs_dict_emergence)
 
 states_technical = dict()
 states_technical['AT_state'] = 0
