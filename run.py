@@ -150,6 +150,19 @@ states_technical['IL_state'] = 0
 states_technical['FPS_state'] = 0
 states_technical['Sa_state'] = 0
 
+# These are the initial values for the exogenous parameters that can be changed through the model policy instruments and packages
+AT_value = 20
+OT_value = 25
+DT_value = 2.5
+FPT_value = 0.5
+# CHANGE THIS! This needs to affect the values in the graph only
+ERC_value = 0
+RT_value = 3.5
+AdT_value = 30
+PH_value = 55
+RS_value = 0.2
+CT_value = 5
+
 '''''
 What are the states that are needed from the technical model?
 
@@ -365,7 +378,9 @@ for run_number in range(run_number_total):
 			time_step_model = time_step_emergence
 
 		# Running the technical model first (for one year time step only:
-		model_technical_output = model_technical.run(params={'FINAL TIME':time_step_emergence})
+		# CHANGE THIS! - The function that has been commented out is the one with the ERC in it
+		# model_technical_output = model_technical.run(params={'FINAL TIME':time_step_emergence, 'aging time':AT_value, 'obsolescence time':OT_value, 'design time':DT_value, 'flood perception time':FPT_value, 'effect on renovation and construction':ERC_value, 'renovation time':RT_value, 'adjustment time':AdT_value, 'planning horizon':PH_value, 'renovation standard':RS_value, 'construction time':CT_value})
+		model_technical_output = model_technical.run(params={'FINAL TIME':time_step_emergence, 'aging time':AT_value, 'obsolescence time':OT_value, 'design time':DT_value, 'flood perception time':FPT_value, 'renovation time':RT_value, 'adjustment time':AdT_value, 'planning horizon':PH_value, 'renovation standard':RS_value, 'construction time':CT_value})
 
 		# For loop for the running of the model (-1 as an initial step has already been run)
 		for n in range(run_time_year - 1):
@@ -374,23 +389,29 @@ for run_number in range(run_number_total):
 			print('--------------------- STEP ' + str(int(n+1)) + ' ---------------------')
 			print('   ')
 
-			# CHANGE THIS - The model are now running fine - What is missing is:
+			# CHANGE THIS! - The model are now running fine - What is missing is:
 			# - Policy instruments
 			# - Communication of the states
 			# - Implementation of the policy instruments
 
 			# Obtention of the states values from the technical model outputs
 			states_technical = states_definition(model_technical, states_technical)
+			print(states_technical)
 
 			# This performs one step of the policy emergence model
-			# CHANGE THIS - The communication of the states must be placed into the step function
+			# CHANGE THIS! - The communication of the states must be placed into the step function
 			emergence_states = states_calculation(states_technical)
 			# model_emergence.step(AS_theory, PF_theory)
 
-			# CHANGE THIS - Somewhere here should be the introduction of the policy instrument into the technical model
+			# This is the part where the policy instruments are implemented
+			# CHANGE THIS! - The function has not been written yet
+
+			# CHANGE THIS! - Somewhere here should be the introduction of the policy instrument into the technical model
 
 			# This performs 1 years worth of steps for the system dynamics model
-			model_technical_output_intermediate = model_technical.run(initial_condition='current', return_timestamps=np.linspace(1+n,1+n+1, 1/0.0078125))
+			# CHANGE THIS - The function that has been commented out is the one with the ERC in it
+			# model_technical_output_intermediate = model_technical.run(params={'aging time':AT_value, 'obsolescence time':OT_value, 'design time':DT_value, 'flood perception time':FPT_value, 'effect on renovation and construction':ERC_value, 'renovation time':RT_value, 'adjustment time':AdT_value, 'planning horizon':PH_value, 'renovation standard':RS_value, 'construction time':CT_value}, initial_condition='current', return_timestamps=np.linspace(1+n,1+n+1, 1/0.0078125))
+			model_technical_output_intermediate = model_technical.run(params={'aging time':AT_value, 'obsolescence time':OT_value, 'design time':DT_value, 'flood perception time':FPT_value, 'renovation time':RT_value, 'adjustment time':AdT_value, 'planning horizon':PH_value, 'renovation standard':RS_value, 'construction time':CT_value}, initial_condition='current', return_timestamps=np.linspace(1+n,1+n+1, 1/0.0078125))
 			model_technical_output = model_technical_output.append(model_technical_output_intermediate)
 
 

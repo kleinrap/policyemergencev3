@@ -34,6 +34,8 @@ def initial_values(inputs_dict, experiment_input, run_number, agent_inputs, AS_t
 	####################################################################################################
 	# INITIALISATION of the belief tree
 
+	# CHANGE THIS! There are now not three but four ML beliefs
+
 	# Belief tree structure inputs
 	inputs_dict["policy_core"] = ["PC1", "PC2"]
 	len_PC = len(inputs_dict["policy_core"])
@@ -76,29 +78,17 @@ def initial_values(inputs_dict, experiment_input, run_number, agent_inputs, AS_t
 	for k in range(policies_number):
 		policies.append(copy.copy(policies_start))
 	# policy 1 - More forest size
-	policies[0][0] = 0.5
-	policies[0][1] = 0
-	policies[0][2] = 0
+	policies[0] = [0.5, 0, 0]
 	# policy 2 - Less forest size
-	policies[1][0] = -0.5
-	policies[1][1] = 0
-	policies[1][2] = 0
+	policies[1] = [-0.5, 0, 0]
 	# policy 3 - More tourism
-	policies[2][0] = 0
-	policies[2][1] = 0.5
-	policies[2][2] = 0
+	policies[2] = [0, 0.5, 0]
 	# policy 4 - Less tourism
-	policies[3][0] = 0
-	policies[3][1] = -0.5
-	policies[3][2] = 0
+	policies[3] = [0, -0.5, 0]
 	# policy 5 - More safety
-	policies[4][0] = 0
-	policies[4][1] = 0
-	policies[4][2] = 0.5
+	policies[4] = [0, 0, 0.5]
 	# policy 6 - Less safety
-	policies[5][0] = 0
-	policies[5][1] = 0
-	policies[5][2] = -0.5
+	policies[5]= [0, 0, -0.5]
 	inputs_dict["Policies"] = policies
 
 	# Instruments inputs
@@ -108,101 +98,37 @@ def initial_values(inputs_dict, experiment_input, run_number, agent_inputs, AS_t
 	for k in range(intstruments_number):
 		instruments.append(copy.copy(instruments_start))
 	# policy instrument 1 - More camp fires
-	instruments[0][0] = 0.5
-	instruments[0][1] = 0
-	instruments[0][2] = 0
-	instruments[0][3] = 0
-	instruments[0][4] = 0
+	instruments[0] = [0.5, 0, 0, 0, 0]
 	# policy instrument 2 - Less camp fires
-	instruments[1][0] = -0.5
-	instruments[1][1] = 0
-	instruments[1][2] = 0
-	instruments[1][3] = 0
-	instruments[1][4] = 0
+	instruments[1] = [-0.5, 0, 0, 0, 0]
 	# policy instrument 3 - More planting
-	instruments[2][0] = 0
-	instruments[2][1] = 0.5
-	instruments[2][2] = 0
-	instruments[2][3] = 0
-	instruments[2][4] = 0
+	instruments[2] = [0, 0.5, 0, 0, 0]
 	# policy instrument 4 - Less planting
-	instruments[3][0] = 0
-	instruments[3][1] = -0.5
-	instruments[3][2] = 0
-	instruments[3][3] = 0
-	instruments[3][4] = 0
+	instruments[3] = [0, -0.5, 0, 0, 0]
 	# policy instrument 5 - More monitoring
-	instruments[4][0] = 0
-	instruments[4][1] = 0
-	instruments[4][2] = 0.5
-	instruments[4][3] = 0
-	instruments[4][4] = 0
+	instruments[4] = [0, 0, 0.5, 0, 0]
 	# policy instrument 6 - Less monitoring
-	instruments[5][0] = 0
-	instruments[5][1] = 0
-	instruments[5][2] = -0.5
-	instruments[5][3] = 0
-	instruments[5][4] = 0
+	instruments[5] = [0, 0, -0.5, 0, 0]
 	# policy instrument 7 - More firefigthers
-	instruments[6][0] = 0
-	instruments[6][1] = 0
-	instruments[6][2] = 0
-	instruments[6][3] = 0.5
-	instruments[6][4] = 0
+	instruments[6] = [0, 0, 0, 0.5, 0]
 	# policy instrument 8 - Less firefigthers
-	instruments[7][0] = 0
-	instruments[7][1] = 0
-	instruments[7][2] = 0
-	instruments[7][3] = -0.5
-	instruments[7][4] = 0
+	instruments[7] = [0, 0, 0, -0.5, 0]
 	# policy instrument 9 - More prevention
-	instruments[8][0] = 0
-	instruments[8][1] = 0
-	instruments[8][2] = 0
-	instruments[8][3] = 0
-	instruments[8][4] = 0.5
+	instruments[8] = [0, 0, 0, 0, 0.5]
 	# policy instrument 10 - Less prevention
-	instruments[9][0] = 0
-	instruments[9][1] = 0
-	instruments[9][2] = 0
-	instruments[9][3] = 0
-	instruments[9][4] = -0.5
+	instruments[9] = [0, 0, 0, 0, -0.5]
 	# policy instrument 11
-	instruments[10][0] = 0
-	instruments[10][1] = 0.2
-	instruments[10][2] = 0.3
-	instruments[10][3] = 0
-	instruments[10][4] = 0.5
+	instruments[10] = [0, 0.2, 0.3, 0, 0.5]
 	# policy instrument 12
-	instruments[11][0] = 0
-	instruments[11][1] = -0.2
-	instruments[11][2] = -0.3
-	instruments[11][3] = 0
-	instruments[11][4] = -0.5
+	instruments[11] = [0, -0.2, 0.3, 0, -0.5]
 	# policy instrument 13
-	instruments[12][0] = -0.4
-	instruments[12][1] = 0.5
-	instruments[12][2] = 0.1
-	instruments[12][3] = -0.9
-	instruments[12][4] = -0.5
+	instruments[12] = [-0.4, 0.5, 0.1, -0.9, -0.5]
 	# policy instrument 14
-	instruments[13][0] = 0.4
-	instruments[13][1] = -0.5
-	instruments[13][2] = -0.1
-	instruments[13][3] = 0.9
-	instruments[13][4] = 0.5
+	instruments[13] = [0.4, -0.5, -0.1, 0.9, 0.5]
 	# policy instrument 15
-	instruments[14][0] = -0.8
-	instruments[14][1] = 0
-	instruments[14][2] = 0
-	instruments[14][3] = 0.9
-	instruments[14][4] = 0
+	instruments[14] = [-0.8, 0, 0, 0.9, 0]
 	# policy instrument 16
-	instruments[15][0] = 0.8
-	instruments[15][1] = 0
-	instruments[15][2] = 0
-	instruments[15][3] = -0.9
-	instruments[15][4] = 0
+	instruments[15] = [0.8, 0, 0, -0.9, 0]
 
 	inputs_dict["Instruments"] = instruments
 
