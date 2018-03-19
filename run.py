@@ -12,10 +12,8 @@ NOTE:
 
 WHAT STILL NEEDS TO BE DONE:
 - The introduction of ERC does not currently work - this needs to be changed (lookup cannot be changed using PySD)
-- Change the initialisation such that it also includes policy and instrument tree when considering the three stream approach (this will allow to comment the notices for the randomiser)
-- Design an experimentation system for multiple experiments (consider the inputs that are needed)
-	- The baseline without the policy emergence model will need to be run and compared to the runs with the policy emergence model in.
-- Completely functionalise the initialisation file
+- Change the experiment running structure such that it also runs different external events for the technical model (remove exploration, change emergence model events, add technical model events)
+- [Optional] Completely functionalise the initialisation file
 
 REMARKS:
 - Check that the impact of the policy instruments act on the difference of states in the belief systems of the actors when they are graded and not on the overall state (which would make it pass the -1 and 1 limits in some cases.)
