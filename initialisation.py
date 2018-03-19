@@ -150,23 +150,23 @@ def initial_values(inputs_dict, experiment_input, run_number, agent_inputs, AS_t
 		if affiliation == 0:
 
 			# This is where the modeller inputs the values for the belief tree of the actors with affiliation 0
-			belieftree_electorate_PC = [0, 0]
-			belieftree_electorate_ML = [0, 0, 0, 0]
-			belieftree_electorate_S = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+			belieftree_electorate_PC = [0.6, 0.7]
+			belieftree_electorate_ML = [0.5, 0.5, 0.75, 0.75]
+			belieftree_electorate_S = [0, 0, 0.75, -0.75, 0.5, 0.5, 0, 0]
 			
 		if affiliation == 1:
 
 			# This is where the modeller inputs the values for the belief tree of the actors with affiliation 0
-			belieftree_electorate_PC = [0, 0]
-			belieftree_electorate_ML = [0, 0, 0, 0]
-			belieftree_electorate_S = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+			belieftree_electorate_PC = [0.6, 0.7]
+			belieftree_electorate_ML = [0.5, 0.5, 0.75, 0.75]
+			belieftree_electorate_S = [0, 0, 0.75, -0.75, 0.5, 0.5, 0, 0]
 
 		if affiliation == 2:
 
 			# This is where the modeller inputs the values for the belief tree of the actors with affiliation 0
-			belieftree_electorate_PC = [0, 0]
-			belieftree_electorate_ML = [0, 0, 0, 0]
-			belieftree_electorate_S = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+			belieftree_electorate_PC = [-0.2, 0.9]
+			belieftree_electorate_ML = [-0.2, -0.2, 0.1, 0.1]
+			belieftree_electorate_S = [0, 0, 0, 0, 0, 0, 0, 0.7, 0, 0]
 
 		# Assembly
 		belieftree_electorate_temp = belieftree_electorate_PC
@@ -600,14 +600,14 @@ def belieftree_profiles(belieftree, belieftree_policy, belieftree_instrument, af
 	if affiliation == 0:
 
 		# This is where the modeller inputs the values for the belief tree of the actors with affiliation 0
-		input_belieftree_PC = [0, 0]
-		input_belieftree_ML = [0, 0, 0, 0]
-		input_belieftree_S = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-		input_belieftree_CR_PC = [0, 0, 0, 0, 0, 0, 0, 0]
-		input_belieftree_CR_ML1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-		input_belieftree_CR_ML2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-		input_belieftree_CR_ML3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-		input_belieftree_CR_ML4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		input_belieftree_PC = [0.6, 0.7]
+		input_belieftree_ML = [0.5, 0.5, 0.75, 0.75]
+		input_belieftree_S = [0, 0, 0, 0, 0, 0, 0, 0.7, 0, 0]
+		input_belieftree_CR_PC = [0, 0, 0.75, -0.75, 0.5, 0.5, 0, 0]
+		input_belieftree_CR_ML1 = [-0.5, 0, 0, 0.4, 0, -0.4, 0.7, 0.3, 0.9, 0]
+		input_belieftree_CR_ML2 = [-0.5, 0, 0, 0.4, 0, -0.4, 0.7, 0.3, 0.9, 0]
+		input_belieftree_CR_ML3 = [-0.9, 0, 0.8, 0.4, 0.9, 0.5, 0, 0.5, 0.3, -0.4]
+		input_belieftree_CR_ML4 = [0, -0.9, 0.4, 0.1, 0.9, -0.5, 0, 0.3, -0.2, -0.1]
 
 		# Policies belief tree
 		# NOTICE! - Needs changing for the new belieftree
@@ -644,14 +644,14 @@ def belieftree_profiles(belieftree, belieftree_policy, belieftree_instrument, af
 	if affiliation == 1:
 		
 		# This is where the modeller inputs the values for the belief tree of the actors with affiliation 1
-		input_belieftree_PC = [0, 0]
-		input_belieftree_ML = [0, 0, 0, 0]
-		input_belieftree_S = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-		input_belieftree_CR_PC = [0, 0, 0, 0, 0, 0, 0, 0]
-		input_belieftree_CR_ML1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-		input_belieftree_CR_ML2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-		input_belieftree_CR_ML3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-		input_belieftree_CR_ML4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		input_belieftree_PC = [0.6, 0.7]
+		input_belieftree_ML = [0.5, 0.5, 0.75, 0.75]
+		input_belieftree_S = [0, 0, 0, 0, 0, 0, 0, 0.7, 0, 0]
+		input_belieftree_CR_PC = [0, 0, 0.75, -0.75, 0.5, 0.5, 0, 0]
+		input_belieftree_CR_ML1 = [-0.5, 0, 0, 0.4, 0, -0.4, 0.7, 0.3, 0.9, 0]
+		input_belieftree_CR_ML2 = [-0.5, 0, 0, 0.4, 0, -0.4, 0.7, 0.3, 0.9, 0]
+		input_belieftree_CR_ML3 = [-0.9, 0, 0.8, 0.4, 0.9, 0.5, 0, 0.5, 0.3, -0.4]
+		input_belieftree_CR_ML4 = [0, -0.9, 0.4, 0.1, 0.9, -0.5, 0, 0.3, -0.2, -0.1]
 
 		# Policies belief tree
 		# NOTICE! - These have not yet been initiated
@@ -688,14 +688,14 @@ def belieftree_profiles(belieftree, belieftree_policy, belieftree_instrument, af
 	if affiliation == 2:
 		
 		# This is where the modeller inputs the values for the belief tree of the actors with affiliation 2
-		input_belieftree_PC = [0, 0]
-		input_belieftree_ML = [0, 0, 0, 0]
-		input_belieftree_S = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-		input_belieftree_CR_PC = [0, 0, 0, 0, 0, 0, 0, 0]
-		input_belieftree_CR_ML1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-		input_belieftree_CR_ML2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-		input_belieftree_CR_ML3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-		input_belieftree_CR_ML4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		input_belieftree_PC = [-0.2, 0.9]
+		input_belieftree_ML = [-0.2, -0.2, 0.1, 0.1]
+		input_belieftree_S = [0, 0, 0, 0, 0, 0, 0, 0.7, 0, 0]
+		input_belieftree_CR_PC = [0, 0, 0.75, -0.75, 0.5, 0.5, 0, 0]
+		input_belieftree_CR_ML1 = [-0.5, 0, 0, 0.4, 0, -0.4, 0.7, 0.3, 0.9, 0]
+		input_belieftree_CR_ML2 = [-0.5, 0, 0, 0.4, 0, -0.4, 0.7, 0.3, 0.9, 0]
+		input_belieftree_CR_ML3 = [-0.9, 0, 0.8, 0.4, 0.9, 0.5, 0, 0.5, 0.3, -0.4]
+		input_belieftree_CR_ML4 = [0, -0.9, 0.4, 0.1, 0.9, -0.5, 0, 0.3, -0.2, -0.1]
 
 		# Policies belief tree
 		# NOTICE! - These have not yet been initiated

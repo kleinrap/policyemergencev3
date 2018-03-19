@@ -12,10 +12,10 @@ NOTE:
 
 WHAT STILL NEEDS TO BE DONE:
 - The introduction of ERC does not currently work - this needs to be changed (lookup cannot be changed using PySD)
-- Change the belief initialisation of the actors to match what could be in real life
-- For the belieftree initialisation make three profiles
 - Change the initialisation such that it also includes policy and instrument tree when considering the three stream approach (this will allow to comment the notices for the randomiser)
-- Design an experimentation system for multiple experiments
+- Design an experimentation system for multiple experiments (consider the inputs that are needed)
+	- The baseline without the policy emergence model will need to be run and compared to the runs with the policy emergence model in.
+- Completely functionalise the initialisation file
 
 REMARKS:
 - Check that the impact of the policy instruments act on the difference of states in the belief systems of the actors when they are graded and not on the overall state (which would make it pass the -1 and 1 limits in some cases.)
@@ -410,6 +410,9 @@ for run_number in range(run_number_total):
 			# model_technical_output_intermediate = model_technical.run(params={'aging time':AT_value, 'obsolescence time':OT_value, 'design time':DT_value, 'flood perception time':FPT_value, 'effect on renovation and construction':ERC_value, 'renovation time':RT_value, 'adjustment time':AdT_value, 'planning horizon':PH_value, 'renovation standard':RS_value, 'construction time':CT_value}, initial_condition='current', return_timestamps=np.linspace(1+n,1+n+1, 1/0.0078125))
 			model_technical_output_intermediate = model_technical.run(params={'aging time':AT_value, 'obsolescence time':OT_value, 'design time':DT_value, 'flood perception time':FPT_value, 'renovation time':RT_value, 'adjustment time':AdT_value, 'planning horizon':PH_value, 'renovation standard':RS_value, 'construction time':CT_value}, initial_condition='current', return_timestamps=np.linspace(1+n,1+n+1, 1/0.0078125))
 			model_technical_output = model_technical_output.append(model_technical_output_intermediate)
+
+		model_technical_output.plot()
+		plt.show()
 
 		#####################################################################
 		# STORING THE DATA - Technical model
