@@ -144,6 +144,4 @@ def states_calculation(states_technical, emergence_states):
 	max_Sa = 1
 	emergence_states["Sa_state"] = (((states_technical["Sa_state"] - min_Sa) / (max_Sa-min_Sa)) * 2) - 1
 
-	print(emergence_states)
-
 	return emergence_states

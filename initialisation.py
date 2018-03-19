@@ -148,67 +148,34 @@ def initial_values(inputs_dict, experiment_input, run_number, agent_inputs, AS_t
 
 		# Creating the initial values for the belief tree per affiliation - Self aims
 		if affiliation == 0:
-			# PC1-PC2
-			belieftree_electorate[0][1] = 0
-			belieftree_electorate[1][1] = 0
-			# ML1-ML4
-			belieftree_electorate[2][1] = 0
-			belieftree_electorate[3][1] = 0
-			belieftree_electorate[4][1] = 0
-			belieftree_electorate[5][1] = 0
-			# S1-S10
-			belieftree_electorate[6][1] = 0
-			belieftree_electorate[7][1] = 0
-			belieftree_electorate[8][1] = 0
-			belieftree_electorate[9][1] = 0
-			belieftree_electorate[10][1] = 0
-			belieftree_electorate[11][1] = 0
-			belieftree_electorate[12][1] = 0
-			belieftree_electorate[13][1] = 0
-			belieftree_electorate[14][1] = 0
-			belieftree_electorate[15][1] = 0
+
+			# This is where the modeller inputs the values for the belief tree of the actors with affiliation 0
+			belieftree_electorate_PC = [0, 0]
+			belieftree_electorate_ML = [0, 0, 0, 0]
+			belieftree_electorate_S = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 			
 		if affiliation == 1:
-			# PC1-PC2
-			belieftree_electorate[0][1] = 0
-			belieftree_electorate[1][1] = 0
-			# ML1-ML4
-			belieftree_electorate[2][1] = 0
-			belieftree_electorate[3][1] = 0
-			belieftree_electorate[4][1] = 0
-			belieftree_electorate[5][1] = 0
-			# S1-S10
-			belieftree_electorate[6][1] = 0
-			belieftree_electorate[7][1] = 0
-			belieftree_electorate[8][1] = 0
-			belieftree_electorate[9][1] = 0
-			belieftree_electorate[10][1] = 0
-			belieftree_electorate[11][1] = 0
-			belieftree_electorate[12][1] = 0
-			belieftree_electorate[13][1] = 0
-			belieftree_electorate[14][1] = 0
-			belieftree_electorate[15][1] = 0
+
+			# This is where the modeller inputs the values for the belief tree of the actors with affiliation 0
+			belieftree_electorate_PC = [0, 0]
+			belieftree_electorate_ML = [0, 0, 0, 0]
+			belieftree_electorate_S = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 		if affiliation == 2:
-			# PC1-PC2
-			belieftree_electorate[0][1] = 0
-			belieftree_electorate[1][1] = 0
-			# ML1-ML4
-			belieftree_electorate[2][1] = 0
-			belieftree_electorate[3][1] = 0
-			belieftree_electorate[4][1] = 0
-			belieftree_electorate[5][1] = 0
-			# S1-S10
-			belieftree_electorate[6][1] = 0
-			belieftree_electorate[7][1] = 0
-			belieftree_electorate[8][1] = 0
-			belieftree_electorate[9][1] = 0
-			belieftree_electorate[10][1] = 0
-			belieftree_electorate[11][1] = 0
-			belieftree_electorate[12][1] = 0
-			belieftree_electorate[13][1] = 0
-			belieftree_electorate[14][1] = 0
-			belieftree_electorate[15][1] = 0
+
+			# This is where the modeller inputs the values for the belief tree of the actors with affiliation 0
+			belieftree_electorate_PC = [0, 0]
+			belieftree_electorate_ML = [0, 0, 0, 0]
+			belieftree_electorate_S = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+		# Assembly
+		belieftree_electorate_temp = belieftree_electorate_PC
+		belieftree_electorate_temp.extend(belieftree_electorate_ML)
+		belieftree_electorate_temp.extend(belieftree_electorate_S)
+
+		# Replacing the main beliefs in the belief tree
+		for ip in range(len_PC+len_ML+len_S):
+				belieftree_electorate[ip][1] = belieftree_electorate_temp[i]
 
 		# Randomises lightly the input value
 		for j in range(len(belieftree_electorate)):
@@ -642,25 +609,6 @@ def belieftree_profiles(belieftree, belieftree_policy, belieftree_instrument, af
 		input_belieftree_CR_ML3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		input_belieftree_CR_ML4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-		# Assembly
-		input_belieftree = input_belieftree_PC
-		input_belieftree.extend(input_belieftree_ML)
-		input_belieftree.extend(input_belieftree_S)
-		input_belieftree.extend(input_belieftree_CR_PC)
-		input_belieftree.extend(input_belieftree_CR_ML1)
-		input_belieftree.extend(input_belieftree_CR_ML2)
-		input_belieftree.extend(input_belieftree_CR_ML3)
-		input_belieftree.extend(input_belieftree_CR_ML4)
-
-		# Replacing the main beliefs in the belief tree
-		for i in range(len_PC+len_ML+len_S+causalrelation_number):
-			# For the issue
-			if i < len_PC+len_ML+len_S:
-				belieftree[0][i][1] = input_belieftree[i]
-			# For the causal relations
-			else:
-				belieftree[0][i][0] = input_belieftree[i]
-
 		# Policies belief tree
 		# NOTICE! - Needs changing for the new belieftree
 		belieftree_policy[0][0] = [0, 0, 0, 0]
@@ -704,25 +652,6 @@ def belieftree_profiles(belieftree, belieftree_policy, belieftree_instrument, af
 		input_belieftree_CR_ML2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		input_belieftree_CR_ML3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		input_belieftree_CR_ML4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
-		# Assembly
-		input_belieftree = input_belieftree_PC
-		input_belieftree.extend(input_belieftree_ML)
-		input_belieftree.extend(input_belieftree_S)
-		input_belieftree.extend(input_belieftree_CR_PC)
-		input_belieftree.extend(input_belieftree_CR_ML1)
-		input_belieftree.extend(input_belieftree_CR_ML2)
-		input_belieftree.extend(input_belieftree_CR_ML3)
-		input_belieftree.extend(input_belieftree_CR_ML4)
-
-		# Replacing the main beliefs in the belief tree
-		for i in range(len_PC+len_ML+len_S+causalrelation_number):
-			# For the issue
-			if i < len_PC+len_ML+len_S:
-				belieftree[0][i][1] = input_belieftree[i]
-			# For the causal relations
-			else:
-				belieftree[0][i][0] = input_belieftree[i]
 
 		# Policies belief tree
 		# NOTICE! - These have not yet been initiated
@@ -768,25 +697,6 @@ def belieftree_profiles(belieftree, belieftree_policy, belieftree_instrument, af
 		input_belieftree_CR_ML3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		input_belieftree_CR_ML4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-		# Assembly
-		input_belieftree = input_belieftree_PC
-		input_belieftree.extend(input_belieftree_ML)
-		input_belieftree.extend(input_belieftree_S)
-		input_belieftree.extend(input_belieftree_CR_PC)
-		input_belieftree.extend(input_belieftree_CR_ML1)
-		input_belieftree.extend(input_belieftree_CR_ML2)
-		input_belieftree.extend(input_belieftree_CR_ML3)
-		input_belieftree.extend(input_belieftree_CR_ML4)
-
-		# Replacing the main beliefs in the belief tree
-		for i in range(len_PC+len_ML+len_S+causalrelation_number):
-			# For the issue
-			if i < len_PC+len_ML+len_S:
-				belieftree[0][i][1] = input_belieftree[i]
-			# For the causal relations
-			else:
-				belieftree[0][i][0] = input_belieftree[i]
-
 		# Policies belief tree
 		# NOTICE! - These have not yet been initiated
 		belieftree_policy[0][0] = [0, 0, 0, 0]
@@ -818,6 +728,25 @@ def belieftree_profiles(belieftree, belieftree_policy, belieftree_instrument, af
 		belieftree_instrument[0][13] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		belieftree_instrument[0][14] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		belieftree_instrument[0][15] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+	# Assembly
+	input_belieftree = input_belieftree_PC
+	input_belieftree.extend(input_belieftree_ML)
+	input_belieftree.extend(input_belieftree_S)
+	input_belieftree.extend(input_belieftree_CR_PC)
+	input_belieftree.extend(input_belieftree_CR_ML1)
+	input_belieftree.extend(input_belieftree_CR_ML2)
+	input_belieftree.extend(input_belieftree_CR_ML3)
+	input_belieftree.extend(input_belieftree_CR_ML4)
+
+	# Replacing the main beliefs in the belief tree
+	for i in range(len_PC+len_ML+len_S+causalrelation_number):
+		# For the issue
+		if i < len_PC+len_ML+len_S:
+			belieftree[0][i][1] = input_belieftree[i]
+		# For the causal relations
+		else:
+			belieftree[0][i][0] = input_belieftree[i]
 
 	# Randomising the belief tree
 	for j in range(len_PC + len_ML + len_S):
