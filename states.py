@@ -62,79 +62,79 @@ def states_calculation(states_technical, emergence_states):
 	'''''
 
 	# Calculation of the ageing time
-	min_AT = 1
-	max_AT = 100
-	emergence_states["AT_state"] = ((states_technical["AT_state"] / (max_AT-min_AT)) * 2) - 1
+	min_AT = 15
+	max_AT = 25
+	emergence_states["AT_state"] = (((states_technical["AT_state"] - min_AT) / (max_AT-min_AT)) * 2) - 1
 
 	# Calculation of the obsolescence time
-	min_OT = 10
-	max_OT = 500
-	emergence_states["OT_state"] = ((states_technical["OT_state"] / (max_OT-min_OT)) * 2) - 1
+	min_OT = 20
+	max_OT = 40
+	emergence_states["OT_state"] = (((states_technical["OT_state"] - min_OT) / (max_OT-min_OT)) * 2) - 1
 
 	# Calculation of the design time
-	min_DT = 0.5
-	max_DT = 10
-	emergence_states["DT_state"] = ((states_technical["DT_state"] / (max_DT-min_DT)) * 2) - 1
+	min_DT = 1.5
+	max_DT = 4.5
+	emergence_states["DT_state"] = (((states_technical["DT_state"] - min_DT) / (max_DT-min_DT)) * 2) - 1
 
 	# Calculation of the flood perception time
 	min_FPT = 0
-	max_FPT = 3
-	emergence_states["FPT_state"] = ((states_technical["FPT_state"] / (max_FPT-min_FPT)) * 2) - 1
+	max_FPT = 1
+	emergence_states["FPT_state"] = (((states_technical["FPT_state"] - min_FPT) / (max_FPT-min_FPT)) * 2) - 1
 
 	# Calculation of the effects on renovation and construction
-	min_ERC = 0
-	max_ERC = 20
-	emergence_states["ERC_state"] = ((states_technical["ERC_state"] / (max_ERC-min_ERC)) * 2) - 1
+	min_ERC = 1.5
+	max_ERC = 7.5
+	emergence_states["ERC_state"] = (((states_technical["ERC_state"] - min_ERC) / (max_ERC-min_ERC)) * 2) - 1
 
 	# Calculation of the renovation time
-	min_RT = 0.5
-	max_RT = 20
-	emergence_states["RT_state"] = ((states_technical["RT_state"] / (max_RT-min_RT)) * 2) - 1
+	min_RT = 2.5
+	max_RT = 5
+	emergence_states["RT_state"] = (((states_technical["RT_state"] - min_RT) / (max_RT-min_RT)) * 2) - 1
 
 	# Calculation of the adjustment time
-	min_AdT = 1
-	max_AdT = 200
-	emergence_states["AdT_state"] = ((states_technical["AdT_state"] / (max_AdT-min_AdT)) * 2) - 1
+	min_AdT = 15
+	max_AdT = 45
+	emergence_states["AdT_state"] = (((states_technical["AdT_state"] - min_AdT) / (max_AdT-min_AdT)) * 2) - 1
 
 	# Calculation of the planning horizon
-	min_PH = 10
-	max_PH = 200
-	emergence_states["PH_state"] = ((states_technical["PH_state"] / (max_PH-min_PH)) * 2) - 1
+	min_PH = 15
+	max_PH = 100
+	emergence_states["PH_state"] = (((states_technical["PH_state"] - min_PH) / (max_PH-min_PH)) * 2) - 1
 
 	# Calculation of the renovation standard
 	min_RS = 0.05
-	max_RS = 1
-	emergence_states["RS_state"] = ((states_technical["RS_state"] / (max_RS-min_RS)) * 2) - 1
+	max_RS = 0.4
+	emergence_states["RS_state"] = (((states_technical["RS_state"] - min_RS) / (max_RS-min_RS)) * 2) - 1
 
 	# Calculation of the construction time
-	min_CT = 0.5
-	max_CT = 15
-	emergence_states["CT_state"] = ((states_technical["CT_state"] / (max_CT-min_CT)) * 2) - 1
+	min_CT = 3
+	max_CT = 7
+	emergence_states["CT_state"] = (((states_technical["CT_state"] - min_CT) / (max_CT-min_CT)) * 2) - 1
 
 	# Calculation of the standard levy safety
 	min_SLS = 0
 	max_SLS = 80000
-	emergence_states["SLS_state"] = ((states_technical["SLS_state"] / (max_SLS-min_SLS)) * 2) - 1
+	emergence_states["SLS_state"] = (((states_technical["SLS_state"] - min_SLS) / (max_SLS-min_SLS)) * 2) - 1
 
 	# Calculation of the old levee safety
 	min_OLS = 0
 	max_OLS = 80000
-	emergence_states["OLS_state"] = ((states_technical["OLS_state"] / (max_OLS-min_OLS)) * 2) - 1
+	emergence_states["OLS_state"] = (((states_technical["OLS_state"] - min_OLS) / (max_OLS-min_OLS)) * 2) - 1
 
 	# Calculation of the standard levee length
 	min_SL = 0
 	max_SL = 12000
-	emergence_states["SL_state"] = ((states_technical["SL_state"] / (max_SL-min_SL)) * 2) - 1
+	emergence_states["SL_state"] = (((states_technical["SL_state"] - min_SL) / (max_SL-min_SL)) * 2) - 1
 
 	# Calculation of the old levee length
 	min_OL = 0
 	max_OL = 12000
-	emergence_states["OL_state"] = ((states_technical["OL_state"] / (max_OL-min_OL)) * 2) - 1
+	emergence_states["OL_state"] = (((states_technical["OL_state"] - min_OL) / (max_OL-min_OL)) * 2) - 1
 
 	# Calculation of the investment priority
 	min_IP = 0
 	max_IP  = 15
-	emergence_states["IP_state"] = ((states_technical["IP_state"] / (max_IP-min_IP)) * 2) - 1
+	emergence_states["IP_state"] = (((states_technical["IP_state"] - min_IP) / (max_IP-min_IP)) * 2) - 1
 	# Check considering the low level required for max_IP
 	if emergence_states["IP_state"] < -1 or emergence_states["IP_state"] > 1:
 		print('There is a problem for the calculation of the IP_state.')
@@ -142,6 +142,8 @@ def states_calculation(states_technical, emergence_states):
 	# Calculation of the safety
 	min_Sa = 0
 	max_Sa = 1
-	emergence_states["Sa_state"] = ((states_technical["Sa_state"] / (max_Sa-min_Sa)) * 2) - 1
+	emergence_states["Sa_state"] = (((states_technical["Sa_state"] - min_Sa) / (max_Sa-min_Sa)) * 2) - 1
+
+	print(emergence_states)
 
 	return emergence_states

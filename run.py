@@ -13,7 +13,7 @@ NOTE:
 WHAT STILL NEEDS TO BE DONE:
 - The introduction of ERC does not currently work - this needs to be changed (lookup cannot be changed using PySD)
 - Change the belief initialisation of the actors to match what could be in real life
-- For the belieftree initialisation make three profiles (once as functions) and then remove 90% of the code.
+- For the belieftree initialisation make three profiles
 - Change the initialisation such that it also includes policy and instrument tree when considering the three stream approach (this will allow to comment the notices for the randomiser)
 - Design an experimentation system for multiple experiments
 
@@ -94,6 +94,8 @@ PF_theory = AS_theory
 
 # This is set up to use only in the case of exploration
 exploration = False
+if exploration == True:
+	print('WARNING! The initialisation exploration file is not up to date compared to the normal initialisation file.')
 
 # Choosing the evernal event
 event1 = False
