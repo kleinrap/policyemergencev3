@@ -516,6 +516,7 @@ Different countries make different choices regarding current and design safety s
 1,198,197,142,1,0,0,0,0,64,0,-1--1--1,,1|(1266,1078)|
 ///---\\\
 :L<%^E!@
+1:Current.vdf
 9:Current
 22:$,Dollar,Dollars,$s
 22:Hour,Hours
@@ -531,7 +532,7 @@ Different countries make different choices regarding current and design safety s
 27:2,
 34:0,
 4:Time
-5:discrepancy in levee length
+5:pulse if flood
 35:Date
 36:YYYY-MM-DD
 37:2000

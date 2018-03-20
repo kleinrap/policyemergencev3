@@ -414,8 +414,6 @@ for repetition_number in range(repetition):
 					if policy_selected != None:
 						AT_value, OT_value, DT_value, FPT_value, ERC_value, RT_value, AdT_value, PH_value, RS_value, CT_value = policy_package_implementation(policy_selected, AT_value, OT_value, DT_value, FPT_value, ERC_value, RT_value, AdT_value, PH_value, RS_value, CT_value)
 
-					print('\n\n\n\n', type(model_technical_output), '\n\n\n\n')
-
 					# This performs 1 years worth of steps for the system dynamics model
 					print('   ')
 					print('TECHNICAL MODEL RUN ---')
