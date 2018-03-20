@@ -66,14 +66,14 @@ This part of the model contains all the inputs require to initialise the model w
 # random.seed(42)
 
 # For tailored runs:
-min_run_number = 0
-max_run_number = 1
+min_run_number = 20
+max_run_number = 30
 
 # For the total number of steps in years
 run_time_year = 20
 
 # Number of repetitions required:
-repetition = 1
+repetition = 5
 
 #####################################################################
 # Policy emergence model initialisation
@@ -147,34 +147,6 @@ time_step_SD = 0.0078125
 inputs_dict_emergence = policy_package_initialisation(inputs_dict_emergence)
 
 states_technical = dict()
-states_technical['AT_state'] = 0
-states_technical['OT_state'] = 0
-states_technical['DT_state'] = 0
-states_technical['FPT_state'] = 0
-states_technical['ERC_state'] = 0
-states_technical['RT_state'] = 0
-states_technical['AdT_state'] = 0
-states_technical['PH_state'] = 0
-states_technical['RS_state'] = 0
-states_technical["SLS_state"] = 0
-states_technical["OLS_state"] = 0
-states_technical["SL_state"] = 0
-states_technical["OL_state"] = 0
-states_technical['IP_state'] = 0
-states_technical['Sa_state'] = 0
-
-# These are the initial values for the exogenous parameters that can be changed through the model policy instruments and packages
-AT_value = 20
-OT_value = 25
-DT_value = 2.5
-FPT_value = 0.5
-# CHANGE THIS! This needs to affect the values in the graph only - ERC changes is currently deactivated in the rest of the code
-ERC_value = 0
-RT_value = 3.5
-AdT_value = 30
-PH_value = 55
-RS_value = 0.2
-CT_value = 5
 
 technical_param_values = []
 
@@ -370,6 +342,35 @@ for repetition_number in range(repetition):
 				#####################################################################
 				# IN-MODEL INITIALISATION - Technical model
 
+				states_technical['AT_state'] = 0
+				states_technical['OT_state'] = 0
+				states_technical['DT_state'] = 0
+				states_technical['FPT_state'] = 0
+				states_technical['ERC_state'] = 0
+				states_technical['RT_state'] = 0
+				states_technical['AdT_state'] = 0
+				states_technical['PH_state'] = 0
+				states_technical['RS_state'] = 0
+				states_technical["SLS_state"] = 0
+				states_technical["OLS_state"] = 0
+				states_technical["SL_state"] = 0
+				states_technical["OL_state"] = 0
+				states_technical['IP_state'] = 0
+				states_technical['Sa_state'] = 0
+
+				# These are the initial values for the exogenous parameters that can be changed through the model policy instruments and packages
+				AT_value = 20
+				OT_value = 25
+				DT_value = 2.5
+				FPT_value = 0.5
+				# CHANGE THIS! This needs to affect the values in the graph only - ERC changes is currently deactivated in the rest of the code
+				ERC_value = 0
+				RT_value = 3.5
+				AdT_value = 30
+				PH_value = 55
+				RS_value = 0.2
+				CT_value = 5
+
 				# This initialises the technical model and transforms it from vensim to python. (Vary the model depending on the external event being considered)
 				if tm_event_i == 0:
 					model_technical = pysd.read_vensim('Flood_Levees_14_Final.mdl')
@@ -424,7 +425,7 @@ for repetition_number in range(repetition):
 					model_technical_output = model_technical_output.append(model_technical_output_intermediate)
 
 				model_technical_output.plot()
-				plt.show()
+				# plt.show()
 
 				#####################################################################
 				# STORING THE DATA - Technical model
