@@ -35,9 +35,7 @@ import pandas as pd
 from model import PolicyEmergence
 from mesa.batchrunner import BatchRunner
 from initialisation import initial_values
-from initialisation_exploration import initial_values_exploration
 import matplotlib.pyplot as plt
-from technical_model import Technical_Model
 from datacollection import DataCollector
 from agent import Policymakers, Electorate, Externalparties, Truth, Policyentres
 
@@ -66,8 +64,8 @@ This part of the model contains all the inputs require to initialise the model w
 # random.seed(42)
 
 # For tailored runs:
-min_run_number = 20
-max_run_number = 30
+min_run_number = 0
+max_run_number = 5
 
 # For the total number of steps in years
 run_time_year = 20

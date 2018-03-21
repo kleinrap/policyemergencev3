@@ -211,7 +211,7 @@ def pulse_if_flood():
 
     PULSE IF gives a value of 1 for one week at year 30
     """
-    return functions.pulse_train(0.5, 0.1, 3, 20)
+    return functions.pulse_train(1.5, 0.2, 3, 20)
 
 
 @cache('step')
