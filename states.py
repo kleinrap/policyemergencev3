@@ -6,26 +6,26 @@ import pysd
 What are the states that are needed from the technical model?
 
 Secondary beliefs (S)
-1. Ageing time - endogenous (AT_state)
-2. Obscolescence time - endogenous (OT_state)
-3. Design time - endogenous (DT_state)
-4. Flood perception time - endogenous (FPT_state)
-5. Effects on renovation and construction - endogenous (ERC_state)
-6. Renovation time - endogenous (RT_state)
-7. Adjustment time - endogenous (AdT_state)
-8. Planning horizon - endogenous (PH_state)
-9. Renovation standard - endogenous (RS_state)
-10. Construction time - endogenous (CT_state)
+7. Ageing time - endogenous (AT_state)
+8. Obscolescence time - endogenous (OT_state)
+9. Design time - endogenous (DT_state)
+10. Flood perception time - endogenous (FPT_state)
+11. Effects on renovation and construction - endogenous (ERC_state)
+12. Renovation time - endogenous (RT_state)
+13. Adjustment time - endogenous (AdT_state)
+14. Planning horizon - endogenous (PH_state)
+15. Renovation standard - endogenous (RS_state)
+16. Construction time - endogenous (CT_state)
 
 Mid-level beliefs (ML)
-11. Standard levee safety - endogenous (SLS_state)
-12. Old levee safety - endogenous (OLS_state)
-13. Standard levees - endogenous (SL_state)
-14. Old levees - endogenous (OL_state)
+3. Standard levee safety - endogenous (SLS_state)
+4. Old levee safety - endogenous (OLS_state)
+5. Standard levees - endogenous (SL_state)
+6. Old levees - endogenous (OL_state)
 
 Policy core beliefs (PC)
-15. Investment priority - calculated as OL_state/SL_state (IP_state)
-16. Safety - calculated as half perceived safety and hald technical safety (Sa_state)
+1. Investment priority - calculated as OL_state/SL_state (IP_state)
+2. Safety - calculated as half perceived safety and hald technical safety (Sa_state)
 '''''
 
 def states_definition(model_technical, states_technical):
