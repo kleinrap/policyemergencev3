@@ -64,14 +64,14 @@ This part of the model contains all the inputs require to initialise the model w
 # random.seed(42)
 
 # For tailored runs:
-min_run_number = 20
-max_run_number = 25
+min_run_number = 0
+max_run_number = 1
 
 # For the total number of steps in years
-run_time_year = 20
+run_time_year = 5*10
 
 # Number of repetitions required:
-repetition = 5
+repetition = 1
 
 #####################################################################
 # Policy emergence model initialisation
@@ -131,7 +131,7 @@ externalparties_number = 6
 agent_inputs = [policymaker_number, externalparties_number]
 
 # Selecting the time step for the policy emergence model (time step interval in years)
-time_step_emergence = 1
+time_step_emergence = 1/10
 
 # initialisation of the dictionnary containing the states for the policy emergence model
 emergence_states = dict()
@@ -381,7 +381,7 @@ for repetition_number in range(repetition):
 				#####################################################################
 				# RUNNING THE MODEL
 
-				print('STEP 1 -------------')
+				print('MONTH 1 -------------')
 				print('   ')
 
 				# Running the technical model first (for one year time step only
@@ -389,12 +389,15 @@ for repetition_number in range(repetition):
 				print('   ')
 				# CHANGE THIS! - The function that has been commented out is the one with the ERC in it
 				# model_technical_output = model_technical.run(params={'FINAL TIME':time_step_emergence, 'aging time':AT_value, 'obsolescence time':OT_value, 'design time':DT_value, 'flood perception time':FPT_value, 'effect on renovation and construction':ERC_value, 'renovation time':RT_value, 'adjustment time':AdT_value, 'planning horizon':PH_value, 'renovation standard':RS_value, 'construction time':CT_value})
-				model_technical_output = model_technical.run(params={'FINAL TIME':time_step_emergence, 'aging time':AT_value, 'obsolescence time':OT_value, 'design time':DT_value, 'flood perception time':FPT_value, 'renovation time':RT_value, 'adjustment time':AdT_value, 'planning horizon':PH_value, 'renovation standard':RS_value, 'construction time':CT_value})
+				model_technical_output = model_technical.run(params={'FINAL TIME':0.09, 'TIME STEP': 0.01, 'aging time':AT_value, 'obsolescence time':OT_value, 'design time':DT_value, 'flood perception time':FPT_value, 'renovation time':RT_value, 'adjustment time':AdT_value, 'planning horizon':PH_value, 'renovation standard':RS_value, 'construction time':CT_value})
+
+				print(model_technical_output)
 
 				# For loop for the running of the model (-1 as an initial step has already been run)
 				for n in range(run_time_year - 1):
+					# n is now in months in this approach
 
-					print('STEP ', n+2, ' -------------')
+					print('MONTH ', n+2, ' -------------')
 					print('   ')
 
 					# Obtention of the states values from the technical model outputs
@@ -418,8 +421,17 @@ for repetition_number in range(repetition):
 					print('TECHNICAL MODEL RUN ---')
 					print('   ')
 					# CHANGE THIS - The function that has been commented out is the one with the ERC in it
-					# model_technical_output_intermediate = model_technical.run(params={'aging time':AT_value, 'obsolescence time':OT_value, 'design time':DT_value, 'flood perception time':FPT_value, 'effect on renovation and construction':ERC_value, 'renovation time':RT_value, 'adjustment time':AdT_value, 'planning horizon':PH_value, 'renovation standard':RS_value, 'construction time':CT_value}, initial_condition='current', return_timestamps=np.linspace(1+n,1+n+1, 1/0.0078125))
-					model_technical_output_intermediate = model_technical.run(params={'aging time':AT_value, 'obsolescence time':OT_value, 'design time':DT_value, 'flood perception time':FPT_value, 'renovation time':RT_value, 'adjustment time':AdT_value, 'planning horizon':PH_value, 'renovation standard':RS_value, 'construction time':CT_value}, initial_condition='current', return_timestamps=np.linspace(1+n,1+n+1, 1/0.0078125))
+					# model_technical_output_intermediate = model_technical.run(params={'aging time':AT_value, 'obsolescence time':OT_value, 'design time':DT_value, 'flood perception time':FPT_value, 'effect on renovation and construction':ERC_value, 'renovation time':RT_value, 'adjustment time':AdT_value, 'planning horizon':PH_value, 'renovation standard':RS_value, 'construction time':CT_value}, initial_condition='current', return_timestamps=np.linspace(1+n,1+n+1, 1/time_step_SD))
+					print(0.09+n*0.1)
+					print(np.linspace((1+n)*0.01,(1+n+1)*0.01, 10))
+					print(len(np.linspace((1+n)*0.01,(1+n+1)*0.01, 10)))
+					# model_technical_output_intermediate = model_technical.run(params={'FINAL TIME':0.099+n*0.1,'TIME STEP': 0.001, 'aging time':AT_value, 'obsolescence time':OT_value, 'design time':DT_value, 'flood perception time':FPT_value, 'renovation time':RT_value, 'adjustment time':AdT_value, 'planning horizon':PH_value, 'renovation standard':RS_value, 'construction time':CT_value}, initial_condition='current', return_timestamps=np.linspace((1+n)*0.01,(1+n+1)*0.01, 10))
+					model_technical_output_intermediate = model_technical.run(params={'FINAL TIME':0.09+n*0.1,'TIME STEP': 0.01, 'aging time':AT_value, 'obsolescence time':OT_value, 'design time':DT_value, 'flood perception time':FPT_value, 'renovation time':RT_value, 'adjustment time':AdT_value, 'planning horizon':PH_value, 'renovation standard':RS_value, 'construction time':CT_value}, initial_condition='current')
+
+					print(model_technical_output_intermediate)
+
+					# np.linspace((1+n)*0.01,(1+n+1)*0.01, 10)
+					# np.linspace((0+n)*time_step_SD,(0+n+10)*time_step_SD, 1/time_step_SD)
 					model_technical_output = model_technical_output.append(model_technical_output_intermediate)
 
 				model_technical_output.plot()

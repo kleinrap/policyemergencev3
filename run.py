@@ -64,8 +64,8 @@ This part of the model contains all the inputs require to initialise the model w
 # random.seed(42)
 
 # For tailored runs:
-min_run_number = 0
-max_run_number = 5
+min_run_number = 20
+max_run_number = 25
 
 # For the total number of steps in years
 run_time_year = 20
